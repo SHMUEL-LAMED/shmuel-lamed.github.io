@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="ראש בראש">
+  <rect width="160" height="160" rx="42" fill="#132440"/>
+  <rect x="6" y="6" width="148" height="148" rx="37" fill="none" stroke="#e6c67d" stroke-width="2"/>
+  <path d="M35 66v28m16-43v58m16-69v80m58-54v28m-16-43v58" fill="none" stroke="#e6c67d" stroke-width="7" stroke-linecap="round"/>
+  <path d="m81 61 25 19-25 19z" fill="#e6c67d"/>
+</svg>

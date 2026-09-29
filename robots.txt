@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shmuel-lamed.github.io/SongToNotes/sitemap.xml
+Sitemap: https://shmuel-lamed.github.io/rosh-berosh-2/sitemap.xml
