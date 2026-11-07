@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.github.com; img-src data: blob: https:; base-uri 'none'; form-action 'none'">
+<title>לוח ניהול</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%99%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#1d2433;--mute:#6b7385;--line:#e2e6ee;--acc:#2457d6;--acc2:#e9effd;--ok:#1a7f45;--bad:#c33131;--warn:#b26b00}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5}
+header{background:#1d2433;color:#fff;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+header a{color:#fff;text-decoration:none;font-weight:700;font-size:18px}
+header .who{opacity:.75;font-size:14px}
+.sp{flex:1}
+main{max-width:1000px;margin:0 auto;padding:16px}
+h2{margin:0 0 6px}
+h3{margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.narrow{max-width:520px;margin:30px auto}
+button,.btn{font:inherit;font-size:15px;border:0;border-radius:8px;padding:9px 14px;background:var(--acc);color:#fff;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+button.sec,.btn.sec{background:var(--acc2);color:var(--acc)}
+button.danger{background:var(--bad)}
+button:disabled{opacity:.5;cursor:default}
+input,textarea,select{font:inherit;width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:inherit}
+textarea.code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:14px;min-height:60vh;direction:ltr;text-align:left;white-space:pre;tab-size:2;overflow:auto}
+label{display:block;font-weight:600;margin:10px 0 4px}
+.chk{display:flex;align-items:center;gap:8px;font-weight:400}
+.chk input{width:auto}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.repo h3{margin:0 0 4px;font-size:18px}
+.repo h3 a{color:var(--ink);text-decoration:none}
+.repo .row{margin-top:10px}
+.mute{color:var(--mute);font-size:14px}
+.tag{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--acc2);color:var(--acc);font-weight:400;vertical-align:middle}
+.tag.priv{background:#fdf0e1;color:var(--warn)}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin:10px 0 14px}
+.tabs a{padding:8px 12px;text-decoration:none;color:var(--mute);border-bottom:3px solid transparent;white-space:nowrap}
+.tabs a.on{color:var(--acc);border-color:var(--acc);font-weight:700}
+.list{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.item{display:flex;gap:10px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--line);color:inherit;text-decoration:none}
+.item:last-child{border-bottom:0}
+a.item:hover{background:#f8f9fc}
+.item .nm{flex:1;word-break:break-all}
+.crumbs{margin:12px 0 8px;font-size:15px}
+.crumbs a{color:var(--acc);text-decoration:none}
+pre.body{white-space:pre-wrap;word-break:break-word;background:#f8f9fc;padding:10px;border-radius:8px;margin:8px 0;font-family:inherit}
+details.card summary{cursor:pointer}
+.cm .c{border-top:1px solid var(--line);padding:8px 0}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.warn{color:var(--warn)}
+.hidden{display:none!important}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1d2433;color:#fff;padding:10px 18px;border-radius:10px;max-width:92vw;z-index:20;box-shadow:0 4px 16px rgba(0,0,0,.2);display:none}
+#toast.bad{background:var(--bad)}
+ol li{margin-bottom:6px}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+</style>
+</head>
+<body>
+<header id="hdr"></header>
+<main id="main"></main>
+<div id="toast"></div>
+<script>
+'use strict';
+const API = 'https://api.github.com';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const enc = encodeURIComponent;
+const encPath = p => String(p || '').split('/').filter(Boolean).map(enc).join('/');
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+let TOKEN = null, ME = null;
+const S = { repo: null, info: null, branch: null, branches: [], pages: undefined, issueState: 'open', dirty: false };
+
+/* ---------- אחסון המפתח ---------- */
+function storeGet(){ try { return localStorage.getItem('gh_tok') || sessionStorage.getItem('gh_tok'); } catch(e){ return null; } }
+function storeSet(t, rem){ try { (rem ? localStorage : sessionStorage).setItem('gh_tok', t); } catch(e){} }
+function storeClear(){ try { localStorage.removeItem('gh_tok'); sessionStorage.removeItem('gh_tok'); } catch(e){} }
+
+/* ---------- עזרים ---------- */
+function b64ToBytes(b64){ const bin = atob(String(b64 || '').replace(/\s/g, '')); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
+function bytesToB64(u){ let s = ''; const CH = 0x8000; for (let i = 0; i < u.length; i += CH) s += String.fromCharCode.apply(null, u.subarray(i, i + CH)); return btoa(s); }
+const textToB64 = t => bytesToB64(new TextEncoder().encode(t));
+function looksText(u){ const n = Math.min(u.length, 8000); for (let i = 0; i < n; i++) if (u[i] === 0) return false; return true; }
+function fmtSize(n){ if (n < 1024) return n + ' בתים'; if (n < 1048576) return (n/1024).toFixed(1) + ' KB'; return (n/1048576).toFixed(1) + ' MB'; }
+function fmtTime(t){ try { return new Date(t).toLocaleString('he-IL', {dateStyle:'short', timeStyle:'short'}); } catch(e){ return t; } }
+
+function toast(msg, bad){ const t = $('#toast'); t.textContent = msg; t.className = bad ? 'bad' : ''; t.style.display = 'block'; clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = 'none', bad ? 7000 : 3500); }
+
+function heErr(status, data){
+  const m = data && data.message ? String(data.message) : '';
+  if (status === 422 && /already exists/i.test(m)) return 'כבר קיים שם כזה. בחר שם אחר.';
+  if (status === 422 && /sha/i.test(m)) return 'כבר יש קובץ בשם הזה.';
+  if (status === 403 && /rate limit/i.test(m)) return 'עברת את מכסת הבקשות לגיטהאב לשעה הזאת. נסה שוב מאוחר יותר.';
+  const map = {
+    401: 'מפתח הגישה לא תקין או שפג תוקפו.',
+    403: 'אין הרשאה לפעולה הזאת. ייתכן שחסרה הרשאה במפתח הגישה.',
+    404: 'לא נמצא.',
+    409: 'התנגשות – כנראה שהקובץ השתנה בינתיים. רענן את הדף ונסה שוב.',
+    422: 'הנתונים לא התקבלו.'
+  };
+  return (map[status] || ('שגיאה ' + status)) + (m && status !== 404 ? ' (' + m + ')' : '');
+}
+
+async function gh(path, opts = {}){
+  const headers = { 'Authorization': 'Bearer ' + TOKEN, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+  if (opts.body) headers['Content-Type'] = 'application/json';
+  let res;
+  try {
+    res = await fetch(path.startsWith('http') ? path : API + path, { method: opts.method || 'GET', headers, body: opts.body ? JSON.stringify(opts.body) : undefined, cache: 'no-store' });
+  } catch(e) {
+    const err = new Error('אין חיבור לגיטהאב. בדוק את האינטרנט ונסה שוב.'); err.status = 0; throw err;
+  }
+  if (res.status === 204) return null;
+  const txt = await res.text(); let data = null;
+  try { data = txt ? JSON.parse(txt) : null; } catch(e) { data = txt; }
+  if (!res.ok) { const err = new Error(heErr(res.status, data)); err.status = res.status; err.data = data; throw err; }
+  return data;
+}
+
+function showError(e){
+  console.error(e);
+  if (e && e.status === 401 && ME) { storeClear(); TOKEN = null; ME = null; renderHeader(); renderLogin('מפתח הגישה כבר לא תקין. צריך להתחבר מחדש.'); return; }
+  toast((e && e.message) || 'משהו השתבש', true);
+  const v = $('#view') || $('#main');
+  if (v && /טוען/.test(v.textContent) && v.textContent.length < 20) v.innerHTML = '<div class="card bad">' + esc(e.message) + '</div>';
+}
+
+async function act(btn, fn){
+  const t = btn.innerHTML; btn.disabled = true; btn.textContent = 'רגע...';
+  try { await fn(); } catch(e) { showError(e); } finally { if (btn.isConnected) { btn.disabled = false; btn.innerHTML = t; } }
+}
+
+const setMain = h => { $('#main').innerHTML = h; };
+const setView = h => { const v = $('#view'); if (v) v.innerHTML = h; };
+const R = () => '/repos/' + S.info.full_name;
+const link = (tab, path) => '#/r/' + enc(S.repo) + '/' + tab + (path ? '/' + encPath(path) : '');
+const brBody = () => (S.branches.length ? { branch: S.branch } : {});
+
+/* ---------- כותרת וכניסה ---------- */
+function renderHeader(){
+  $('#hdr').innerHTML = '<a href="#/">⚙ לוח הניהול שלי</a><span class="sp"></span>' +
+    (ME ? '<span class="who" dir="ltr">' + esc(ME.login) + '</span><button class="sec" id="logout">יציאה</button>' : '');
+  const b = $('#logout');
+  if (b) b.onclick = () => { if (!confirm('לצאת מהחשבון במכשיר הזה?')) return; storeClear(); TOKEN = null; ME = null; S.repo = null; renderHeader(); location.hash = '#/'; renderLogin(); };
+}
+
+function renderLogin(msg){
+  const tokUrl = 'https://github.com/settings/tokens/new?scopes=repo,workflow,delete_repo&description=' + enc('לוח ניהול');
+  setMain(`<div class="card narrow">
+    <h2>כניסה ללוח הניהול</h2>
+    ${msg ? '<p class="bad">' + esc(msg) + '</p>' : ''}
+    <p class="mute">כדי שהאתר יוכל לנהל את הגיטהאב שלך, צריך להדביק כאן "מפתח גישה" (טוקן) מגיטהאב. איך משיגים אותו – למטה.</p>
+    <label for="tok">מפתח גישה</label>
+    <input id="tok" type="password" dir="ltr" autocomplete="off" placeholder="ghp_...">
+    <label class="chk"><input type="checkbox" id="rem" checked> לזכור אותי במכשיר הזה</label>
+    <div class="row" style="margin-top:12px"><button id="go">כניסה</button></div>
+    <p id="lerr" class="bad"></p>
+    <details open><summary><b>איך משיגים מפתח גישה? (פעם אחת בלבד)</b></summary>
+      <ol>
+        <li>היכנס לגיטהאב באותו דפדפן.</li>
+        <li>לחץ על הקישור: <a href="${tokUrl}" target="_blank" rel="noopener">יצירת מפתח גישה בגיטהאב</a>. ייפתח דף שבו ההרשאות הנכונות כבר מסומנות.</li>
+        <li>בשדה <b dir="ltr">Expiration</b> (תוקף) בחר כמה זמן המפתח יעבוד. לדוגמה <b dir="ltr">90 days</b> (90 יום), או <b dir="ltr">No expiration</b> (בלי תפוגה).</li>
+        <li>גלול לתחתית הדף ולחץ על הכפתור הירוק <b dir="ltr">Generate token</b> (יצירת מפתח).</li>
+        <li>יופיע קוד שמתחיל ב־<span dir="ltr">ghp_</span>. העתק אותו והדבק כאן למעלה. גיטהאב מציג אותו רק פעם אחת.</li>
+      </ol>
+      <p class="mute">⚠ המפתח הזה הוא כמו סיסמה לחשבון. אל תשלח אותו לאף אחד. אם הוא נחשף, מוחקים אותו בגיטהאב (באותו דף של המפתחות) ויוצרים חדש.</p>
+    </details>
+  </div>`);
+  const go = async () => {
+    const t = $('#tok').value.trim(); if (!t) return;
+    $('#lerr').textContent = '';
+    TOKEN = t;
+    try { ME = await gh('/user'); }
+    catch(e) { TOKEN = null; $('#lerr').textContent = e.status === 401 ? 'המפתח לא תקין. בדוק שהעתקת אותו במלואו.' : e.message; return; }
+    storeSet(t, $('#rem').checked); renderHeader(); route();
+  };
+  $('#go').onclick = e => act(e.currentTarget, go);
+  $('#tok').onkeydown = e => { if (e.key === 'Enter') $('#go').click(); };
+}
+
+/* ---------- ניתוב ---------- */
+let lastHash = location.hash;
+window.addEventListener('hashchange', () => {
+  if (S.dirty && !confirm('יש שינויים שלא נשמרו. לצאת בלי לשמור?')) { history.replaceState(null, '', lastHash); return; }
+  S.dirty = false; lastHash = location.hash; route();
+});
+window.addEventListener('beforeunload', e => { if (S.dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+async function ensureRepo(name){
+  if (S.repo === name && S.info) return;
+  S.info = await gh('/repos/' + enc(ME.login) + '/' + enc(name));
+  S.repo = name; S.branch = S.info.default_branch || 'main'; S.pages = undefined;
+  S.branches = await gh(R() + '/branches?per_page=100').catch(() => []);
+}
+
+async function route(){
+  if (!TOKEN || !ME) { renderLogin(); return; }
+  const h = location.hash.replace(/^#\/?/, '');
+  const parts = h ? h.split('/') : [];
+  try {
+    if (parts[0] === 'r' && parts[1]) {
+      const name = decodeURIComponent(parts[1]);
+      const tab = parts[2] || 'files';
+      const rest = parts.slice(3).map(decodeURIComponent).join('/');
+      setMain('<div class="card">טוען...</div>');
+      await ensureRepo(name);
+      renderRepoShell(tab);
+      const views = { files: viewFiles, edit: viewEdit, new: viewNew, pages: viewPages, issues: viewIssues, commits: viewCommits, settings: viewSettings };
+      await (views[tab] || viewFiles)(rest);
+    } else {
+      await viewHome();
+    }
+  } catch(e) { showError(e); }
+}
+
+/* ---------- דף הבית: כל המאגרים ---------- */
+function guessSite(r){
+  if (!r.has_pages) return null;
+  const l = ME.login.toLowerCase();
+  return r.name.toLowerCase() === l + '.github.io' ? 'https://' + l + '.github.io/' : 'https://' + l + '.github.io/' + r.name + '/';
+}
+
+async function viewHome(){
+  setMain(`<div class="row between"><h2>האתרים והמאגרים שלי</h2><button id="nrBtn">+ מאגר חדש</button></div>
+    <div id="nrBox" class="card hidden">
+      <h3>מאגר חדש</h3>
+      <label>שם (באנגלית, בלי רווחים)</label><input id="nrName" dir="ltr" placeholder="my-new-site">
+      <label>תיאור (לא חובה)</label><input id="nrDesc">
+      <label class="chk"><input type="checkbox" id="nrPages" checked> להפעיל אתר (GitHub Pages) עם דף פתיחה</label>
+      <label class="chk"><input type="checkbox" id="nrPriv"> מאגר פרטי (אתר במאגר פרטי דורש חשבון בתשלום)</label>
+      <div class="row" style="margin-top:12px"><button id="nrGo">יצירה</button><button class="sec" id="nrX">ביטול</button></div>
+    </div>
+    <div id="list" class="grid"><div class="card">טוען...</div></div>`);
+  $('#nrBtn').onclick = () => $('#nrBox').classList.toggle('hidden');
+  $('#nrX').onclick = () => $('#nrBox').classList.add('hidden');
+  $('#nrGo').onclick = e => act(e.currentTarget, createRepo);
+
+  const repos = await gh('/user/repos?per_page=100&sort=updated&affiliation=owner');
+  $('#list').innerHTML = repos.length ? repos.map(r => {
+    const site = guessSite(r);
+    return `<div class="card repo" style="margin:0">
+      <h3><a href="#/r/${enc(r.name)}/files" dir="ltr">${esc(r.name)}</a> ${r.private ? '<span class="tag priv">פרטי</span>' : '<span class="tag">ציבורי</span>'}</h3>
+      ${r.description ? '<div class="mute" dir="auto">' + esc(r.description) + '</div>' : ''}
+      <div class="mute">עודכן: ${fmtTime(r.pushed_at || r.updated_at)}${r.open_issues_count ? ' · ' + r.open_issues_count + ' בעיות פתוחות' : ''}</div>
+      <div class="row">
+        <a class="btn" href="#/r/${enc(r.name)}/files">ניהול</a>
+        ${site ? `<a class="btn sec" data-site="${esc(r.name)}" href="${esc(site)}" target="_blank" rel="noopener">🌐 לאתר</a>` : ''}
+      </div></div>`;
+  }).join('') : '<div class="card">אין עדיין מאגרים.</div>';
+  // תיקון כתובות לאתרים עם דומיין מותאם
+  repos.filter(r => r.has_pages).forEach(r => {
+    gh('/repos/' + r.full_name + '/pages').then(p => { const a = document.querySelector('a[data-site="' + CSS.escape(r.name) + '"]'); if (a && p && p.html_url) a.href = p.html_url; }).catch(() => {});
+  });
+}
+
+async function createRepo(){
+  const name = $('#nrName').value.trim().replace(/\s+/g, '-');
+  if (!name) { toast('צריך לכתוב שם', true); return; }
+  const wantPages = $('#nrPages').checked, priv = $('#nrPriv').checked;
+  const r = await gh('/user/repos', { method: 'POST', body: { name, description: $('#nrDesc').value.trim(), private: priv, auto_init: true } });
+  const br = r.default_branch || 'main';
+  if (wantPages) {
+    const page = `<!DOCTYPE html>\n<html lang="he" dir="rtl">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<title>${name}</title>\n</head>\n<body>\n<h1>${name}</h1>\n<p>האתר החדש שלי</p>\n</body>\n</html>\n`;
+    for (let i = 0; i < 5; i++) {
+      try { await gh('/repos/' + r.full_name + '/contents/index.html', { method: 'PUT', body: { message: 'דף פתיחה', content: textToB64(page), branch: br } }); break; }
+      catch(e) { if (i === 4) throw e; await sleep(1500); }
+    }
+    let ok = false;
+    for (let i = 0; i < 5 && !ok; i++) {
+      try { await gh('/repos/' + r.full_name + '/pages', { method: 'POST', body: { source: { branch: br, path: '/' } } }); ok = true; }
+      catch(e) { if (e.status === 409) ok = true; else await sleep(2000); }
+    }
+    toast(ok ? 'המאגר נוצר והאתר מופעל. ייקח דקה-שתיים עד שהוא יעלה.' : 'המאגר נוצר, אבל הפעלת האתר נכשלה. אפשר להפעיל ידנית בלשונית "אתר ופרסום".', !ok);
+  } else toast('המאגר נוצר ✓');
+  location.hash = '#/r/' + enc(r.name) + '/files';
+}
+
+/* ---------- מעטפת של מאגר ---------- */
+async function siteUrl(){
+  if (S.pages === undefined) { try { S.pages = await gh(R() + '/pages'); } catch(e) { S.pages = null; } }
+  return S.pages ? S.pages.html_url : null;
+}
+
+function renderRepoShell(tab){
+  const i = S.info;
+  const tabs = [['files','קבצים'],['pages','אתר ופרסום'],['issues','בעיות'],['commits','היסטוריה'],['settings','הגדרות']];
+  const cur = (tab === 'edit' || tab === 'new') ? 'files' : tab;
+  setMain(`<a href="#/" class="mute" style="text-decoration:none">→ כל המאגרים</a>
+    <div class="row between" style="margin-top:4px">
+      <h2 dir="ltr" style="text-align:right">${esc(i.name)} ${i.private ? '<span class="tag priv">פרטי</span>' : '<span class="tag">ציבורי</span>'}</h2>
+      <div class="row"><a class="btn sec hidden" id="siteLink" target="_blank" rel="noopener">🌐 לאתר</a><a class="btn sec" href="${esc(i.html_url)}" target="_blank" rel="noopener">פתיחה בגיטהאב</a></div>
+    </div>
+    <nav class="tabs">${tabs.map(([k,v]) => `<a href="${link(k)}" class="${k === cur ? 'on' : ''}">${v}</a>`).join('')}</nav>
+    <div id="view"><div class="card">טוען...</div></div>`);
+  siteUrl().then(u => { const a = $('#siteLink'); if (u && a) { a.href = u; a.classList.remove('hidden'); } });
+}
+
+function crumbs(path, isFile){
+  const segs = String(path || '').split('/').filter(Boolean);
+  let out = `<a href="${link('files')}">📁 ראשי</a>`;
+  segs.forEach((s, i) => {
+    const p = segs.slice(0, i + 1).join('/');
+    const last = i === segs.length - 1;
+    out += ' / ' + (last && isFile ? '<b dir="ltr">' + esc(s) + '</b>' : `<a href="${link('files', p)}" dir="ltr">${esc(s)}</a>`);
+  });
+  return '<div class="crumbs">' + out + '</div>';
+}
+
+/* ---------- קבצים ---------- */
+async function viewFiles(dir){
+  let items;
+  try { items = await gh(R() + '/contents/' + encPath(dir) + '?ref=' + enc(S.branch)); }
+  catch(e) { if (e.status === 404 && !dir) items = []; else throw e; }
+  if (!Array.isArray(items)) { location.replace(link('edit', dir)); return; }
+  items.sort((a, b) => (a.type === 'dir' ? 0 : 1) - (b.type === 'dir' ? 0 : 1) || a.name.localeCompare(b.name));
+  const brs = S.branches.length ? S.branches.map(b => b.name) : [S.branch];
+  const parent = dir.split('/').slice(0, -1).join('/');
+  const rows = (dir ? `<a class="item" href="${link('files', parent)}"><span>↩</span><span class="nm">חזרה למעלה</span></a>` : '') +
+    items.map(it => {
+      const isDir = it.type === 'dir';
+      const href = isDir ? link('files', it.path) : link('edit', it.path);
+      return `<a class="item" href="${href}"><span>${isDir ? '📁' : '📄'}</span><span class="nm" dir="ltr" style="text-align:right">${esc(it.name)}</span>${isDir ? '' : '<span class="mute">' + fmtSize(it.size) + '</span>'}</a>`;
+    }).join('');
+  setView(`<div class="row between">
+      <div class="row"><span>ענף:</span><select id="br" style="width:auto" dir="ltr">${brs.map(b => `<option ${b === S.branch ? 'selected' : ''}>${esc(b)}</option>`).join('')}</select></div>
+      <div class="row">
+        <a class="btn" href="${link('new', dir)}">+ קובץ חדש</a>
+        <button class="sec" id="upBtn">⬆ העלאת קבצים</button>
+        <button class="sec" id="upDirBtn">⬆ העלאת תיקייה</button>
+      </div>
+    </div>
+    <input type="file" id="upIn" multiple hidden>
+    <input type="file" id="upDirIn" webkitdirectory multiple hidden>
+    <div id="upPanel" class="card hidden" style="margin-top:12px"></div>
+    ${crumbs(dir)}
+    <div class="list">${rows || '<div class="item">התיקייה ריקה</div>'}</div>
+    ${!items.length && !dir ? '<p class="mute">המאגר ריק. אפשר להתחיל ב"קובץ חדש" או ב"העלאת קבצים".</p>' : ''}`);
+  $('#br').onchange = e => { S.branch = e.target.value; route(); };
+  $('#upBtn').onclick = () => $('#upIn').click();
+  $('#upDirBtn').onclick = () => $('#upDirIn').click();
+  $('#upIn').onchange = e => prepUpload(e.target.files, dir, false);
+  $('#upDirIn').onchange = e => prepUpload(e.target.files, dir, true);
+}
+
+function prepUpload(fileList, dir, isFolder){
+  const files = [...fileList].filter(f => !/(^|\/)(\.git|node_modules)\//.test(f.webkitRelativePath || '') && f.name !== '.DS_Store');
+  if (!files.length) return;
+  const panel = $('#upPanel'); panel.classList.remove('hidden');
+  const paths = strip => files.map(f => {
+    let rel = f.webkitRelativePath || f.name;
+    if (strip && f.webkitRelativePath) rel = rel.split('/').slice(1).join('/');
+    return (dir ? dir + '/' : '') + rel;
+  });
+  const show = () => {
+    const ps = paths(isFolder && $('#upStrip') && $('#upStrip').checked);
+    $('#upList').innerHTML = ps.slice(0, 12).map(p => '<div dir="ltr" style="text-align:right">' + esc(p) + '</div>').join('') + (ps.length > 12 ? '<div>ועוד ' + (ps.length - 12) + '...</div>' : '');
+  };
+  panel.innerHTML = `<b>${files.length} קבצים יועלו לתיקייה: ${dir ? '<span dir="ltr">' + esc(dir) + '</span>' : 'הראשית'}</b>
+    <p class="mute">קבצים עם אותו שם יוחלפו בחדשים.</p>
+    ${isFolder ? '<label class="chk"><input type="checkbox" id="upStrip"> להעלות רק את מה שבתוך התיקייה, בלי התיקייה עצמה (מתאים לפרסום אתר מוכן)</label>' : ''}
+    <div id="upList" class="mute"></div>
+    <label>תיאור השינוי</label><input id="upMsg" value="העלאת קבצים">
+    <div class="row" style="margin-top:10px"><button id="upGo">⬆ העלאה ופרסום</button><button class="sec" id="upX">ביטול</button></div>
+    <div id="upProg" class="mute"></div>`;
+  show();
+  if ($('#upStrip')) $('#upStrip').onchange = show;
+  $('#upX').onclick = () => { panel.classList.add('hidden'); $('#upIn').value = ''; $('#upDirIn').value = ''; };
+  $('#upGo').onclick = e => act(e.currentTarget, async () => {
+    const ps = paths(isFolder && $('#upStrip') && $('#upStrip').checked);
+    const entries = [];
+    for (let i = 0; i < files.length; i++) entries.push({ path: ps[i], bytes: new Uint8Array(await files[i].arrayBuffer()) });
+    await commitFiles(entries, $('#upMsg').value.trim() || 'העלאת קבצים', t => { const p = $('#upProg'); if (p) p.textContent = t; });
+    toast('הועלה ✓ אם יש אתר, הוא יתעדכן תוך דקה-שתיים.');
+    route();
+  });
+}
+
+// העלאה של כמה קבצים בשמירה אחת
+async function commitFiles(entries, message, prog){
+  const base = R(); let head = null;
+  try { const ref = await gh(base + '/git/ref/heads/' + encPath(S.branch)); head = ref.object.sha; }
+  catch(e) { if (e.status !== 404 && e.status !== 409) throw e; }
+  if (!head) { // מאגר ריק לגמרי
+    for (let i = 0; i < entries.length; i++) {
+      prog('מעלה ' + (i + 1) + ' מתוך ' + entries.length + '...');
+      await gh(base + '/contents/' + encPath(entries[i].path), { method: 'PUT', body: { message, content: bytesToB64(entries[i].bytes) } });
+    }
+    S.branches = await gh(base + '/branches?per_page=100').catch(() => []);
+    return;
+  }
+  const commit = await gh(base + '/git/commits/' + head);
+  const tree = [];
+  for (let i = 0; i < entries.length; i++) {
+    prog('מכין קובץ ' + (i + 1) + ' מתוך ' + entries.length + '...');
+    const b = await gh(base + '/git/blobs', { method: 'POST', body: { content: bytesToB64(entries[i].bytes), encoding: 'base64' } });
+    tree.push({ path: entries[i].path, mode: '100644', type: 'blob', sha: b.sha });
+  }
+  prog('שומר...');
+  const t = await gh(base + '/git/trees', { method: 'POST', body: { base_tree: commit.tree.sha, tree } });
+  const c = await gh(base + '/git/commits', { method: 'POST', body: { message, tree: t.sha, parents: [head] } });
+  await gh(base + '/git/refs/heads/' + encPath(S.branch), { method: 'PATCH', body: { sha: c.sha } });
+  prog('');
+}
+
+async function viewEdit(path){
+  const d = await gh(R() + '/contents/' + encPath(path) + '?ref=' + enc(S.branch));
+  if (Array.isArray(d)) { location.replace(link('files', path)); return; }
+  let b64 = d.content;
+  if (!b64 && d.size > 0) { const bl = await gh(R() + '/git/blobs/' + d.sha); b64 = bl.content; }
+  const bytes = b64ToBytes(b64 || '');
+  const ext = (d.name.split('.').pop() || '').toLowerCase();
+  const imgTypes = { png:'image/png', jpg:'image/jpeg', jpeg:'image/jpeg', gif:'image/gif', webp:'image/webp', ico:'image/x-icon', bmp:'image/bmp', avif:'image/avif' };
+  const isImg = !!imgTypes[ext];
+  const isText = !isImg && looksText(bytes);
+  let sha = d.sha;
+  const dir = path.split('/').slice(0, -1).join('/');
+  await siteUrl();
+  const p = S.pages;
+  const live = p && p.build_type !== 'workflow' && p.source && p.source.path === '/' && p.source.branch === S.branch
+    ? p.html_url.replace(/\/?$/, '/') + encPath(path) : null;
+  setView(`${crumbs(path, true)}
+    <div class="card">
+      ${isText ? '<textarea id="ed" class="code" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>'
+        : isImg ? `<img alt="" src="data:${imgTypes[ext]};base64,${esc(String(b64).replace(/\s/g, ''))}" style="max-width:100%;max-height:60vh"><p class="mute">${fmtSize(d.size)}</p>`
+        : `<p>זה קובץ שאי אפשר לערוך כאן (${fmtSize(d.size)}). אפשר להחליף אותו בקובץ אחר מהמכשיר.</p>`}
+      ${isText ? `<label>תיאור השינוי</label><input id="msg" value="${esc('עדכון ' + d.name)}">` : ''}
+      <div class="row" style="margin-top:12px">
+        ${isText ? '<button id="save">💾 שמירה ופרסום</button>' : ''}
+        <button class="sec" id="rep">⬆ החלפה בקובץ מהמכשיר</button>
+        ${live ? `<a class="btn sec" target="_blank" rel="noopener" href="${esc(live)}">🌐 צפייה באתר</a>` : ''}
+        <a class="btn sec" href="${link('files', dir)}">חזרה לתיקייה</a>
+        <span class="sp"></span>
+        <button class="danger" id="del">🗑 מחיקה</button>
+      </div>
+      <input type="file" id="repIn" hidden>
+    </div>`);
+  if (isText) {
+    const ed = $('#ed');
+    ed.value = new TextDecoder().decode(bytes);
+    ed.oninput = () => { S.dirty = true; };
+    ed.onkeydown = e => {
+      if (e.key === 'Tab') { e.preventDefault(); ed.setRangeText('  ', ed.selectionStart, ed.selectionEnd, 'end'); S.dirty = true; }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); $('#save').click(); }
+    };
+    $('#save').onclick = e => act(e.currentTarget, async () => {
+      const r = await gh(R() + '/contents/' + encPath(path), { method: 'PUT', body: { message: $('#msg').value.trim() || 'עדכון ' + d.name, content: textToB64(ed.value), sha, ...brBody() } });
+      sha = r.content.sha; S.dirty = false;
+      toast('נשמר ✓ אם יש אתר, הוא יתעדכן תוך דקה-שתיים.');
+    });
+  }
+  $('#rep').onclick = () => $('#repIn').click();
+  $('#repIn').onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    if (!confirm('להחליף את ' + d.name + ' בקובץ ' + f.name + '?')) return;
+    act($('#rep'), async () => {
+      const bytesNew = new Uint8Array(await f.arrayBuffer());
+      await gh(R() + '/contents/' + encPath(path), { method: 'PUT', body: { message: 'החלפת ' + d.name, content: bytesToB64(bytesNew), sha, ...brBody() } });
+      S.dirty = false; toast('הקובץ הוחלף ✓'); route();
+    });
+  };
+  $('#del').onclick = e => {
+    if (!confirm('למחוק את הקובץ ' + d.name + '?')) return;
+    act(e.currentTarget, async () => {
+      await gh(R() + '/contents/' + encPath(path), { method: 'DELETE', body: { message: 'מחיקת ' + d.name, sha, ...brBody() } });
+      S.dirty = false; toast('נמחק ✓'); location.hash = link('files', dir);
+    });
+  };
+}
+
+async function viewNew(dir){
+  setView(`${crumbs(dir)}
+    <div class="card">
+      <label>שם הקובץ</label>
+      <div class="row" style="flex-wrap:nowrap" dir="ltr">${dir ? '<span class="mute">' + esc(dir) + '/</span>' : ''}<input id="fn" dir="ltr" placeholder="index.html" autocapitalize="off"></div>
+      <div class="mute">כדי ליצור תיקייה חדשה כותבים את שמה לפני שם הקובץ, למשל: <span dir="ltr">pages/about.html</span></div>
+      <label>תוכן</label><textarea id="ed" class="code" spellcheck="false" autocapitalize="off" style="min-height:45vh"></textarea>
+      <label>תיאור השינוי</label><input id="msg" value="קובץ חדש">
+      <div class="row" style="margin-top:12px"><button id="save">💾 יצירה ופרסום</button><a class="btn sec" href="${link('files', dir)}">ביטול</a></div>
+    </div>`);
+  $('#ed').oninput = () => { S.dirty = true; };
+  $('#save').onclick = e => act(e.currentTarget, async () => {
+    const fn = $('#fn').value.trim().replace(/^\/+/, '');
+    if (!fn) { toast('צריך לכתוב שם לקובץ', true); return; }
+    const path = (dir ? dir + '/' : '') + fn;
+    await gh(R() + '/contents/' + encPath(path), { method: 'PUT', body: { message: $('#msg').value.trim() || 'קובץ חדש', content: textToB64($('#ed').value), ...brBody() } });
+    if (!S.branches.length) S.branches = await gh(R() + '/branches?per_page=100').catch(() => []);
+    S.dirty = false; toast('נוצר ✓'); location.hash = link('edit', path);
+  });
+}
+
+/* ---------- אתר ופרסום ---------- */
+const pagesStatusHe = s => ({ built: '<span class="ok">✓ באוויר</span>', building: '<span class="warn">⏳ מתעדכן...</span>', errored: '<span class="bad">✗ שגיאה</span>' }[s] || '<span class="mute">לא ידוע</span>');
+function runStatusHe(r){
+  if (r.status !== 'completed') return { queued: '<span class="warn">⏳ ממתין בתור</span>', in_progress: '<span class="warn">⏳ רץ עכשיו</span>', waiting: '<span class="warn">⏳ ממתין</span>' }[r.status] || '<span class="warn">⏳ ' + esc(r.status) + '</span>';
+  return { success: '<span class="ok">✓ הצליח</span>', failure: '<span class="bad">✗ נכשל</span>', cancelled: '<span class="mute">בוטל</span>', skipped: '<span class="mute">דולג</span>' }[r.conclusion] || esc(r.conclusion || '');
+}
+function srcForm(br, path){
+  const brs = S.branches.length ? S.branches.map(b => b.name) : [br];
+  return `<div class="row"><span>ענף:</span><select id="pgBr" style="width:auto" dir="ltr">${brs.map(b => `<option ${b === br ? 'selected' : ''}>${esc(b)}</option>`).join('')}</select>
+    <span>תיקייה:</span><select id="pgPath" style="width:auto"><option value="/" ${path === '/' ? 'selected' : ''}>הראשית</option><option value="/docs" ${path === '/docs' ? 'selected' : ''}>docs</option></select></div>`;
+}
+
+async function viewPages(){
+  const base = R();
+  let p = null;
+  try { p = await gh(base + '/pages'); } catch(e) { if (e.status !== 404) throw e; }
+  S.pages = p;
+  const [build, runs] = await Promise.all([
+    p && p.build_type !== 'workflow' ? gh(base + '/pages/builds/latest').catch(() => null) : null,
+    gh(base + '/actions/runs?per_page=8').catch(() => null)
+  ]);
+  let html = '';
+  if (!p) {
+    html += `<div class="card"><h3>האתר של המאגר הזה לא מופעל</h3>
+      <p>אפשר להפעיל אתר (GitHub Pages) שיציג את הקבצים שבמאגר.</p>${srcForm(S.info.default_branch || 'main', '/')}
+      <div class="row" style="margin-top:12px"><button id="pgOn">הפעלת האתר</button></div>
+      ${S.info.private ? '<p class="mute">שים לב: אתר ממאגר פרטי דורש חשבון גיטהאב בתשלום.</p>' : ''}</div>`;
+  } else {
+    html += `<div class="card"><h3>מצב האתר</h3>
+      <p>כתובת: <a href="${esc(p.html_url)}" target="_blank" rel="noopener" dir="ltr">${esc(p.html_url)}</a></p>
+      <p>מצב: ${pagesStatusHe(p.status)}</p>
+      ${p.cname ? '<p>דומיין: <span dir="ltr">' + esc(p.cname) + '</span></p>' : ''}
+      ${p.build_type === 'workflow'
+        ? '<p class="mute">האתר הזה מתפרסם דרך תהליך אוטומטי (Actions): כל שמירה של קובץ מפעילה אותו. המצב שלו מופיע למטה.</p>'
+        : `${build ? `<p>פרסום אחרון: ${pagesStatusHe(build.status)} · ${fmtTime(build.created_at)}${build.error && build.error.message ? '<br><span class="bad">שגיאה: ' + esc(build.error.message) + '</span>' : ''}</p>` : ''}
+           <div class="row"><button id="pgRe">🔄 פרסום מחדש עכשיו</button></div>
+           <hr><h3>מאיפה האתר לוקח את הקבצים</h3>${srcForm(p.source ? p.source.branch : S.branch, p.source ? p.source.path : '/')}
+           <div class="row" style="margin-top:10px"><button class="sec" id="pgSave">שמירת ההגדרה</button></div>`}
+      <hr><button class="danger" id="pgOff">כיבוי האתר</button></div>`;
+  }
+  const wr = runs && runs.workflow_runs ? runs.workflow_runs : [];
+  if (wr.length) {
+    html += `<div class="card"><h3>תהליכים אוטומטיים אחרונים</h3><div class="list">${wr.map(r => `<div class="item">
+        <div style="flex:1"><div dir="auto">${esc(r.display_title || r.name)}</div>
+        <div class="mute">${runStatusHe(r)} · <span dir="ltr">${esc(r.name)}</span> · ${fmtTime(r.created_at)}</div></div>
+        ${r.status === 'completed' ? `<button class="sec" data-rerun="${r.id}">הרצה שוב</button>` : ''}
+        <a class="btn sec" href="${esc(r.html_url)}" target="_blank" rel="noopener">פרטים</a></div>`).join('')}</div></div>`;
+  }
+  setView(html);
+
+  if ($('#pgOn')) $('#pgOn').onclick = e => act(e.currentTarget, async () => {
+    await gh(base + '/pages', { method: 'POST', body: { source: { branch: $('#pgBr').value, path: $('#pgPath').value } } });
+    S.pages = undefined; toast('האתר מופעל ✓ ייקח דקה-שתיים עד שהוא יעלה.'); route();
+  });
+  if ($('#pgRe')) $('#pgRe').onclick = e => act(e.currentTarget, async () => {
+    await gh(base + '/pages/builds', { method: 'POST' }); toast('הפרסום התחיל ✓'); await sleep(1500); route();
+  });
+  if ($('#pgSave')) $('#pgSave').onclick = e => act(e.currentTarget, async () => {
+    await gh(base + '/pages', { method: 'PUT', body: { source: { branch: $('#pgBr').value, path: $('#pgPath').value } } });
+    toast('נשמר ✓'); route();
+  });
+  if ($('#pgOff')) $('#pgOff').onclick = e => {
+    if (!confirm('לכבות את האתר? הקבצים יישארו במאגר, אבל האתר יפסיק להיות זמין באינטרנט.')) return;
+    act(e.currentTarget, async () => { await gh(base + '/pages', { method: 'DELETE' }); S.pages = undefined; toast('האתר כובה'); route(); });
+  };
+  document.querySelectorAll('[data-rerun]').forEach(b => b.onclick = () => act(b, async () => {
+    await gh(base + '/actions/runs/' + b.dataset.rerun + '/rerun', { method: 'POST' }); toast('הופעל מחדש ✓'); await sleep(1500); route();
+  }));
+  // רענון אוטומטי כשמשהו עדיין רץ
+  const busy = (p && p.status === 'building') || (build && build.status === 'building') || wr.some(r => r.status !== 'completed');
+  if (busy) { const h = location.hash; setTimeout(() => { if (location.hash === h && !document.hidden) route(); }, 15000); }
+}
+
+/* ---------- בעיות ---------- */
+async function viewIssues(){
+  const st = S.issueState;
+  const list = (await gh(R() + '/issues?state=' + st + '&per_page=50')).filter(i => !i.pull_request);
+  setView(`<div class="row between">
+      <div class="row"><button class="${st === 'open' ? '' : 'sec'}" data-st="open">פתוחות</button><button class="${st === 'closed' ? '' : 'sec'}" data-st="closed">סגורות</button></div>
+      <button id="niBtn">+ בעיה חדשה</button></div>
+    <div id="niBox" class="card hidden" style="margin-top:12px"><label>כותרת</label><input id="niT" dir="auto"><label>פירוט</label><textarea id="niB" rows="5" dir="auto"></textarea>
+      <div class="row" style="margin-top:10px"><button id="niGo">שמירה</button></div></div>
+    <div style="margin-top:12px">${list.length ? list.map(i => `<details class="card" data-n="${i.number}" data-c="${i.comments}">
+      <summary><b dir="auto">${esc(i.title)}</b> <span class="mute">#${i.number} · ${fmtTime(i.created_at)}${i.comments ? ' · ' + i.comments + ' תגובות' : ''}</span></summary>
+      <pre class="body" dir="auto">${esc(i.body || '(אין פירוט)')}</pre>
+      <div class="cm"></div>
+      <textarea class="cmIn" rows="3" dir="auto" placeholder="כתיבת תגובה..."></textarea>
+      <div class="row" style="margin-top:8px"><button data-act="cm">שליחת תגובה</button><button class="sec" data-act="st" data-to="${i.state === 'open' ? 'closed' : 'open'}">${i.state === 'open' ? '✓ סגירת הבעיה' : 'פתיחה מחדש'}</button>
+      <a class="btn sec" href="${esc(i.html_url)}" target="_blank" rel="noopener">בגיטהאב</a></div>
+    </details>`).join('') : '<div class="card">אין בעיות ' + (st === 'open' ? 'פתוחות' : 'סגורות') + '.</div>'}</div>`);
+  document.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { S.issueState = b.dataset.st; route(); });
+  $('#niBtn').onclick = () => $('#niBox').classList.toggle('hidden');
+  $('#niGo').onclick = e => act(e.currentTarget, async () => {
+    const title = $('#niT').value.trim(); if (!title) { toast('צריך כותרת', true); return; }
+    await gh(R() + '/issues', { method: 'POST', body: { title, body: $('#niB').value } }); toast('נוצר ✓'); route();
+  });
+  document.querySelectorAll('details[data-n]').forEach(d => {
+    const n = d.dataset.n;
+    const loadComments = async () => {
+      if (d.dataset.c === '0') return;
+      const cs = await gh(R() + '/issues/' + n + '/comments?per_page=100');
+      d.querySelector('.cm').innerHTML = cs.map(c => `<div class="c"><div class="mute" dir="ltr" style="text-align:right">${esc(c.user && c.user.login)} · ${fmtTime(c.created_at)}</div><pre class="body" dir="auto">${esc(c.body)}</pre></div>`).join('');
+    };
+    d.addEventListener('toggle', () => { if (d.open && !d.dataset.loaded) { d.dataset.loaded = 1; loadComments().catch(showError); } });
+    d.querySelector('[data-act="cm"]').onclick = e => act(e.currentTarget, async () => {
+      const body = d.querySelector('.cmIn').value.trim(); if (!body) return;
+      await gh(R() + '/issues/' + n + '/comments', { method: 'POST', body: { body } });
+      d.querySelector('.cmIn').value = ''; d.dataset.c = '1'; await loadComments(); toast('התגובה נשלחה ✓');
+    });
+    const sb = d.querySelector('[data-act="st"]');
+    sb.onclick = e => act(e.currentTarget, async () => {
+      const to = sb.dataset.to;
+      await gh(R() + '/issues/' + n, { method: 'PATCH', body: to === 'closed' ? { state: 'closed', state_reason: 'completed' } : { state: 'open' } });
+      toast(to === 'closed' ? 'הבעיה נסגרה ✓' : 'הבעיה נפתחה מחדש'); route();
+    });
+  });
+}
+
+/* ---------- היסטוריה ---------- */
+async function viewCommits(){
+  const cs = await gh(R() + '/commits?sha=' + enc(S.branch) + '&per_page=30');
+  setView(`<p class="mute">30 השינויים האחרונים בענף <span dir="ltr">${esc(S.branch)}</span>:</p>
+    <div class="list">${cs.map(c => `<a class="item" href="${esc(c.html_url)}" target="_blank" rel="noopener">
+      <div style="flex:1"><div dir="auto">${esc((c.commit.message || '').split('\n')[0])}</div>
+      <div class="mute">${fmtTime(c.commit.author && c.commit.author.date)} · <span dir="ltr">${esc((c.author && c.author.login) || (c.commit.author && c.commit.author.name) || '')}</span></div></div>
+      <span class="mute" dir="ltr">${esc(c.sha.slice(0, 7))}</span></a>`).join('') || '<div class="item">אין שינויים</div>'}</div>`);
+}
+
+/* ---------- הגדרות ---------- */
+async function viewSettings(){
+  const i = S.info;
+  setView(`<div class="card"><h3>פרטי המאגר</h3>
+      <label>שם (באנגלית, בלי רווחים)</label><input id="sN" dir="ltr" value="${esc(i.name)}">
+      <label>תיאור</label><input id="sD" dir="auto" value="${esc(i.description || '')}">
+      <label>כתובת אתר (מוצגת בדף המאגר בגיטהאב)</label><input id="sH" dir="ltr" value="${esc(i.homepage || '')}">
+      <label class="chk"><input type="checkbox" id="sP" ${i.private ? 'checked' : ''}> מאגר פרטי (רק אתה רואה את הקבצים)</label>
+      <p class="mute">שים לב: שינוי שם המאגר משנה גם את כתובת האתר שלו.</p>
+      <div class="row"><button id="sGo">💾 שמירה</button></div></div>
+    <div class="card" style="border-color:#f1c4c4"><h3 class="bad">מחיקת המאגר</h3>
+      <p>המחיקה סופית. כל הקבצים וכל ההיסטוריה יימחקו ואי אפשר יהיה לשחזר אותם. אם יש למאגר אתר, גם הוא יפסיק לעבוד.</p>
+      <label>כדי לאשר, הקלד את שם המאגר: <b dir="ltr">${esc(i.name)}</b></label><input id="dN" dir="ltr" autocomplete="off">
+      <div class="row" style="margin-top:10px"><button class="danger" id="dGo" disabled>🗑 מחיקה לצמיתות</button></div></div>`);
+  $('#sGo').onclick = e => act(e.currentTarget, async () => {
+    const body = { name: $('#sN').value.trim(), description: $('#sD').value, homepage: $('#sH').value.trim(), private: $('#sP').checked };
+    if (body.private !== i.private && !confirm(body.private ? 'להפוך את המאגר לפרטי? אם יש לו אתר בחשבון חינמי, האתר עלול להפסיק לעבוד.' : 'להפוך את המאגר לציבורי? כל אחד יוכל לראות את הקבצים.')) return;
+    const r = await gh(R(), { method: 'PATCH', body });
+    S.info = r; S.repo = r.name; toast('נשמר ✓'); location.hash = link('settings'); route();
+  });
+  $('#dN').oninput = () => { $('#dGo').disabled = $('#dN').value.trim() !== i.name; };
+  $('#dGo').onclick = e => {
+    if (!confirm('בטוח? אין דרך חזרה.')) return;
+    act(e.currentTarget, async () => { await gh(R(), { method: 'DELETE' }); S.repo = null; S.info = null; toast('המאגר נמחק'); location.hash = '#/'; });
+  };
+}
+
+/* ---------- הפעלה ---------- */
+(async () => {
+  const t = storeGet();
+  if (t) {
+    TOKEN = t;
+    try { ME = await gh('/user'); }
+    catch(e) { TOKEN = null; if (e.status === 401) storeClear(); }
+  }
+  renderHeader(); route();
+})();
+</script>
+</body>
+</html>
