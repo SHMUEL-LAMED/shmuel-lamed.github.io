@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.github.com; img-src data: blob: https:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.github.com https://admin-api.xn--4dbjbascrao3i.com; img-src data: blob: https:; base-uri 'none'; form-action 'none'">
 <title>לוח ניהול</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%99%3C/text%3E%3C/svg%3E">
 <style>
@@ -72,13 +72,38 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const enc = encodeURIComponent;
 const encPath = p => String(p || '').split('/').filter(Boolean).map(enc).join('/');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-let TOKEN = null, ME = null;
+const SERVER = 'https://admin-api.xn--4dbjbascrao3i.com';
+let MODE = null; // 'server' = כניסה עם סיסמה דרך השרת, 'direct' = כניסה עם מפתח ישיר
+let TOKEN = null, SESSION = null, ME = null;
 const S = { repo: null, info: null, branch: null, branches: [], pages: undefined, issueState: 'open', dirty: false };
 
-/* ---------- אחסון המפתח ---------- */
-function storeGet(){ try { return localStorage.getItem('gh_tok') || sessionStorage.getItem('gh_tok'); } catch(e){ return null; } }
-function storeSet(t, rem){ try { (rem ? localStorage : sessionStorage).setItem('gh_tok', t); } catch(e){} }
-function storeClear(){ try { localStorage.removeItem('gh_tok'); sessionStorage.removeItem('gh_tok'); } catch(e){} }
+/* ---------- אחסון ---------- */
+function storeGet(k){ try { return localStorage.getItem(k) || sessionStorage.getItem(k); } catch(e){ return null; } }
+function storeSet(k, v, rem){ try { (rem ? localStorage : sessionStorage).setItem(k, v); } catch(e){} }
+function storeClear(){ try { ['gh_tok','adm_sess'].forEach(k => { localStorage.removeItem(k); sessionStorage.removeItem(k); }); } catch(e){} }
+
+/* ---------- השרת בקלאודפלייר ---------- */
+const SRV_ERR = {
+  bad_code: 'קוד ההתקנה שגוי.',
+  weak_password: 'הסיסמה צריכה להיות באורך 8 תווים לפחות.',
+  bad_github_token: 'מפתח הגיטהאב לא תקין או שפג תוקפו. בדוק שהעתקת אותו במלואו.',
+  bad_password: 'סיסמה שגויה.',
+  too_many: 'יותר מדי ניסיונות. נסה שוב בעוד רבע שעה.',
+  already_setup: 'השרת כבר הוגדר. היכנס עם הסיסמה.',
+  session: 'החיבור פג. צריך להיכנס מחדש.',
+  not_setup: 'השרת עדיין לא הוגדר.'
+};
+async function srv(path, body){
+  let res;
+  try {
+    res = await fetch(SERVER + path, { method: body ? 'POST' : 'GET', cache: 'no-store',
+      headers: { ...(SESSION ? { 'X-Session': SESSION } : {}), ...(body ? { 'Content-Type': 'application/json' } : {}) },
+      body: body ? JSON.stringify(body) : undefined });
+  } catch(e) { const err = new Error('השרת לא זמין כרגע.'); err.status = 0; throw err; }
+  let data = null; try { data = await res.json(); } catch(e) {}
+  if (!res.ok) { const code = data && data.error; const err = new Error(SRV_ERR[code] || ('שגיאה ' + res.status)); err.status = res.status; err.code = code; throw err; }
+  return data;
+}
 
 /* ---------- עזרים ---------- */
 function b64ToBytes(b64){ const bin = atob(String(b64 || '').replace(/\s/g, '')); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
@@ -106,24 +131,35 @@ function heErr(status, data){
 }
 
 async function gh(path, opts = {}){
-  const headers = { 'Authorization': 'Bearer ' + TOKEN, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+  const viaServer = MODE === 'server';
+  const headers = viaServer ? { 'X-Session': SESSION || '' }
+    : { 'Authorization': 'Bearer ' + TOKEN, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
   if (opts.body) headers['Content-Type'] = 'application/json';
   let res;
   try {
-    res = await fetch(path.startsWith('http') ? path : API + path, { method: opts.method || 'GET', headers, body: opts.body ? JSON.stringify(opts.body) : undefined, cache: 'no-store' });
+    res = await fetch((viaServer ? SERVER + '/gh' : API) + path, { method: opts.method || 'GET', headers, body: opts.body ? JSON.stringify(opts.body) : undefined, cache: 'no-store' });
   } catch(e) {
-    const err = new Error('אין חיבור לגיטהאב. בדוק את האינטרנט ונסה שוב.'); err.status = 0; throw err;
+    const err = new Error(viaServer ? 'אין חיבור לשרת. בדוק את האינטרנט ונסה שוב.' : 'אין חיבור לגיטהאב. בדוק את האינטרנט ונסה שוב.'); err.status = 0; throw err;
   }
   if (res.status === 204) return null;
   const txt = await res.text(); let data = null;
   try { data = txt ? JSON.parse(txt) : null; } catch(e) { data = txt; }
-  if (!res.ok) { const err = new Error(heErr(res.status, data)); err.status = res.status; err.data = data; throw err; }
+  if (!res.ok) {
+    if (viaServer && res.status === 502 && data && data.error === 'bad_github_token') {
+      const err = new Error('מפתח הגיטהאב שבשרת לא תקין או שפג תוקפו. צריך להחליף אותו בדף "חשבון".'); err.status = 502; err.badgh = true; throw err;
+    }
+    if (viaServer && res.status === 401) { const err = new Error(SRV_ERR.session); err.status = 401; throw err; }
+    const err = new Error(heErr(res.status, data)); err.status = res.status; err.data = data; throw err;
+  }
   return data;
 }
 
+function logout(msg){ storeClear(); TOKEN = null; SESSION = null; MODE = null; ME = null; S.repo = null; S.info = null; renderHeader(); renderLogin(msg); }
+
 function showError(e){
   console.error(e);
-  if (e && e.status === 401 && ME) { storeClear(); TOKEN = null; ME = null; renderHeader(); renderLogin('מפתח הגישה כבר לא תקין. צריך להתחבר מחדש.'); return; }
+  if (e && e.status === 401 && ME) { logout(MODE === 'server' ? 'החיבור פג. צריך להיכנס מחדש עם הסיסמה.' : 'מפתח הגישה כבר לא תקין. צריך להתחבר מחדש.'); return; }
+  if (e && e.badgh && location.hash !== '#/account') { toast(e.message, true); location.hash = '#/account'; return; }
   toast((e && e.message) || 'משהו השתבש', true);
   const v = $('#view') || $('#main');
   if (v && /טוען/.test(v.textContent) && v.textContent.length < 20) v.innerHTML = '<div class="card bad">' + esc(e.message) + '</div>';
@@ -143,43 +179,125 @@ const brBody = () => (S.branches.length ? { branch: S.branch } : {});
 /* ---------- כותרת וכניסה ---------- */
 function renderHeader(){
   $('#hdr').innerHTML = '<a href="#/">⚙ לוח הניהול שלי</a><span class="sp"></span>' +
-    (ME ? '<span class="who" dir="ltr">' + esc(ME.login) + '</span><button class="sec" id="logout">יציאה</button>' : '');
+    (ME ? (MODE === 'server' ? '<a href="#/account" class="who" style="font-size:14px;font-weight:400">👤 חשבון</a>' : '<span class="who" dir="ltr">' + esc(ME.login) + '</span>') +
+      '<button class="sec" id="logout">יציאה</button>' : '');
   const b = $('#logout');
-  if (b) b.onclick = () => { if (!confirm('לצאת מהחשבון במכשיר הזה?')) return; storeClear(); TOKEN = null; ME = null; S.repo = null; renderHeader(); location.hash = '#/'; renderLogin(); };
+  if (b) b.onclick = () => { if (!confirm('לצאת מלוח הניהול במכשיר הזה?')) return; location.hash = '#/'; logout(); };
 }
 
-function renderLogin(msg){
+function tokenHelp(open){
   const tokUrl = 'https://github.com/settings/tokens/new?scopes=repo,workflow,delete_repo&description=' + enc('לוח ניהול');
-  setMain(`<div class="card narrow">
-    <h2>כניסה ללוח הניהול</h2>
-    ${msg ? '<p class="bad">' + esc(msg) + '</p>' : ''}
-    <p class="mute">כדי שהאתר יוכל לנהל את הגיטהאב שלך, צריך להדביק כאן "מפתח גישה" (טוקן) מגיטהאב. איך משיגים אותו – למטה.</p>
-    <label for="tok">מפתח גישה</label>
-    <input id="tok" type="password" dir="ltr" autocomplete="off" placeholder="ghp_...">
-    <label class="chk"><input type="checkbox" id="rem" checked> לזכור אותי במכשיר הזה</label>
-    <div class="row" style="margin-top:12px"><button id="go">כניסה</button></div>
-    <p id="lerr" class="bad"></p>
-    <details open><summary><b>איך משיגים מפתח גישה? (פעם אחת בלבד)</b></summary>
+  return `<details ${open ? 'open' : ''}><summary><b>איך משיגים מפתח גישה מגיטהאב?</b></summary>
       <ol>
         <li>היכנס לגיטהאב באותו דפדפן.</li>
         <li>לחץ על הקישור: <a href="${tokUrl}" target="_blank" rel="noopener">יצירת מפתח גישה בגיטהאב</a>. ייפתח דף שבו ההרשאות הנכונות כבר מסומנות.</li>
-        <li>בשדה <b dir="ltr">Expiration</b> (תוקף) בחר כמה זמן המפתח יעבוד. לדוגמה <b dir="ltr">90 days</b> (90 יום), או <b dir="ltr">No expiration</b> (בלי תפוגה).</li>
+        <li>בשדה <b dir="ltr">Expiration</b> (תוקף) בחר <b dir="ltr">No expiration</b> (בלי תפוגה), כדי שהמפתח יהיה קבוע.</li>
         <li>גלול לתחתית הדף ולחץ על הכפתור הירוק <b dir="ltr">Generate token</b> (יצירת מפתח).</li>
-        <li>יופיע קוד שמתחיל ב־<span dir="ltr">ghp_</span>. העתק אותו והדבק כאן למעלה. גיטהאב מציג אותו רק פעם אחת.</li>
+        <li>יופיע קוד שמתחיל ב־<span dir="ltr">ghp_</span>. העתק אותו והדבק כאן. גיטהאב מציג אותו רק פעם אחת.</li>
       </ol>
-      <p class="mute">⚠ המפתח הזה הוא כמו סיסמה לחשבון. אל תשלח אותו לאף אחד. אם הוא נחשף, מוחקים אותו בגיטהאב (באותו דף של המפתחות) ויוצרים חדש.</p>
+      <p class="mute">⚠ המפתח הזה הוא כמו סיסמה לחשבון. אל תשלח אותו לאף אחד.</p>
+    </details>`;
+}
+
+async function enterServer(data, rem){
+  SESSION = data.session; MODE = 'server'; storeSet('adm_sess', SESSION, rem);
+  ME = { login: data.login };
+  renderHeader(); route();
+}
+
+async function renderLogin(msg){
+  setMain('<div class="card narrow">טוען...</div>');
+  let st = null, stErr = null;
+  try { st = await srv('/status'); } catch(e) { stErr = e; }
+  let top;
+  if (stErr) {
+    top = `<h2>כניסה ללוח הניהול</h2><p class="bad">השרת לא זמין כרגע. אם זה נמשך, ייתכן שהסינון חוסם את הכתובת <span dir="ltr">admin-api.שמואלליווי.com</span>, ואפשר לבקש לפתוח אותה. בינתיים אפשר להיכנס עם מפתח ישיר (למטה).</p>`;
+  } else if (!st.setup) {
+    top = `<h2>הגדרה ראשונה (פעם אחת בלבד)</h2>
+      <p class="mute">כאן שומרים את מפתח הגיטהאב בשרת שלך בקלאודפלייר, ובוחרים סיסמה. מעכשיו תיכנס רק עם הסיסמה, מכל מכשיר.</p>
+      <label>קוד התקנה</label><input id="sc" dir="ltr" inputmode="numeric" autocomplete="off">
+      <label>מפתח גישה מגיטהאב</label><input id="stok" type="password" dir="ltr" autocomplete="off" placeholder="ghp_...">
+      ${tokenHelp(true)}
+      <label>סיסמה לכניסה ללוח (לפחות 8 תווים)</label><input id="sp1" type="password" autocomplete="new-password">
+      <label>הסיסמה שוב</label><input id="sp2" type="password" autocomplete="new-password">
+      <label class="chk"><input type="checkbox" id="rem" checked> לזכור אותי במכשיר הזה</label>
+      <div class="row" style="margin-top:12px"><button id="sgo">שמירה וכניסה</button></div>
+      <p id="lerr" class="bad"></p>`;
+  } else {
+    top = `<h2>כניסה ללוח הניהול</h2>
+      <label>סיסמה</label><input id="pw" type="password" autocomplete="current-password">
+      <label class="chk"><input type="checkbox" id="rem" checked> לזכור אותי במכשיר הזה (30 יום)</label>
+      <div class="row" style="margin-top:12px"><button id="pgo">כניסה</button></div>
+      <p id="lerr" class="bad"></p>`;
+  }
+  setMain(`<div class="card narrow">
+    ${msg ? '<p class="bad">' + esc(msg) + '</p>' : ''}
+    ${top}
+    <hr>
+    <details ${stErr ? 'open' : ''}><summary class="mute">כניסה עם מפתח ישיר (בלי השרת)</summary>
+      <label for="tok">מפתח גישה</label>
+      <input id="tok" type="password" dir="ltr" autocomplete="off" placeholder="ghp_...">
+      <label class="chk"><input type="checkbox" id="remd" checked> לזכור אותי במכשיר הזה</label>
+      <div class="row" style="margin-top:12px"><button class="sec" id="go">כניסה עם מפתח</button></div>
+      <p id="derr" class="bad"></p>
+      ${tokenHelp(false)}
     </details>
   </div>`);
-  const go = async () => {
-    const t = $('#tok').value.trim(); if (!t) return;
+
+  if ($('#sgo')) $('#sgo').onclick = e => act(e.currentTarget, async () => {
     $('#lerr').textContent = '';
-    TOKEN = t;
+    if ($('#sp1').value !== $('#sp2').value) { $('#lerr').textContent = 'שתי הסיסמאות לא זהות.'; return; }
+    try { await enterServer(await srv('/setup', { code: $('#sc').value.trim(), token: $('#stok').value.trim(), password: $('#sp1').value }), $('#rem').checked); toast('ההגדרה נשמרה ✓'); }
+    catch(err) { $('#lerr').textContent = err.message; }
+  });
+  if ($('#pgo')) {
+    $('#pgo').onclick = e => act(e.currentTarget, async () => {
+      $('#lerr').textContent = '';
+      try { await enterServer(await srv('/login', { password: $('#pw').value }), $('#rem').checked); }
+      catch(err) { $('#lerr').textContent = err.message; }
+    });
+    $('#pw').onkeydown = e => { if (e.key === 'Enter') $('#pgo').click(); };
+    $('#pw').focus();
+  }
+  $('#go').onclick = e => act(e.currentTarget, async () => {
+    const t = $('#tok').value.trim(); if (!t) return;
+    $('#derr').textContent = '';
+    TOKEN = t; MODE = 'direct';
     try { ME = await gh('/user'); }
-    catch(e) { TOKEN = null; $('#lerr').textContent = e.status === 401 ? 'המפתח לא תקין. בדוק שהעתקת אותו במלואו.' : e.message; return; }
-    storeSet(t, $('#rem').checked); renderHeader(); route();
-  };
-  $('#go').onclick = e => act(e.currentTarget, go);
+    catch(err) { TOKEN = null; MODE = null; $('#derr').textContent = err.status === 401 ? 'המפתח לא תקין. בדוק שהעתקת אותו במלואו.' : err.message; return; }
+    storeSet('gh_tok', t, $('#remd').checked); renderHeader(); route();
+  });
   $('#tok').onkeydown = e => { if (e.key === 'Enter') $('#go').click(); };
+}
+
+/* ---------- חשבון: החלפת סיסמה ומפתח ---------- */
+async function viewAccount(){
+  if (MODE !== 'server') {
+    setMain(`<div class="card narrow"><h2>חשבון</h2><p>נכנסת עם מפתח ישיר, לכן אין כאן הגדרות שרת. כדי לעבור לכניסה עם סיסמה, צא ונכנס דרך הסיסמה.</p><a class="btn sec" href="#/">חזרה</a></div>`);
+    return;
+  }
+  setMain(`<a href="#/" class="mute" style="text-decoration:none">→ כל המאגרים</a>
+    <div class="card" style="margin-top:8px"><h3>החלפת מפתח הגיטהאב</h3>
+      <p class="mute">צריך רק אם המפתח פג, נמחק או נחשף. המפתח החדש נשמר בשרת שלך בקלאודפלייר.</p>
+      <label>מפתח גישה חדש</label><input id="atok" type="password" dir="ltr" autocomplete="off" placeholder="ghp_...">
+      ${tokenHelp(false)}
+      <div class="row" style="margin-top:10px"><button id="atGo">החלפת המפתח</button></div></div>
+    <div class="card"><h3>החלפת סיסמה</h3>
+      <label>הסיסמה הנוכחית</label><input id="ap0" type="password" autocomplete="current-password">
+      <label>סיסמה חדשה (לפחות 8 תווים)</label><input id="ap1" type="password" autocomplete="new-password">
+      <label>הסיסמה החדשה שוב</label><input id="ap2" type="password" autocomplete="new-password">
+      <p class="mute">אחרי ההחלפה, כל המכשירים האחרים ינותקו ויצטרכו להיכנס עם הסיסמה החדשה.</p>
+      <div class="row"><button id="apGo">החלפת הסיסמה</button></div></div>`);
+  $('#atGo').onclick = e => act(e.currentTarget, async () => {
+    const t = $('#atok').value.trim(); if (!t) return;
+    const r = await srv('/token', { token: t }); ME = { login: r.login }; $('#atok').value = ''; toast('המפתח הוחלף ✓');
+  });
+  $('#apGo').onclick = e => act(e.currentTarget, async () => {
+    if ($('#ap1').value !== $('#ap2').value) { toast('שתי הסיסמאות החדשות לא זהות', true); return; }
+    const r = await srv('/password', { old: $('#ap0').value, password: $('#ap1').value });
+    SESSION = r.session; let rem = false; try { rem = !!localStorage.getItem('adm_sess'); } catch(e) {} storeSet('adm_sess', SESSION, rem);
+    ['ap0','ap1','ap2'].forEach(id => $('#' + id).value = ''); toast('הסיסמה הוחלפה ✓');
+  });
 }
 
 /* ---------- ניתוב ---------- */
@@ -198,10 +316,11 @@ async function ensureRepo(name){
 }
 
 async function route(){
-  if (!TOKEN || !ME) { renderLogin(); return; }
+  if (!ME) { renderLogin(); return; }
   const h = location.hash.replace(/^#\/?/, '');
   const parts = h ? h.split('/') : [];
   try {
+    if (parts[0] === 'account') { await viewAccount(); return; }
     if (parts[0] === 'r' && parts[1]) {
       const name = decodeURIComponent(parts[1]);
       const tab = parts[2] || 'files';
@@ -649,11 +768,19 @@ async function viewSettings(){
 
 /* ---------- הפעלה ---------- */
 (async () => {
-  const t = storeGet();
-  if (t) {
-    TOKEN = t;
+  const sess = storeGet('adm_sess'), t = storeGet('gh_tok');
+  if (sess) {
+    MODE = 'server'; SESSION = sess;
     try { ME = await gh('/user'); }
-    catch(e) { TOKEN = null; if (e.status === 401) storeClear(); }
+    catch(e) {
+      if (e.badgh) { ME = { login: '' }; renderHeader(); location.hash = '#/account'; route(); toast(e.message, true); return; }
+      if (e.status === 401) storeClear();
+      MODE = null; SESSION = null;
+    }
+  } else if (t) {
+    MODE = 'direct'; TOKEN = t;
+    try { ME = await gh('/user'); }
+    catch(e) { TOKEN = null; MODE = null; if (e.status === 401) storeClear(); }
   }
   renderHeader(); route();
 })();
