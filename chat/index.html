@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://yemot-mail.smwlyqswkwt232.workers.dev; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#1f3a5f">
+<title>הצ'אטים שלי</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231f3a5f'/%3E%3Cpath d='M22 30h56v32H44l-14 12V62h-8z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#eef1f5;--card:#fff;--ink:#1d2433;--mute:#6b7385;--line:#e2e6ee;--acc:#1f3a5f;--acc2:#d97757;--mine:#dcf3e4;--theirs:#fff;--bad:#c33131}
+@media (prefers-color-scheme:dark){:root{--bg:#10151f;--card:#1a2130;--ink:#e8ecf3;--mute:#98a1b3;--line:#2a3345;--acc:#8fb3e8;--mine:#1f4a35;--theirs:#232c3e}}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:system-ui,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.hide{display:none!important}
+header{background:#1f3a5f;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;min-height:56px}
+header h1{font-size:18px;margin:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+header button{color:#fff;padding:6px 10px;border-radius:8px;font-size:15px}
+header button:hover{background:rgba(255,255,255,.12)}
+#login{max-width:360px;margin:12vh auto 0;padding:0 16px;text-align:center}
+#login .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+#login input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);text-align:center;font-size:20px;letter-spacing:4px;margin:14px 0}
+.btn{background:var(--acc2);color:#fff;padding:11px 18px;border-radius:10px;font-weight:700;width:100%}
+.btn:disabled{opacity:.6}
+.err{color:var(--bad);min-height:1.5em;margin-top:8px}
+#app{display:flex;flex-direction:column;height:100%}
+#body{flex:1;display:flex;min-height:0}
+#list{width:340px;border-left:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;min-height:0}
+#search{margin:10px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.tabs{display:flex;gap:6px;padding:0 10px 8px}
+.tabs button{padding:5px 12px;border-radius:20px;background:var(--bg);font-size:14px}
+.tabs button.on{background:var(--acc);color:#fff}
+#spaces{overflow-y:auto;flex:1}
+.sp{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);width:100%;text-align:right}
+.sp:hover,.sp.on{background:var(--bg)}
+.av{width:40px;height:40px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.sp .t{flex:1;min-width:0}
+.sp .n{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp .d{font-size:13px;color:var(--mute)}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--acc2);flex:none}
+.muted .n{opacity:.6}
+#conv{flex:1;display:flex;flex-direction:column;min-width:0}
+#convhead{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--card);border-bottom:1px solid var(--line);min-height:52px}
+#convhead .n{flex:1;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#convhead button{padding:6px 10px;border-radius:8px;font-size:14px;background:var(--bg)}
+#back{display:none}
+#msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:6px}
+.m{max-width:78%;padding:7px 11px;border-radius:12px;background:var(--theirs);border:1px solid var(--line);white-space:pre-wrap;word-wrap:break-word;align-self:flex-start}
+.m.mine{background:var(--mine);align-self:flex-end}
+.m .w{font-size:13px;font-weight:700;color:var(--acc)}
+.m .at{font-size:11px;color:var(--mute);text-align:left;margin-top:2px}
+.m .att{font-size:13px;color:var(--mute)}
+.day{align-self:center;font-size:12px;color:var(--mute);background:var(--card);padding:2px 10px;border-radius:10px;margin:6px 0}
+#summary{margin:10px 12px 0;padding:12px;background:var(--card);border:1px solid var(--acc2);border-radius:12px;white-space:pre-wrap;font-size:15px}
+#compose{display:flex;gap:8px;padding:10px;background:var(--card);border-top:1px solid var(--line);padding-bottom:max(10px,env(safe-area-inset-bottom))}
+#compose textarea{flex:1;resize:none;border:1px solid var(--line);border-radius:12px;padding:9px 12px;background:var(--bg);max-height:140px}
+#compose button{background:var(--acc2);color:#fff;border-radius:12px;padding:0 18px;font-weight:700}
+.empty{margin:auto;color:var(--mute);text-align:center;padding:20px}
+@media (max-width:760px){
+  #list{width:100%;border:0}
+  #conv{display:none}
+  body.open #list{display:none}
+  body.open #conv{display:flex}
+  #back{display:inline-block}
+}
+</style>
+</head>
+<body>
+<div id="login" class="hide">
+  <div class="card">
+    <h2 style="margin:0">הצ'אטים שלי</h2>
+    <div style="color:var(--mute)">כניסה עם הקוד הסודי של הקו</div>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" aria-label="קוד סודי">
+    <button class="btn" id="go">כניסה</button>
+    <div class="err" id="lerr"></div>
+  </div>
+</div>
+
+<div id="app" class="hide">
+  <header>
+    <h1>הצ'אטים שלי</h1>
+    <button id="refresh" title="רענון">רענון</button>
+    <button id="logout" title="יציאה">יציאה</button>
+  </header>
+  <div id="body">
+    <aside id="list">
+      <input id="search" type="search" placeholder="חיפוש שיחה">
+      <div class="tabs">
+        <button data-f="all" class="on">הכל</button>
+        <button data-f="unread">לא נקראו</button>
+        <button data-f="dm">פרטיים</button>
+        <button data-f="group">קבוצות</button>
+      </div>
+      <div id="spaces"><div class="empty">טוען...</div></div>
+    </aside>
+    <section id="conv">
+      <div id="convhead">
+        <button id="back">חזרה</button>
+        <div class="n" id="ctitle"></div>
+        <button id="sum">סיכום</button>
+        <button id="mute">השתקה</button>
+      </div>
+      <div id="summary" class="hide"></div>
+      <div id="msgs"><div class="empty">בחר שיחה מהרשימה</div></div>
+      <form id="compose" class="hide">
+        <textarea id="text" rows="1" placeholder="כתוב הודעה..."></textarea>
+        <button type="submit">שליחה</button>
+      </form>
+    </section>
+  </div>
+</div>
+
+<script>
+"use strict";
+const API = "https://yemot-mail.smwlyqswkwt232.workers.dev/chatsite/";
+const $ = (id) => document.getElementById(id);
+const st = { token: "", spaces: [], cur: null, filter: "all", timer: 0 };
+try { st.token = localStorage.getItem("chat_token") || ""; } catch (e) {}
+
+async function api(op, body, q) {
+  const r = await fetch(API + op + (q || ""), {
+    method: body ? "POST" : "GET",
+    headers: Object.assign({ "content-type": "application/json" }, st.token ? { "x-chat-token": st.token } : {}),
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const j = await r.json().catch(() => ({ error: "תקלה בחיבור" }));
+  if (r.status === 401 && op !== "login") { logout(true); throw new Error(j.error || "צריך להיכנס"); }
+  if (!r.ok || j.error) throw new Error(j.error || "תקלה");
+  return j;
+}
+function show(which) {
+  $("login").classList.toggle("hide", which !== "login");
+  $("app").classList.toggle("hide", which !== "app");
+}
+function logout(silent) {
+  if (!silent && st.token) api("logout", {}).catch(() => {});
+  st.token = "";
+  try { localStorage.removeItem("chat_token"); } catch (e) {}
+  clearInterval(st.timer);
+  show("login");
+}
+$("go").onclick = async () => {
+  $("lerr").textContent = "";
+  $("go").disabled = true;
+  try {
+    const j = await api("login", { pin: $("pin").value.trim() });
+    st.token = j.token;
+    try { localStorage.setItem("chat_token", st.token); } catch (e) {}
+    $("pin").value = "";
+    start();
+  } catch (e) { $("lerr").textContent = e.message; }
+  $("go").disabled = false;
+};
+$("pin").onkeydown = (e) => { if (e.key === "Enter") $("go").click(); };
+$("logout").onclick = () => logout(false);
+$("refresh").onclick = () => { loadSpaces(); if (st.cur) loadMsgs(); };
+
+const initial = (t) => (String(t || "?").trim()[0] || "?");
+const fmtTime = (iso) => { if (!iso) return ""; const d = new Date(iso); return d.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" }); };
+const fmtDay = (iso) => { if (!iso) return ""; const d = new Date(iso), n = new Date(); if (d.toDateString() === n.toDateString()) return "היום"; const y = new Date(n - 864e5); if (d.toDateString() === y.toDateString()) return "אתמול"; return d.toLocaleDateString("he-IL", { day: "numeric", month: "numeric", year: d.getFullYear() === n.getFullYear() ? undefined : "2-digit" }); };
+const fmtWhen = (iso) => { const day = fmtDay(iso); return day === "היום" ? fmtTime(iso) : day; };
+
+async function loadSpaces() {
+  try { st.spaces = (await api("spaces")).spaces; renderSpaces(); }
+  catch (e) { $("spaces").innerHTML = ""; $("spaces").append(el("div", "empty", e.message)); }
+}
+function el(tag, cls, text) { const x = document.createElement(tag); if (cls) x.className = cls; if (text != null) x.textContent = text; return x; }
+function renderSpaces() {
+  const q = $("search").value.trim().toLowerCase();
+  const list = st.spaces.filter((s) => (st.filter === "all" || (st.filter === "unread" ? s.unread && !s.muted : st.filter === "dm" ? s.dm : !s.dm)) && (!q || s.title.toLowerCase().includes(q)));
+  const box = $("spaces");
+  box.innerHTML = "";
+  if (!list.length) { box.append(el("div", "empty", "אין שיחות")); return; }
+  for (const s of list) {
+    const b = el("button", "sp" + (st.cur && st.cur.space === s.space ? " on" : "") + (s.muted ? " muted" : ""));
+    b.append(el("div", "av", initial(s.title)));
+    const t = el("div", "t");
+    t.append(el("div", "n", s.title), el("div", "d", (s.dm ? "פרטי" : "קבוצה") + (s.muted ? " · מושתק" : "") + " · " + fmtWhen(s.last)));
+    b.append(t);
+    if (s.unread && !s.muted) b.append(el("span", "dot"));
+    b.onclick = () => openSpace(s);
+    box.append(b);
+  }
+}
+$("search").oninput = renderSpaces;
+document.querySelectorAll(".tabs button").forEach((b) => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach((x) => x.classList.toggle("on", x === b));
+  st.filter = b.dataset.f; renderSpaces();
+});
+
+async function openSpace(s) {
+  st.cur = s;
+  document.body.classList.add("open");
+  $("ctitle").textContent = s.title;
+  $("mute").textContent = s.muted ? "ביטול השתקה" : "השתקה";
+  $("mute").classList.toggle("hide", s.dm);
+  $("summary").classList.add("hide");
+  $("compose").classList.remove("hide");
+  $("msgs").innerHTML = "";
+  $("msgs").append(el("div", "empty", "טוען..."));
+  renderSpaces();
+  await loadMsgs();
+  if (s.unread) { s.unread = false; renderSpaces(); api("read", { space: s.space }).catch(() => {}); }
+}
+async function loadMsgs() {
+  const s = st.cur; if (!s) return;
+  try {
+    const j = await api("messages", null, "?space=" + encodeURIComponent(s.space));
+    if (st.cur !== s) return;
+    const box = $("msgs");
+    const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+    box.innerHTML = "";
+    if (!j.messages.length) box.append(el("div", "empty", "אין הודעות"));
+    let lastDay = "";
+    for (const m of j.messages) {
+      const day = fmtDay(m.at);
+      if (day !== lastDay) { box.append(el("div", "day", day)); lastDay = day; }
+      const d = el("div", "m" + (m.mine ? " mine" : ""));
+      if (!m.mine && !s.dm) d.append(el("div", "w", m.who));
+      if (m.text) d.append(el("div", "", m.text));
+      for (const a of m.atts || []) d.append(el("div", "att", "📎 " + a));
+      d.append(el("div", "at", fmtTime(m.at)));
+      box.append(d);
+    }
+    if (atBottom || box.dataset.space !== s.space) box.scrollTop = box.scrollHeight;
+    box.dataset.space = s.space;
+  } catch (e) { $("msgs").innerHTML = ""; $("msgs").append(el("div", "empty", e.message)); }
+}
+$("back").onclick = () => { document.body.classList.remove("open"); st.cur = null; renderSpaces(); };
+$("compose").onsubmit = async (e) => {
+  e.preventDefault();
+  const t = $("text").value.trim(); if (!t || !st.cur) return;
+  $("text").value = ""; $("text").style.height = "";
+  try { await api("send", { space: st.cur.space, text: t }); await loadMsgs(); $("msgs").scrollTop = $("msgs").scrollHeight; }
+  catch (err) { $("text").value = t; alert("ההודעה לא נשלחה: " + err.message); }
+};
+$("text").onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey && window.matchMedia("(min-width:761px)").matches) { e.preventDefault(); $("compose").requestSubmit(); } };
+$("text").oninput = () => { const t = $("text"); t.style.height = ""; t.style.height = Math.min(t.scrollHeight, 140) + "px"; };
+$("sum").onclick = async () => {
+  const s = st.cur; if (!s) return;
+  const box = $("summary"); box.classList.remove("hide"); box.textContent = "מסכם...";
+  try { const j = await api("summary", { space: s.space }); if (st.cur === s) box.textContent = j.summary; }
+  catch (e) { box.textContent = e.message; }
+};
+$("summary").onclick = () => $("summary").classList.add("hide");
+$("mute").onclick = async () => {
+  const s = st.cur; if (!s) return;
+  try { const j = await api("mute", { space: s.space, on: !s.muted }); s.muted = j.muted; $("mute").textContent = s.muted ? "ביטול השתקה" : "השתקה"; renderSpaces(); }
+  catch (e) { alert(e.message); }
+};
+
+function start() {
+  show("app");
+  loadSpaces();
+  clearInterval(st.timer);
+  st.timer = setInterval(() => { if (document.hidden) return; loadSpaces(); if (st.cur) loadMsgs(); }, 20000);
+}
+if (st.token) start(); else show("login");
+</script>
+</body>
+</html>
