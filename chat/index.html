@@ -55,6 +55,12 @@ header button:hover{background:rgba(255,255,255,.12)}
 .m .w{font-size:13px;font-weight:700;color:var(--acc)}
 .m .at{font-size:11px;color:var(--mute);text-align:left;margin-top:2px}
 .m .att{font-size:13px;color:var(--mute)}
+.reacts{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.reacts span{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:0 7px;font-size:13px}
+a.att{display:block;font-size:14px;color:var(--acc);text-decoration:underline;margin-top:3px}
+.rep{display:inline-block;margin-top:4px;font-size:13px;color:var(--acc);font-weight:600;padding:2px 0}
+#thbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--line);font-weight:700}
+#thbar button{padding:4px 10px;border-radius:8px;background:var(--card);font-size:14px;font-weight:400}
 .day{align-self:center;font-size:12px;color:var(--mute);background:var(--card);padding:2px 10px;border-radius:10px;margin:6px 0}
 #summary{margin:10px 12px 0;padding:12px;background:var(--card);border:1px solid var(--acc2);border-radius:12px;white-space:pre-wrap;font-size:15px}
 #compose{display:flex;gap:8px;padding:10px;background:var(--card);border-top:1px solid var(--line);padding-bottom:max(10px,env(safe-area-inset-bottom))}
@@ -105,6 +111,7 @@ header button:hover{background:rgba(255,255,255,.12)}
         <button id="sum">סיכום</button>
         <button id="mute">השתקה</button>
       </div>
+      <div id="thbar" class="hide"><button id="thback">חזרה לשיחה</button><span>שרשור</span></div>
       <div id="summary" class="hide"></div>
       <div id="msgs"><div class="empty">בחר שיחה מהרשימה</div></div>
       <form id="compose" class="hide">
@@ -120,7 +127,9 @@ header button:hover{background:rgba(255,255,255,.12)}
 // דרך הגשר ב-Supabase, כי נטפרי חוסם workers.dev
 const API = "https://ydcfafijktzasrkkxyux.supabase.co/functions/v1/chat-netfree/";
 const $ = (id) => document.getElementById(id);
-const st = { token: "", spaces: [], cur: null, filter: "all", timer: 0 };
+const st = { token: "", spaces: [], cur: null, thread: "", filter: "all", timer: 0 };
+const fileUrl = (a) => a.ref ? API + "file?ref=" + encodeURIComponent(a.ref) + "&name=" + encodeURIComponent(a.name) + "&token=" + encodeURIComponent(st.token)
+  : a.drive ? "https://drive.google.com/file/d/" + encodeURIComponent(a.drive) + "/view" : "";
 try { st.token = localStorage.getItem("chat_token") || ""; } catch (e) {}
 
 async function api(op, body, q) {
@@ -198,6 +207,7 @@ document.querySelectorAll(".tabs button").forEach((b) => b.onclick = () => {
 
 async function openSpace(s) {
   st.cur = s;
+  setThread("");
   document.body.classList.add("open");
   $("ctitle").textContent = s.title;
   $("mute").textContent = s.muted ? "ביטול השתקה" : "השתקה";
@@ -213,8 +223,10 @@ async function openSpace(s) {
 async function loadMsgs() {
   const s = st.cur; if (!s) return;
   try {
-    const j = await api("messages", null, "?space=" + encodeURIComponent(s.space));
-    if (st.cur !== s) return;
+    const th = st.thread;
+    const j = th ? await api("thread", null, "?space=" + encodeURIComponent(s.space) + "&thread=" + encodeURIComponent(th))
+      : await api("messages", null, "?space=" + encodeURIComponent(s.space));
+    if (st.cur !== s || st.thread !== th) return;
     const box = $("msgs");
     const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
     box.innerHTML = "";
@@ -226,20 +238,33 @@ async function loadMsgs() {
       const d = el("div", "m" + (m.mine ? " mine" : ""));
       if (!m.mine && !s.dm) d.append(el("div", "w", m.who));
       if (m.text) d.append(el("div", "", m.text));
-      for (const a of m.atts || []) d.append(el("div", "att", "📎 " + a));
+      for (const a of m.atts || []) {
+        const u = fileUrl(a);
+        if (u) { const l = el("a", "att", "📎 " + a.name); l.href = u; l.target = "_blank"; l.rel = "noopener"; d.append(l); }
+        else d.append(el("div", "att", "📎 " + a.name));
+      }
+      if (m.reacts && m.reacts.length) { const r = el("div", "reacts"); for (const x of m.reacts) r.append(el("span", "", x.e + " " + x.n)); d.append(r); }
+      if (!th && m.thread && !s.dm) { const b = el("button", "rep", m.replies ? "💬 " + m.replies + (m.replies === 1 ? " תגובה" : " תגובות") : "תגובה בשרשור"); b.onclick = () => { setThread(m.thread); loadMsgs(); }; d.append(b); }
       d.append(el("div", "at", fmtTime(m.at)));
       box.append(d);
     }
-    if (atBottom || box.dataset.space !== s.space) box.scrollTop = box.scrollHeight;
-    box.dataset.space = s.space;
+    if (atBottom || box.dataset.space !== s.space + th) box.scrollTop = box.scrollHeight;
+    box.dataset.space = s.space + th;
   } catch (e) { $("msgs").innerHTML = ""; $("msgs").append(el("div", "empty", e.message)); }
 }
-$("back").onclick = () => { document.body.classList.remove("open"); st.cur = null; renderSpaces(); };
+function setThread(t) {
+  st.thread = t || "";
+  $("thbar").classList.toggle("hide", !st.thread);
+  $("text").placeholder = st.thread ? "תגובה בשרשור..." : "כתוב הודעה...";
+  if (st.thread) { $("msgs").innerHTML = ""; $("msgs").append(el("div", "empty", "טוען...")); }
+}
+$("thback").onclick = () => { setThread(""); loadMsgs(); };
+$("back").onclick = () => { if (st.thread) { setThread(""); loadMsgs(); return; } document.body.classList.remove("open"); st.cur = null; renderSpaces(); };
 $("compose").onsubmit = async (e) => {
   e.preventDefault();
   const t = $("text").value.trim(); if (!t || !st.cur) return;
   $("text").value = ""; $("text").style.height = "";
-  try { await api("send", { space: st.cur.space, text: t }); await loadMsgs(); $("msgs").scrollTop = $("msgs").scrollHeight; }
+  try { await api("send", st.thread ? { space: st.cur.space, text: t, thread: st.thread } : { space: st.cur.space, text: t }); await loadMsgs(); $("msgs").scrollTop = $("msgs").scrollHeight; }
   catch (err) { $("text").value = t; alert("ההודעה לא נשלחה: " + err.message); }
 };
 $("text").onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey && window.matchMedia("(min-width:761px)").matches) { e.preventDefault(); $("compose").requestSubmit(); } };
