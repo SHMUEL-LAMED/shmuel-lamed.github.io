@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://yemot-mail.smwlyqswkwt232.workers.dev; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://ydcfafijktzasrkkxyux.supabase.co; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="theme-color" content="#1f3a5f">
 <title>הצ'אטים שלי</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231f3a5f'/%3E%3Cpath d='M22 30h56v32H44l-14 12V62h-8z' fill='%23fff'/%3E%3C/svg%3E">
@@ -117,15 +117,18 @@ header button:hover{background:rgba(255,255,255,.12)}
 
 <script>
 "use strict";
-const API = "https://yemot-mail.smwlyqswkwt232.workers.dev/chatsite/";
+// דרך הגשר ב-Supabase, כי נטפרי חוסם workers.dev
+const API = "https://ydcfafijktzasrkkxyux.supabase.co/functions/v1/chat-netfree/";
 const $ = (id) => document.getElementById(id);
 const st = { token: "", spaces: [], cur: null, filter: "all", timer: 0 };
 try { st.token = localStorage.getItem("chat_token") || ""; } catch (e) {}
 
 async function api(op, body, q) {
-  const r = await fetch(API + op + (q || ""), {
+  // בלי כותרות מיוחדות (בלי preflight): האסימון בפרמטר token, והגוף כ-text/plain. הגשר מתרגם.
+  const qs = (q || "") + (st.token ? ((q ? "&" : "?") + "token=" + encodeURIComponent(st.token)) : "");
+  const r = await fetch(API + op + qs, {
     method: body ? "POST" : "GET",
-    headers: Object.assign({ "content-type": "application/json" }, st.token ? { "x-chat-token": st.token } : {}),
+    headers: body ? { "content-type": "text/plain;charset=UTF-8" } : {},
     body: body ? JSON.stringify(body) : undefined,
   });
   const j = await r.json().catch(() => ({ error: "תקלה בחיבור" }));
