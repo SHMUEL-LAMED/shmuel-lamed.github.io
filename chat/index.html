@@ -71,11 +71,17 @@ svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:
 .sp.on{background:var(--mine)}
 .av{width:44px;height:44px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
 .av.sm{width:38px;height:38px;font-size:16px}
+.spw{position:relative}
+.spw>.more{position:absolute;inset-inline-end:8px;top:50%;margin-top:-17px;width:34px;height:34px;background:var(--panel);box-shadow:var(--shadow);opacity:0}
+.spw:hover>.more,.spw>.more:focus-visible{opacity:1}
 .sp .t{flex:1;min-width:0}
-.sp .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp .n{display:flex;gap:8px;align-items:baseline}
+.sp .n span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp .n small{flex:none;font-size:12px;color:var(--mute);font-weight:400}
 .sp .d{font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sp.un .n{font-weight:700}
-.sp.un .d{color:var(--acc);font-weight:600}
+.sp.un .d{color:var(--ink);font-weight:600}
+.sp.un .n small{color:var(--acc);font-weight:700}
 .dot{width:11px;height:11px;border-radius:50%;background:var(--acc);flex:none}
 .sp.muted .n,.sp.muted .av{opacity:.55}
 
@@ -102,6 +108,14 @@ svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:
 .row.mine .m{background:var(--mine);border-start-start-radius:16px;border-start-end-radius:5px}
 .row.cont .m{border-start-start-radius:16px;border-start-end-radius:16px}
 .m .w{font-size:13px;font-weight:700}
+.m.tome{box-shadow:var(--shadow),inset 3px 0 0 var(--acc)}
+.m.flash{animation:flash 1.2s}
+@keyframes flash{0%,60%{outline:2.5px solid var(--acc)}100%{outline:2.5px solid transparent}}
+.m .men{color:var(--link);font-weight:600;background:rgba(31,95,174,.1);border-radius:5px;padding:0 3px}
+.m code{background:rgba(127,140,165,.2);border-radius:5px;padding:1px 5px;font-family:ui-monospace,Consolas,monospace;font-size:14px;direction:ltr;unicode-bidi:embed}
+.m pre{margin:4px 0;background:rgba(127,140,165,.2);border-radius:8px;padding:8px 10px;font-family:ui-monospace,Consolas,monospace;font-size:14px;direction:ltr;text-align:left;white-space:pre-wrap}
+.q{display:block;width:100%;text-align:start;border-inline-start:3px solid var(--acc);background:rgba(127,140,165,.14);border-radius:6px;padding:4px 9px;margin-bottom:5px;font-size:13px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q b{display:block;color:var(--ink);font-size:12px}
 .m .at{font-size:11px;color:var(--mute);text-align:end;margin-top:1px;white-space:nowrap}
 .m a{color:var(--link)}
 .m mark{background:var(--mark);color:inherit;border-radius:3px}
@@ -139,6 +153,36 @@ svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:
 #sendbtn{background:var(--acc);color:#fff;width:40px;height:40px}
 #sendbtn:hover{background:var(--acc);filter:brightness(1.06)}
 #sendbtn svg{transform:scaleX(-1)}
+#mic.rec{background:var(--bad);color:#fff;width:auto;padding:0 12px;gap:6px;border-radius:20px;display:flex;font-size:14px}
+#sugg{position:absolute;bottom:64px;inset-inline:12px;max-width:340px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--pop);padding:5px;z-index:20;max-height:260px;overflow-y:auto}
+#sugg button{display:flex;align-items:center;gap:10px;width:100%;padding:6px 8px;border-radius:9px;text-align:start}
+#sugg button.on,#sugg button:hover{background:var(--hover)}
+#sugg .av{width:30px;height:30px;font-size:14px}
+#filebar{flex-wrap:wrap}
+.fchip{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border-radius:14px;padding:3px 6px 3px 10px;max-width:100%}
+.fchip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fchip button{width:22px;height:22px;border-radius:50%;flex:none}
+.fchip button:hover{background:var(--hover)}
+#emo{position:fixed;z-index:35;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--pop);padding:8px;width:300px;max-width:calc(100vw - 16px);display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-height:250px;overflow-y:auto}
+#emo button{height:34px;border-radius:8px;font-size:20px}
+#emo button:hover{background:var(--hover)}
+.seg{display:flex;gap:6px;padding:4px 14px 0}
+.seg button{flex:1;padding:6px;border-radius:10px;background:var(--bg);font-size:14px;color:var(--mute)}
+.seg button.on{background:var(--brand2);color:#fff}
+.picked{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px}
+.sect{font-size:13px;color:var(--mute);font-weight:700;padding:12px 16px 4px}
+.modal .in{margin:8px 14px;padding:9px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);outline:0}
+.modal .in:focus{border-color:var(--acc)}
+.modal .btn{width:auto;margin:6px 14px 12px;flex:none}
+.modal .rowbtn{display:flex;align-items:center;gap:10px;width:calc(100% - 12px);margin:0 6px;padding:9px 10px;border-radius:12px;text-align:start}
+.modal .rowbtn:hover{background:var(--hover)}
+.modal .rowbtn.danger{color:var(--bad)}
+.modal .scroll{overflow-y:auto;padding-bottom:10px}
+.mrow{display:flex;align-items:center;gap:10px;padding:6px 16px}
+.mrow .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow small{color:var(--mute)}
+.mrow .x{font-size:13px;color:var(--bad);padding:3px 9px;border-radius:12px}
+.mrow .x:hover{background:var(--hover)}
 #conv.drag::after{content:"שחרר כדי לצרף את הקובץ";position:absolute;inset:8px;border:2.5px dashed var(--acc);border-radius:16px;background:rgba(217,119,87,.12);display:grid;place-items:center;font-weight:700;font-size:18px;pointer-events:none}
 
 /* תפריט, חלונות, הודעות קופצות */
@@ -212,6 +256,7 @@ svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:
       <button class="ib" id="back" aria-label="חזרה"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
       <div class="av sm" id="cav"></div>
       <div class="who"><div id="ctitle"></div><div id="csub"></div></div>
+      <button class="ib" id="infobtn" title="פרטי השיחה, חברים וקבצים" aria-label="פרטי השיחה, חברים וקבצים"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg></button>
       <button class="ib" id="findbtn" title="חיפוש בשיחה" aria-label="חיפוש בשיחה"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
       <button class="ib" id="sum" title="סיכום השיחה" aria-label="סיכום השיחה"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h8"/></svg></button>
       <button class="ib" id="mute" title="השתקה" aria-label="השתקה"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7 2.5 7h-17S6 15 6 9zM10 20a2 2 0 0 0 4 0M4 3l16 18"/></svg></button>
@@ -229,22 +274,37 @@ svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:
     <div id="msgs"></div>
     <button id="down" class="hide" aria-label="לסוף השיחה"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
     <div id="editbar" class="bar hide"><b>תיקון הודעה</b><span class="grow"></span><button class="chip" id="editx">ביטול</button></div>
-    <div id="filebar" class="bar hide"><svg viewBox="0 0 24 24"><path d="M20 11.5 12 19.5a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.7 17.2a1.7 1.7 0 0 1-2.4-2.4l7.7-7.7"/></svg><span class="grow" id="filename"></span><button class="chip" id="filex">הסרה</button></div>
+    <div id="quotebar" class="bar hide"><b>ציטוט</b><span class="grow" id="quotetext"></span><button class="chip" id="quotex">ביטול</button></div>
+    <div id="filebar" class="bar hide"></div>
+    <div id="sugg" class="hide"></div>
     <form id="compose" class="hide">
       <button type="button" class="ib" id="attach" title="צירוף קובץ" aria-label="צירוף קובץ"><svg viewBox="0 0 24 24"><path d="M20 11.5 12 19.5a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.7 17.2a1.7 1.7 0 0 1-2.4-2.4l7.7-7.7"/></svg></button>
-      <input type="file" id="fileinput" class="hide">
+      <input type="file" id="fileinput" class="hide" multiple>
+      <button type="button" class="ib" id="emobtn" title="אמוג'י" aria-label="אמוג'י"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5v.01M15 9.5v.01"/></svg></button>
       <textarea id="text" rows="1" placeholder="כתוב הודעה..." aria-label="הודעה"></textarea>
+      <button type="button" class="ib" id="mic" title="הקלטה קולית" aria-label="הקלטה קולית"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg><span id="mict"></span></button>
       <button type="submit" class="ib" id="sendbtn" title="שליחה" aria-label="שליחה"><svg viewBox="0 0 24 24"><path d="M21 12 4 4l3 8-3 8zM7 12h7"/></svg></button>
     </form>
   </section>
 </div>
 
 <div id="menu" class="hide"></div>
+<div id="emo" class="hide"></div>
+<div id="sheet" class="over hide">
+  <div class="modal">
+    <div class="mh"><span id="sheett"></span><button class="ib" id="sheetx" aria-label="סגירה"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="scroll" id="sheetb"></div>
+  </div>
+</div>
 <div id="newdm" class="over hide">
   <div class="modal">
     <div class="mh"><span>שיחה חדשה</span><button class="ib" id="newx" aria-label="סגירה"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="seg"><button id="modedm" class="on">שיחה פרטית</button><button id="modegrp">קבוצה חדשה</button></div>
+    <input id="gname" class="in hide" placeholder="שם הקבוצה" aria-label="שם הקבוצה" maxlength="80">
+    <div id="picked" class="picked hide"></div>
     <label class="field"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pq" type="search" placeholder="שם או כתובת מייל" aria-label="שם או כתובת מייל"></label>
     <div id="people"></div>
+    <button class="btn hide" id="gcreate">פתיחת הקבוצה</button>
   </div>
 </div>
 <div id="viewer" class="over hide"><div><img id="vimg" alt=""><div class="vb"><button id="vdl">הורדה</button><button id="vx">סגירה</button></div></div></div>
@@ -256,12 +316,14 @@ svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:
 const API = "https://ydcfafijktzasrkkxyux.supabase.co/functions/v1/chat-netfree/";
 const TITLE = "הצ'אטים שלי";
 const EMOJIS = ["👍", "🙏", "✅", "😊", "👏", "❗"];
+const MORE_EMOJIS = "👍 👎 🙏 👏 🙌 💪 🤝 ✋ 👋 ☝️ ✅ ❌ ❗ ❓ ⭐ 🔥 💯 🎉 🎁 🏆 😊 🙂 😀 😄 😁 😅 😂 😉 😎 🤔 😮 😢 😔 😴 🤒 😇 ⏰ 📅 📌 📎 📞 📧 💡 🔑 🔒 💰 🛒 🚗 ✈️ 🏠 🏢 📚 ✏️ 📝 📊 📈 🍎 🍞 ☕ 🍷 🕯️ 🌹 ☀️ 🌧️".split(" ");
+const MAX_FILES = 5;
 const MAX_FILE = 8 * 1024 * 1024;
 const $ = (id) => document.getElementById(id);
 const st = {
   token: "", spaces: [], cur: null, thread: "", filter: "all",
   latest: [], older: [], more: false, oldest: "", divider: "", loadedKey: "", loadingOlder: false,
-  q: "", pending: [], seq: 0, drafts: {}, file: null, edit: null,
+  q: "", pending: [], seq: 0, drafts: {}, files: [], edit: null, quote: null, mem: {},
   nodes: new Map(), keepFromBottom: false, toBottom: false, lastId: "",
   notif: false, seen: null, blobs: new Map(), timers: [],
 };
@@ -278,6 +340,14 @@ function el(tag, cls, text) { const x = document.createElement(tag); if (cls) x.
 // סמלים קבועים בלבד (לא טקסט מהשרת)
 const ICON = {
   more: '<path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3"/>',
+  quote: '<path d="M10 7H6v5h4v2a3 3 0 0 1-3 3M18 7h-4v5h4v2a3 3 0 0 1-3 3"/>',
+  fwd: '<path d="M14 5l6 6-6 6M20 11H9a5 5 0 0 0-5 5v3"/>',
+  smile: '<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5v.01M15 9.5v.01"/>',
+  pin: '<path d="M9 4h6l-1 6 3 3H7l3-3zM12 13v7"/>',
+  unread: '<path d="M4 6h16v12H4zM4 7l8 6 8-6"/>',
+  mute: '<path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7 2.5 7h-17S6 15 6 9zM10 20a2 2 0 0 0 4 0M4 3l16 18"/>',
+  out: '<path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>',
   file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5"/>',
   play: '<path d="M7 5v14l12-7z"/>',
   thread: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
@@ -392,17 +462,25 @@ function renderSpaces() {
   const list = st.spaces.filter((s) => (st.filter === "all" || (st.filter === "unread" ? s.unread && !s.muted : st.filter === "dm" ? s.dm : !s.dm)) && (!q || s.title.toLowerCase().includes(q)));
   const box = $("spaces");
   if (!list.length) { box.replaceChildren(el("div", "empty", q ? "לא נמצאה שיחה" : "אין שיחות")); return; }
+  list.sort((x, y) => !!y.pinned - !!x.pinned);
   const out = [];
   for (const s of list) {
     const un = s.unread && !s.muted;
+    const w = el("div", "spw");
     const b = el("button", "sp" + (st.cur && st.cur.space === s.space ? " on" : "") + (s.muted ? " muted" : "") + (un ? " un" : ""));
     const av = el("div", "av", initial(s.title)); av.style.background = colorOf(s.title);
-    const t = el("div", "t");
-    t.append(el("div", "n", s.title), el("div", "d", (s.dm ? "פרטי" : "קבוצה") + (s.muted ? " · מושתק" : "") + (s.last ? " · " + fmtWhen(s.last) : "")));
+    const t = el("div", "t"), n = el("div", "n");
+    n.append(el("span", "", s.title), el("small", "", s.last ? fmtWhen(s.last) : ""));
+    const sub = s.preview ? (s.previewWho ? s.previewWho + ": " : "") + s.preview : (s.dm ? "פרטי" : "קבוצה");
+    t.append(n, el("div", "d", (s.pinned ? "📌 " : "") + (s.muted ? "מושתק · " : "") + sub));
     b.append(av, t);
     if (un) b.append(el("span", "dot"));
     b.onclick = () => openSpace(s);
-    out.push(b);
+    const more = el("button", "ib more"); more.type = "button"; more.setAttribute("aria-label", "פעולות על השיחה"); more.append(icon("more"));
+    more.onclick = (e) => { e.stopPropagation(); spaceMenu(s, more); };
+    w.oncontextmenu = (e) => { e.preventDefault(); spaceMenu(s, b); };
+    w.append(b, more);
+    out.push(w);
   }
   box.replaceChildren(...out);
 }
@@ -424,7 +502,7 @@ $("bell").onclick = async () => {
 function notify(s) {
   if (!setBell()) return;
   try {
-    const n = new Notification(s.title, { body: "הודעה חדשה", tag: s.space });
+    const n = new Notification(s.title, { body: s.preview ? (s.previewWho ? s.previewWho + ": " : "") + s.preview : "הודעה חדשה", tag: s.space });
     n.onclick = () => { window.focus(); n.close(); const cur = st.spaces.find((x) => x.space === s.space); if (cur) openSpace(cur); };
   } catch (e) {}
 }
@@ -443,7 +521,7 @@ function setHead() {
 }
 function switchView() {
   // מעבר בין שיחות או שרשורים: טיוטה לכל מקום, בלי תיקון ובלי קובץ שנשארו ממקום אחר
-  st.edit = null; setFile(null);
+  st.edit = null; setFiles([]); setQuote(null); stopRec(true); hideSugg(); closeEmo();
   $("editbar").classList.add("hide");
   $("thbar").classList.toggle("hide", !st.thread);
   $("text").placeholder = st.thread ? "תגובה בשרשור..." : "כתוב הודעה...";
@@ -460,14 +538,15 @@ async function openSpace(s) {
   $("convhead").classList.remove("hide");
   $("summary").classList.add("hide");
   $("compose").classList.remove("hide");
-  setHead(); switchView(); renderSpaces();
+  setHead(); switchView(); renderSpaces(); loadMembers(s.space);
   if (!mobile) $("text").focus();
   await loadMsgs();
 }
 function closeConv(quiet) {
   st.cur = null; st.thread = "";
   document.body.classList.remove("open");
-  for (const id of ["convhead", "compose", "summary", "thbar", "editbar", "filebar", "findbar"]) $(id).classList.add("hide");
+  stopRec(true); hideSugg(); closeEmo();
+  for (const id of ["convhead", "compose", "summary", "thbar", "editbar", "filebar", "findbar", "quotebar"]) $(id).classList.add("hide");
   closeMenu();
   emptyState("בחר שיחה מהרשימה", true);
   if (!quiet) renderSpaces();
@@ -505,23 +584,47 @@ async function loadOlder() {
 function allMsgs() { const ids = new Set(st.latest.map((m) => m.id)); return st.older.filter((m) => !ids.has(m.id)).concat(st.latest); }
 function patchMsg(id, fn) { for (const arr of [st.older, st.latest]) { const i = arr.findIndex((m) => m.id === id); if (i >= 0) { const r = fn(arr[i]); if (r === null) arr.splice(i, 1); } } }
 
-// טקסט של הודעה: קישורים לחיצים, והדגשה של מה שמחפשים
-function richText(text, q) {
+// חברי השיחה: לאזכורים (@) ולחלון פרטי השיחה
+async function loadMembers(space, force) {
+  if (st.mem[space] && !force) return st.mem[space];
+  try { st.mem[space] = (await api("members", null, "?space=" + encodeURIComponent(space))).members; }
+  catch (e) { if (!st.mem[space]) st.mem[space] = []; }
+  if (st.cur && st.cur.space === space) { st.nodes.clear(); paint(); }
+  return st.mem[space];
+}
+const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function mentionRe() {
+  const names = ((st.cur && st.mem[st.cur.space]) || []).map((m) => m.name).filter(Boolean).concat("כולם").sort((a, b) => b.length - a.length);
+  return "@(?:" + names.map(esc).join("|") + ")";
+}
+// טקסט של הודעה: קישורים לחיצים, אזכורים, עיצוב (*מודגש* _נטוי_ ~מחוק~ `קוד`), והדגשה של מה שמחפשים
+function richText(text, q, marks) {
   const frag = document.createDocumentFragment();
-  const plain = (t) => {
-    if (!q) return frag.append(t);
+  const plain = (t, into) => {
+    into = into || frag;
+    if (!q) return into.append(t);
     const low = t.toLowerCase(); let i = 0, j;
-    while ((j = low.indexOf(q, i)) >= 0) { if (j > i) frag.append(t.slice(i, j)); frag.append(el("mark", "", t.slice(j, j + q.length))); i = j + q.length; }
-    if (i < t.length) frag.append(t.slice(i));
+    while ((j = low.indexOf(q, i)) >= 0) { if (j > i) into.append(t.slice(i, j)); into.append(el("mark", "", t.slice(j, j + q.length))); i = j + q.length; }
+    if (i < t.length) into.append(t.slice(i));
   };
-  let last = 0;
-  for (const m of text.matchAll(/https?:\/\/[^\s<>"']+/g)) {
-    const u = m[0].replace(/[.,;:!?)\]}]+$/, "");
+  const link = (u, label) => {
     let ok = false; try { ok = /^https?:$/.test(new URL(u).protocol); } catch (e) {}
-    if (!ok) continue;
+    if (!ok) return false;
+    const a = el("a", "", label || u); a.href = u; a.target = "_blank"; a.rel = "noopener noreferrer"; if (!label) a.dir = "ltr"; frag.append(a); return true;
+  };
+  const parts = ["(https?:\\/\\/[^\\s<>\"'|]+)", "(" + mentionRe() + ")(?![\\wא-ת])"];
+  if (marks) parts.push("```([\\s\\S]+?)```", "`([^`\\n]+)`", "<(https?:\\/\\/[^|>\\s]+)\\|([^>\\n]+)>", "(?<![\\w*])\\*([^*\\n]+)\\*(?![\\w*])", "(?<![\\w_])_([^_\\n]+)_(?![\\w_])", "(?<![\\w~])~([^~\\n]+)~(?![\\w~])");
+  let last = 0;
+  for (const m of text.matchAll(new RegExp(parts.join("|"), "g"))) {
+    let len = m[0].length;
     if (m.index > last) plain(text.slice(last, m.index));
-    const a = el("a", "", u); a.href = u; a.target = "_blank"; a.rel = "noopener noreferrer"; a.dir = "ltr"; frag.append(a);
-    last = m.index + u.length;
+    if (m[1]) { const u = m[1].replace(/[.,;:!?)\]}]+$/, ""); len = u.length; if (!link(u)) plain(u); }
+    else if (m[2]) frag.append(el("span", "men", m[2]));
+    else if (m[3] != null) frag.append(el("pre", "", m[3].replace(/^\n|\n$/g, "")));
+    else if (m[4] != null) frag.append(el("code", "", m[4]));
+    else if (m[5]) { if (!link(m[5], m[6])) plain(m[0]); }
+    else { const x = el(m[7] != null ? "b" : m[8] != null ? "i" : "s"); plain(m[7] ?? m[8] ?? m[9], x); frag.append(x); }
+    last = m.index + len;
   }
   if (last < text.length) plain(text.slice(last));
   return frag;
@@ -548,9 +651,16 @@ function attEl(a) {
 }
 function msgEl(m, s, th, cont, q) {
   const row = el("div", "row" + (m.mine ? " mine" : "") + (cont ? " cont" : ""));
-  const d = el("div", "m");
+  const d = el("div", "m" + (m.toMe && !m.mine ? " tome" : ""));
   if (!m.mine && !s.dm && !cont) { const w = el("div", "w", m.who); w.style.color = nameColor(m.who); d.append(w); }
-  if (m.text) { const t = el("div"); t.append(richText(m.text, q)); d.append(t); }
+  if (m.quote) {
+    const qb = el("button", "q"); qb.type = "button";
+    if (m.quote.who) qb.append(el("b", "", m.quote.who));
+    qb.append(m.quote.text || "הודעה מצוטטת");
+    qb.onclick = () => jumpTo(m.quote.id);
+    d.append(qb);
+  }
+  if (m.text) { const t = el("div"); t.append(richText(m.fmt || m.text, q, !!m.fmt)); d.append(t); }
   for (const a of m.atts || []) d.append(attEl(a));
   if (m.reacts && m.reacts.length) {
     const r = el("div", "reacts");
@@ -568,11 +678,18 @@ function msgEl(m, s, th, cont, q) {
   row.append(d, more);
   return row;
 }
+function jumpTo(id) {
+  const n = st.nodes.get(id);
+  if (!n) return toast("ההודעה המצוטטת לא נטענה (אולי היא ישנה יותר)");
+  n.el.scrollIntoView({ block: "center", behavior: "smooth" });
+  const b = n.el.querySelector(".m"); b.classList.remove("flash"); void b.offsetWidth; b.classList.add("flash");
+}
 function pendEl(p) {
   const row = el("div", "row mine " + (p.state === "failed" ? "fail" : "pend"));
   const d = el("div", "m");
+  if (p.quote) { const qb = el("div", "q"); if (p.quote.who) qb.append(el("b", "", p.quote.who)); qb.append(p.quote.text || "הודעה מצוטטת"); d.append(qb); }
   if (p.text) d.append(el("div", "", p.text));
-  if (p.file) { const f = el("div", "file"); f.append(icon("file"), el("span", "", p.file.name)); d.append(f); }
+  for (const pf of p.files) { const f = el("div", "file"); f.append(icon("file"), el("span", "", pf.name)); d.append(f); }
   const at = el("div", "at", p.state === "failed" ? "לא נשלח: " + p.err : "שולח...");
   if (p.state === "failed") {
     const again = el("button", "", "נסה שוב"); again.type = "button"; again.onclick = () => deliver(p);
@@ -639,12 +756,47 @@ window.addEventListener("popstate", () => { if (st.cur && matchMedia("(max-width
 
 // ---------------------------------------------------------------- תפריט הודעה: אמוג'י, העתקה, תיקון, מחיקה
 function closeMenu() { $("menu").classList.add("hide"); }
+function placePop(pop, anchor) {
+  pop.classList.remove("hide");
+  const r = anchor.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+  pop.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + "px";
+  pop.style.top = (r.bottom + h + 8 > innerHeight ? Math.max(8, r.top - h - 6) : r.bottom + 6) + "px";
+}
+const menuItem = (ic, label, fn, cls) => { const b = el("button", "it" + (cls ? " " + cls : "")); b.type = "button"; b.append(icon(ic), el("span", "", label)); b.onclick = fn; return b; };
+// לוח אמוג'י מלא: לתגובה על הודעה או להוספה לטקסט
+function closeEmo() { $("emo").classList.add("hide"); }
+function openEmoji(anchor, pick) {
+  $("emo").replaceChildren(...MORE_EMOJIS.map((e) => { const b = el("button", "", e); b.type = "button"; b.setAttribute("aria-label", e); b.onclick = (ev) => { ev.stopPropagation(); pick(e); }; return b; }));
+  placePop($("emo"), anchor);
+}
+// תפריט של שיחה ברשימה: הצמדה, סימון כלא נקרא, השתקה
+function spaceMenu(sp, anchor) {
+  const items = [
+    menuItem("pin", sp.pinned ? "ביטול הצמדה" : "הצמדה לראש הרשימה", async () => { closeMenu(); try { sp.pinned = (await api("pin", { space: sp.space, on: !sp.pinned })).pinned; renderSpaces(); } catch (e) { toast(e.message); } }),
+  ];
+  if (sp.last && !sp.unread) items.push(menuItem("unread", "סימון כלא נקרא", async () => {
+    closeMenu();
+    try {
+      if (st.cur && st.cur.space === sp.space) closeConv(true);
+      await api("unread", { space: sp.space, at: sp.last }); sp.unread = true; if (st.seen) st.seen[sp.space] = sp.last; renderSpaces();
+    } catch (e) { toast(e.message); }
+  }));
+  if (!sp.dm) items.push(menuItem("mute", sp.muted ? "ביטול השתקה" : "השתקה", async () => { closeMenu(); try { sp.muted = (await api("mute", { space: sp.space, on: !sp.muted })).muted; setHead(); renderSpaces(); } catch (e) { toast(e.message); } }));
+  $("menu").replaceChildren(...items);
+  placePop($("menu"), anchor);
+}
 function openMenu(m, anchor) {
   const menu = $("menu"), s = st.cur;
   const emo = el("div", "emo");
   for (const e of EMOJIS) { const b = el("button", "", e); b.type = "button"; b.setAttribute("aria-label", "תגובה " + e); b.onclick = () => { closeMenu(); react(m, e); }; emo.append(b); }
-  const item = (ic, label, fn, cls) => { const b = el("button", "it" + (cls ? " " + cls : "")); b.type = "button"; b.append(icon(ic), el("span", "", label)); b.onclick = fn; return b; };
+  const plus = el("button"); plus.type = "button"; plus.setAttribute("aria-label", "עוד אמוג'י"); plus.append(icon("smile"));
+  plus.onclick = (ev) => { ev.stopPropagation(); closeMenu(); openEmoji(anchor, (e) => { closeEmo(); react(m, e); }); };
+  emo.append(plus);
+  const item = menuItem;
   const items = [emo];
+  items.push(item("quote", "ציטוט ותשובה", () => { closeMenu(); setQuote(m); $("text").focus(); }));
+  if (m.text) items.push(item("fwd", "העברה לשיחה אחרת", () => { closeMenu(); forward(m); }));
+  if (m.reacts && m.reacts.length) items.push(item("smile", "מי הגיב", () => { closeMenu(); showReactors(m); }));
   if (m.text) items.push(item("copy", "העתקה", async () => { closeMenu(); try { await navigator.clipboard.writeText(m.text); toast("הועתק"); } catch (e) { toast("ההעתקה נכשלה"); } }));
   if (!st.thread && m.thread && !s.dm) items.push(item("thread", "תגובה בשרשור", () => { closeMenu(); setThread(m.thread); }));
   if (m.mine) {
@@ -656,12 +808,10 @@ function openMenu(m, anchor) {
     items.push(del);
   }
   menu.replaceChildren(...items);
-  menu.classList.remove("hide");
-  const r = anchor.getBoundingClientRect(), w = menu.offsetWidth, h = menu.offsetHeight;
-  menu.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + "px";
-  menu.style.top = (r.bottom + h + 8 > innerHeight ? Math.max(8, r.top - h - 6) : r.bottom + 6) + "px";
+  placePop(menu, anchor);
 }
-document.addEventListener("click", (e) => { if (!$("menu").contains(e.target)) closeMenu(); });
+document.addEventListener("click", (e) => { if (!$("menu").contains(e.target)) closeMenu(); if (!$("emo").contains(e.target)) closeEmo(); if (!$("sugg").contains(e.target)) hideSugg(); });
+$("msgs").addEventListener("scroll", closeEmo, { passive: true });
 $("msgs").addEventListener("scroll", closeMenu, { passive: true });
 async function react(m, e) {
   const s = st.cur; if (!s) return;
@@ -676,7 +826,7 @@ async function react(m, e) {
   } catch (err) { toast(err.message); }
 }
 function startEdit(m) {
-  st.edit = m; setFile(null);
+  st.edit = m; setFiles([]); setQuote(null);
   $("editbar").classList.remove("hide");
   $("text").value = m.text; grow(); $("text").focus();
 }
@@ -697,31 +847,109 @@ function saveDraft() {
   if (v.trim()) st.drafts[k] = v; else delete st.drafts[k];
   clearTimeout(draftTimer); draftTimer = setTimeout(() => store.set("chat_drafts", JSON.stringify(st.drafts)), 400);
 }
-$("text").oninput = () => { grow(); saveDraft(); };
+$("text").oninput = () => { grow(); saveDraft(); updateSugg(); };
 $("text").onkeydown = (e) => {
+  if (sugg.list.length) {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); sugg.i = (sugg.i + (e.key === "ArrowDown" ? 1 : sugg.list.length - 1)) % sugg.list.length; return drawSugg(); }
+    if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); return pickSugg(sugg.i); }
+    if (e.key === "Escape") { e.stopPropagation(); return hideSugg(); }
+  }
+  if ((e.ctrlKey || e.metaKey) && (e.code === "KeyB" || e.code === "KeyI")) { e.preventDefault(); return wrapSel(e.code === "KeyB" ? "*" : "_"); }
   if (e.key === "Enter" && !e.shiftKey && !e.isComposing && matchMedia("(min-width:761px)").matches) { e.preventDefault(); $("compose").requestSubmit(); }
   if (e.key === "Escape" && st.edit) { e.stopPropagation(); stopEdit(); }
 };
-function setFile(f) { st.file = f; $("filebar").classList.toggle("hide", !f); $("filename").textContent = f ? f.name + " · " + (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + " מגה" : Math.max(1, Math.round(f.size / 1024)) + " ק\"ב") : ""; }
+function setFiles(list) {
+  st.files = list;
+  const bar = $("filebar"); bar.classList.toggle("hide", !list.length);
+  bar.replaceChildren(...list.map((f) => {
+    const c = el("span", "fchip"), x = el("button"); x.type = "button"; x.setAttribute("aria-label", "הסרת " + f.name); x.append(icon("x"));
+    x.onclick = () => setFiles(st.files.filter((y) => y !== f));
+    c.append(el("span", "", f.name + " · " + (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + " מגה" : Math.max(1, Math.round(f.size / 1024)) + " ק\"ב")), x);
+    return c;
+  }));
+}
+function setQuote(m) { st.quote = m; $("quotebar").classList.toggle("hide", !m); $("quotetext").textContent = m ? (m.mine ? "" : m.who + ": ") + (m.text || "קובץ מצורף") : ""; }
 function pickFile(f) {
   if (!f || !st.cur) return;
   if (st.edit) return toast("אי אפשר לצרף קובץ בזמן תיקון הודעה");
-  if (f.size > MAX_FILE) return toast("הקובץ גדול מדי (עד 8 מגה)");
+  if (st.files.length >= MAX_FILES) return toast("אפשר לצרף עד " + MAX_FILES + " קבצים להודעה");
+  if (st.files.reduce((n, x) => n + x.size, 0) + f.size > MAX_FILE) return toast("הקבצים גדולים מדי (עד 8 מגה יחד)");
   if (!f.size) return toast("הקובץ ריק");
   const key = viewKey(), rd = new FileReader();
-  rd.onload = () => { if (viewKey() !== key) return; setFile({ name: f.name || "file", type: f.type || "application/octet-stream", size: f.size, data: String(rd.result).split(",")[1] || "" }); $("text").focus(); };
+  rd.onload = () => { if (viewKey() !== key) return; setFiles(st.files.concat({ name: f.name || "file", type: f.type || "application/octet-stream", size: f.size, data: String(rd.result).split(",")[1] || "" })); $("text").focus(); };
   rd.onerror = () => toast("לא הצלחתי לקרוא את הקובץ");
   rd.readAsDataURL(f);
 }
+// הקלטה קולית: לחיצה מתחילה, לחיצה נוספת מסיימת ומצרפת את ההקלטה להודעה
+let rec = null;
+function stopRec(discard) {
+  if (!rec) return;
+  const r = rec; rec = null; r.discard = !!discard;
+  clearInterval(r.timer); $("mic").classList.remove("rec"); $("mict").textContent = "";
+  try { r.mr.stop(); } catch (e) {}
+  r.stream.getTracks().forEach((t) => t.stop());
+}
+$("mic").onclick = async () => {
+  if (rec) return stopRec(false);
+  if (st.edit) return toast("אי אפשר להקליט בזמן תיקון הודעה");
+  if (!navigator.mediaDevices || !window.MediaRecorder) return toast("הדפדפן הזה לא תומך בהקלטה");
+  let stream;
+  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { return toast("אין גישה למיקרופון"); }
+  const mr = new MediaRecorder(stream), chunks = [], r = { mr, stream, discard: false, start: Date.now() };
+  mr.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
+  mr.onstop = () => {
+    if (r.discard || !chunks.length) return;
+    const type = (mr.mimeType || "audio/webm").split(";")[0];
+    pickFile(new File(chunks, "הקלטה קולית." + (type.includes("ogg") ? "ogg" : type.includes("mp4") ? "m4a" : "webm"), { type }));
+  };
+  r.timer = setInterval(() => { const sec = Math.floor((Date.now() - r.start) / 1000); $("mict").textContent = Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0"); if (sec >= 300) stopRec(false); }, 500);
+  rec = r; $("mic").classList.add("rec"); $("mict").textContent = "0:00"; mr.start();
+};
+// הוספת טקסט במקום הסמן, ועיטוף הטקסט המסומן (Ctrl+B מודגש, Ctrl+I נטוי)
+function insertText(t) { const x = $("text"), a = x.selectionStart, b = x.selectionEnd; x.setRangeText(t, a, b, "end"); x.focus(); grow(); saveDraft(); }
+function wrapSel(mark) { const x = $("text"), a = x.selectionStart, b = x.selectionEnd; if (a === b) return; x.setRangeText(mark + x.value.slice(a, b) + mark, a, b, "select"); grow(); saveDraft(); }
+$("emobtn").onclick = (e) => { e.stopPropagation(); if (!$("emo").classList.contains("hide")) return closeEmo(); openEmoji($("emobtn"), insertText); };
+// אזכור: אחרי @ מוצעים חברי השיחה
+let sugg = { list: [], i: 0, from: 0 };
+function hideSugg() { $("sugg").classList.add("hide"); sugg.list = []; }
+function updateSugg() {
+  const x = $("text"), s = st.cur; if (!s || st.edit) return hideSugg();
+  const m = /(^|\s)@([^\s@]*)$/.exec(x.value.slice(0, x.selectionStart));
+  const mem = st.mem[s.space] || [];
+  if (!m || !mem.length) return hideSugg();
+  const q = m[2].toLowerCase();
+  const list = mem.filter((p) => !p.me && p.name && p.name.toLowerCase().includes(q)).slice(0, 6);
+  if (!s.dm && "כולם".includes(q)) list.push({ name: "כולם", uid: "users/all" });
+  if (!list.length) return hideSugg();
+  sugg = { list, i: 0, from: x.selectionStart - m[2].length - 1 };
+  drawSugg();
+}
+function drawSugg() {
+  $("sugg").replaceChildren(...sugg.list.map((p, i) => {
+    const b = el("button", i === sugg.i ? "on" : ""); b.type = "button";
+    const av = el("div", "av", initial(p.name)); av.style.background = colorOf(p.name);
+    b.append(av, el("span", "", p.name)); b.onmousedown = (e) => { e.preventDefault(); pickSugg(i); }; return b;
+  }));
+  $("sugg").classList.remove("hide");
+}
+function pickSugg(i) { const p = sugg.list[i], x = $("text"); if (!p) return; x.setRangeText("@" + p.name + " ", sugg.from, x.selectionStart, "end"); hideSugg(); x.focus(); saveDraft(); }
+// לפני השליחה: @שם הופך לאזכור אמיתי של גוגל
+function withMentions(text, space) {
+  const mem = (st.mem[space] || []).filter((p) => p.name && !p.me).concat({ name: "כולם", uid: "users/all" }).sort((a, b) => b.name.length - a.name.length);
+  for (const p of mem) text = text.split("@" + p.name).join("<" + p.uid + ">");
+  return text;
+}
+$("quotex").onclick = () => setQuote(null);
 $("attach").onclick = () => $("fileinput").click();
-$("fileinput").onchange = () => { pickFile($("fileinput").files[0]); $("fileinput").value = ""; };
-$("filex").onclick = () => setFile(null);
-$("text").addEventListener("paste", (e) => { const f = [...(e.clipboardData && e.clipboardData.files || [])][0]; if (f) { e.preventDefault(); pickFile(f); } });
+// הקריאה של כל קובץ מסתיימת לפני הבא, כדי שהמגבלות ייבדקו נכון
+async function pickFiles(list) { for (const f of [...list]) { pickFile(f); await new Promise((r) => setTimeout(r, 60)); } }
+$("fileinput").onchange = () => { pickFiles($("fileinput").files); $("fileinput").value = ""; };
+$("text").addEventListener("paste", (e) => { const fs = [...(e.clipboardData && e.clipboardData.files || [])]; if (fs.length) { e.preventDefault(); pickFiles(fs); } });
 const conv = $("conv");
 const hasFiles = (e) => e.dataTransfer && [...e.dataTransfer.types].includes("Files");
 conv.addEventListener("dragover", (e) => { if (st.cur && hasFiles(e)) { e.preventDefault(); conv.classList.add("drag"); } });
 conv.addEventListener("dragleave", (e) => { if (!conv.contains(e.relatedTarget)) conv.classList.remove("drag"); });
-conv.addEventListener("drop", (e) => { conv.classList.remove("drag"); if (!st.cur || !hasFiles(e)) return; e.preventDefault(); pickFile(e.dataTransfer.files[0]); });
+conv.addEventListener("drop", (e) => { conv.classList.remove("drag"); if (!st.cur || !hasFiles(e)) return; e.preventDefault(); pickFiles(e.dataTransfer.files); });
 
 $("compose").onsubmit = async (e) => {
   e.preventDefault();
@@ -733,20 +961,22 @@ $("compose").onsubmit = async (e) => {
     catch (err) { toast("התיקון לא נשמר: " + err.message); }
     return;
   }
-  if (!t && !st.file) return;
+  if (rec) return toast("קודם לסיים את ההקלטה (לחיצה על המיקרופון)");
+  if (!t && !st.files.length) return;
   // ההודעה מופיעה מיד, והשליחה ממשיכה ברקע
-  const p = { id: "p" + (++st.seq), key: viewKey(), space: s.space, thread: st.thread, text: t, file: st.file, state: "sending", err: "" };
+  const p = { id: "p" + (++st.seq), key: viewKey(), space: s.space, thread: st.thread, text: t, files: st.files, quote: st.quote, state: "sending", err: "" };
   st.pending.push(p);
-  $("text").value = ""; grow(); setFile(null);
+  $("text").value = ""; grow(); setFiles([]); setQuote(null); hideSugg();
   delete st.drafts[p.key]; store.set("chat_drafts", JSON.stringify(st.drafts));
   deliver(p);
 };
 async function deliver(p) {
   p.state = "sending"; p.err = ""; st.toBottom = true; paint();
   try {
-    const body = { space: p.space, text: p.text };
+    const body = { space: p.space, text: withMentions(p.text, p.space) };
     if (p.thread) body.thread = p.thread;
-    if (p.file) body.file = { name: p.file.name, type: p.file.type, data: p.file.data };
+    if (p.files.length) body.files = p.files.map((f) => ({ name: f.name, type: f.type, data: f.data }));
+    if (p.quote) body.quote = { id: p.quote.id, upd: p.quote.upd, text: (p.quote.text || "").slice(0, 80) };
     await api("send", body);
     p.state = "sent";
     if (viewKey() === p.key) { st.toBottom = true; await loadMsgs(); }
@@ -772,41 +1002,145 @@ $("mute").onclick = async () => {
   catch (e) { toast(e.message); }
 };
 
-// ---------------------------------------------------------------- שיחה חדשה
-let pqTimer = 0, pqSeq = 0;
+// ---------------------------------------------------------------- שיחה חדשה או קבוצה חדשה
+let pqTimer = 0, pqSeq = 0, grp = false, picked = [];
 function peopleMsg(t) { $("people").replaceChildren(el("div", "empty", t)); }
-$("newbtn").onclick = () => { $("newdm").classList.remove("hide"); $("pq").value = ""; peopleMsg("הקלד שם כדי לחפש"); $("pq").focus(); };
+function personRow(p, onPick) {
+  const b = el("button", "sp"); b.type = "button";
+  const av = el("div", "av", initial(p.name)); av.style.background = colorOf(p.name);
+  const t = el("div", "t"), e = el("div", "d", p.email); e.dir = "ltr";
+  t.append(el("div", "n", p.name), e);
+  b.append(av, t); b.onclick = () => onPick(p, b); return b;
+}
+// חיפוש אנשים משותף: לשיחה חדשה, לקבוצה חדשה ולהוספת חבר
+function peopleSearch(input, box, onPick, hint) {
+  const msg = (t) => box.replaceChildren(el("div", "empty", t));
+  input.oninput = () => {
+    clearTimeout(pqTimer);
+    const q = input.value.trim(), n = ++pqSeq;
+    if (q.length < 2) return msg(hint);
+    pqTimer = setTimeout(async () => {
+      msg("מחפש...");
+      try {
+        const j = await api("people", null, "?q=" + encodeURIComponent(q));
+        if (n !== pqSeq) return;
+        if (!j.people.length) return msg("לא נמצא אף אחד בשם הזה");
+        box.replaceChildren(...j.people.map((p) => personRow(p, onPick)));
+      } catch (e) { if (n === pqSeq) msg(e.message); }
+    }, 350);
+  };
+}
+function drawPicked() {
+  $("picked").replaceChildren(...picked.map((p) => {
+    const c = el("span", "fchip"), x = el("button"); x.type = "button"; x.setAttribute("aria-label", "הסרת " + p.name); x.append(icon("x"));
+    x.onclick = () => { picked = picked.filter((y) => y !== p); drawPicked(); };
+    c.append(el("span", "", p.name), x); return c;
+  }));
+  $("gcreate").disabled = !picked.length;
+}
+function setMode(g) {
+  grp = g; picked = [];
+  $("modedm").classList.toggle("on", !g); $("modegrp").classList.toggle("on", g);
+  for (const id of ["gname", "picked", "gcreate"]) $(id).classList.toggle("hide", !g);
+  $("pq").value = ""; $("gname").value = ""; drawPicked();
+  peopleMsg(g ? "חפש אנשים והוסף אותם לקבוצה" : "הקלד שם כדי לחפש");
+  (g ? $("gname") : $("pq")).focus();
+}
+$("modedm").onclick = () => setMode(false);
+$("modegrp").onclick = () => setMode(true);
+$("newbtn").onclick = () => { $("newdm").classList.remove("hide"); setMode(false); };
 const closeNew = () => $("newdm").classList.add("hide");
 $("newx").onclick = closeNew;
 $("newdm").onclick = (e) => { if (e.target === $("newdm")) closeNew(); };
-$("pq").oninput = () => {
-  clearTimeout(pqTimer);
-  const q = $("pq").value.trim(), n = ++pqSeq;
-  if (q.length < 2) return peopleMsg("הקלד שם כדי לחפש");
-  pqTimer = setTimeout(async () => {
-    peopleMsg("מחפש...");
-    try {
-      const j = await api("people", null, "?q=" + encodeURIComponent(q));
-      if (n !== pqSeq) return;
-      if (!j.people.length) return peopleMsg("לא נמצא אף אחד בשם הזה");
-      $("people").replaceChildren(...j.people.map((p) => {
-        const b = el("button", "sp"); b.type = "button";
-        const av = el("div", "av", initial(p.name)); av.style.background = colorOf(p.name);
-        const t = el("div", "t"); t.append(el("div", "n", p.name), el("div", "d", p.email));
-        b.append(av, t); b.onclick = () => startDm(p, b); return b;
-      }));
-    } catch (e) { if (n === pqSeq) peopleMsg(e.message); }
-  }, 350);
-};
+peopleSearch($("pq"), $("people"), (p, b) => {
+  if (!grp) return startDm(p, b);
+  if (!picked.some((y) => y.email === p.email)) picked.push(p);
+  drawPicked(); $("pq").value = ""; peopleMsg("אפשר להוסיף עוד אנשים"); $("pq").focus();
+}, "הקלד שם כדי לחפש");
+function enterSpace(j) {
+  let s = st.spaces.find((x) => x.space === j.space);
+  if (!s) { s = { space: j.space, dm: !!j.dm, title: j.title, last: "", unread: false, muted: false }; st.spaces.unshift(s); }
+  closeNew(); openSpace(s);
+}
 async function startDm(p, btn) {
   btn.disabled = true;
-  try {
-    const j = await api("dm", { email: p.email, name: p.name });
-    let s = st.spaces.find((x) => x.space === j.space);
-    if (!s) { s = { space: j.space, dm: true, title: j.title, last: "", unread: false, muted: false }; st.spaces.unshift(s); }
-    closeNew(); openSpace(s);
-  } catch (e) { btn.disabled = false; toast(e.message); }
+  try { enterSpace(await api("dm", { email: p.email, name: p.name })); }
+  catch (e) { btn.disabled = false; toast(e.message); }
 }
+$("gcreate").onclick = async () => {
+  const name = $("gname").value.trim();
+  if (!name) { $("gname").focus(); return toast("צריך לתת שם לקבוצה"); }
+  $("gcreate").disabled = true;
+  try { enterSpace(await api("group", { name, emails: picked.map((p) => p.email) })); }
+  catch (e) { toast(e.message); }
+  $("gcreate").disabled = false;
+};
+
+// ---------------------------------------------------------------- חלון כללי: פרטי שיחה, העברה, מי הגיב
+function openSheet(title, nodes) { $("sheett").textContent = title; $("sheetb").replaceChildren(...nodes); $("sheet").classList.remove("hide"); }
+const closeSheet = () => $("sheet").classList.add("hide");
+$("sheetx").onclick = closeSheet;
+$("sheet").onclick = (e) => { if (e.target === $("sheet")) closeSheet(); };
+const sure = (btn, label, fn) => { btn.onclick = () => { if (!btn.dataset.sure) { btn.dataset.sure = "1"; btn.lastChild.textContent = label; return; } fn(); }; };
+async function showReactors(m) {
+  openSheet("מי הגיב", [el("div", "empty", "טוען...")]);
+  try {
+    const j = await api("reactors", null, "?space=" + encodeURIComponent(st.cur.space) + "&id=" + encodeURIComponent(m.id));
+    openSheet("מי הגיב", j.reactors.length ? j.reactors.map((r) => { const d = el("div", "mrow"); d.append(el("span", "", r.e), el("span", "t", r.who.join(", "))); return d; }) : [el("div", "empty", "אין תגובות")]);
+  } catch (e) { openSheet("מי הגיב", [el("div", "empty", e.message)]); }
+}
+function forward(m) {
+  openSheet("העברה לשיחה אחרת", st.spaces.filter((x) => x.space !== st.cur.space).map((x) => {
+    const b = el("button", "sp"); b.type = "button";
+    const av = el("div", "av sm", initial(x.title)); av.style.background = colorOf(x.title);
+    b.append(av, el("div", "t", x.title));
+    b.onclick = async () => { b.disabled = true; try { await api("send", { space: x.space, text: m.text }); closeSheet(); toast("ההודעה הועברה אל " + x.title); loadSpaces(); } catch (e) { b.disabled = false; toast(e.message); } };
+    return b;
+  }));
+}
+async function showInfo() {
+  const s = st.cur; if (!s) return;
+  const draw = (mem) => {
+    const nodes = [];
+    if (!s.dm) {
+      const nm = el("input", "in"); nm.value = s.title; nm.maxLength = 80; nm.setAttribute("aria-label", "שם הקבוצה");
+      const save = el("button", "chip", "שמירת השם");
+      save.onclick = async () => { const v = nm.value.trim(); if (!v || v === s.title) return; try { s.title = (await api("rename", { space: s.space, name: v })).title; setHead(); renderSpaces(); toast("השם עודכן"); } catch (e) { toast(e.message); } };
+      const r = el("div", "mrow"); nm.style.flex = "1"; nm.style.margin = "0"; r.append(nm, save); nodes.push(r);
+      nodes.push(el("div", "sect", "חברים" + (mem ? " (" + mem.length + ")" : "")));
+      if (!mem) nodes.push(el("div", "empty", "טוען..."));
+      for (const p of mem || []) {
+        const row = el("div", "mrow"), av = el("div", "av sm", initial(p.name)); av.style.background = colorOf(p.name);
+        row.append(av, el("span", "t", p.name + (p.me ? " (אתה)" : "")));
+        if (p.manager) row.append(el("small", "", "מנהל"));
+        if (!p.me) { const x = el("button", "x"); x.type = "button"; x.append("הסרה"); sure(x, "ללחוץ שוב להסרה", async () => { try { await api("removemember", { space: s.space, mid: p.mid }); toast(p.name + " הוסר מהקבוצה"); draw(await loadMembers(s.space, true)); } catch (e) { toast(e.message); } }); row.append(x); }
+        nodes.push(row);
+      }
+      nodes.push(el("div", "sect", "הוספת חבר"));
+      const f = el("label", "field"), inp = el("input"); inp.type = "search"; inp.placeholder = "שם או כתובת מייל"; inp.setAttribute("aria-label", "הוספת חבר לפי שם או כתובת מייל"); f.append(inp);
+      const box = el("div");
+      peopleSearch(inp, box, async (p, b) => { b.disabled = true; try { await api("addmember", { space: s.space, email: p.email }); toast(p.name + " נוסף לקבוצה"); draw(await loadMembers(s.space, true)); } catch (e) { b.disabled = false; toast(e.message); } }, "");
+      nodes.push(f, box);
+    }
+    const atts = allMsgs().flatMap((m) => (m.atts || []).map((a) => ({ a, m })));
+    nodes.push(el("div", "sect", "קבצים בהודעות שנטענו" + (atts.length ? " (" + atts.length + ")" : "")));
+    if (!atts.length) nodes.push(el("div", "empty", "אין קבצים"));
+    for (const { a, m } of atts.reverse()) {
+      const b = el("button", "rowbtn"); b.type = "button"; b.append(icon("file"), el("span", "t", a.name), el("small", "", fmtDay(m.at)));
+      b.onclick = () => (a.ref ? download(a) : a.drive ? window.open("https://drive.google.com/file/d/" + encodeURIComponent(a.drive) + "/view", "_blank", "noopener") : toast("אי אפשר להוריד את הקובץ הזה"));
+      nodes.push(b);
+    }
+    if (!s.dm) {
+      const out = el("button", "rowbtn danger"); out.type = "button"; out.append(icon("out"), el("span", "", "יציאה מהקבוצה"));
+      sure(out, "ללחוץ שוב כדי לצאת מהקבוצה", async () => { try { await api("leave", { space: s.space }); closeSheet(); st.spaces = st.spaces.filter((x) => x.space !== s.space); closeConv(); toast("יצאת מהקבוצה"); } catch (e) { toast(e.message); } });
+      nodes.push(el("div", "sect", ""), out);
+    }
+    if (st.cur === s || (st.cur && st.cur.space === s.space)) openSheet(s.dm ? "פרטי השיחה" : "פרטי הקבוצה", nodes);
+  };
+  draw(s.dm ? [] : st.mem[s.space] || null);
+  if (!s.dm) draw(await loadMembers(s.space, true));
+}
+$("infobtn").onclick = showInfo;
 
 // ---------------------------------------------------------------- תצוגת תמונה
 let viewing = null;
@@ -819,6 +1153,8 @@ $("viewer").onclick = (e) => { if (e.target === $("viewer") || e.target === $("v
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
   if (!$("viewer").classList.contains("hide")) return closeViewer();
+  if (!$("emo").classList.contains("hide")) return closeEmo();
+  if (!$("sheet").classList.contains("hide")) return closeSheet();
   if (!$("newdm").classList.contains("hide")) return closeNew();
   if (!$("menu").classList.contains("hide")) return closeMenu();
   if (!$("findbar").classList.contains("hide")) { closeFind(); st.toBottom = true; return paint(); }
