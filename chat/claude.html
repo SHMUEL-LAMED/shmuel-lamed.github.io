@@ -9,36 +9,67 @@
 <meta name="theme-color" content="#1f3a5f">
 <title>שיחה עם Claude</title>
 <style>
-:root{--bg:#f3f5f9;--panel:#fff;--ink:#1b2333;--mute:#69728a;--line:#e3e7ef;--brand:#1f3a5f;--acc:#d97757;--mine:#dbe9ff;--theirs:#fff;--chatbg:#e9edf4;--shadow:0 1px 2px rgba(20,30,50,.08),0 4px 14px rgba(20,30,50,.06)}
-@media (prefers-color-scheme:dark){:root{--bg:#0e131c;--panel:#161d2b;--ink:#e7ebf3;--mute:#93a0b8;--line:#263044;--brand:#16263f;--acc:#e08a6c;--mine:#23457a;--theirs:#1d2638;--chatbg:#0b1018;--shadow:0 1px 2px rgba(0,0,0,.4)}}
+:root{
+  --bg:#f3f5f9;--panel:#fff;--ink:#1b2333;--mute:#69728a;--line:#e3e7ef;--hover:#eef2f8;
+  --brand:#1f3a5f;--brand2:#2c5282;--acc:#d97757;--link:#1f5fae;
+  --mine:#dbe9ff;--theirs:#fff;--chatbg:#e9edf4;--bad:#c33131;
+  --shadow:0 1px 2px rgba(20,30,50,.08),0 4px 14px rgba(20,30,50,.06);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0e131c;--panel:#161d2b;--ink:#e7ebf3;--mute:#93a0b8;--line:#263044;--hover:#1e2738;
+  --brand:#16263f;--brand2:#1f3a5f;--acc:#e08a6c;--link:#8fb8f0;
+  --mine:#23457a;--theirs:#1d2638;--chatbg:#0b1018;--bad:#ff7b7b;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{font-family:system-ui,"Segoe UI",Arial,sans-serif;background:var(--chatbg);color:var(--ink);font-size:16px;line-height:1.5;display:flex;flex-direction:column}
+body{font-family:system-ui,"Segoe UI",Arial,sans-serif;background:var(--chatbg);color:var(--ink);font-size:16px;line-height:1.5;display:flex;flex-direction:column;-webkit-tap-highlight-color:transparent}
 button,textarea{font:inherit;color:inherit}
-header{background:var(--brand);color:#fff;display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:58px}
-header a{color:#fff;text-decoration:none;font-size:22px;padding:0 6px}
-header b{font-size:18px}
-#stat{font-size:13px;opacity:.85;flex:1}
-#msgs{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:8px}
-.m{max-width:min(680px,85%);padding:8px 12px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:var(--shadow)}
-.m.me{align-self:flex-start;background:var(--mine)}
-.m.claude{align-self:flex-end;background:var(--theirs)}
-.t{display:block;font-size:12px;color:var(--mute);margin-top:4px}
-.cf{display:block;margin-top:6px;padding:6px 8px;border-radius:8px;background:var(--bg);font-size:14px}
-.empty{color:var(--mute);text-align:center;margin:auto;padding:20px}
-form{display:flex;gap:6px;align-items:flex-end;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--line)}
-textarea{flex:1;resize:none;max-height:160px;padding:9px 14px;border-radius:20px;border:1.5px solid var(--line);background:var(--bg);outline:0}
-textarea:focus{border-color:var(--acc)}
-#send{border:0;border-radius:50%;width:42px;height:42px;background:var(--acc);color:#fff;cursor:pointer;display:grid;place-items:center;flex:none}
-#send svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transform:scaleX(-1)}
+button{cursor:pointer;border:0;background:none;padding:0}
+button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ib{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;transition:background .15s;color:inherit;text-decoration:none}
+.ib:hover{background:var(--hover)}
+#convhead{display:flex;align-items:center;gap:4px;padding:8px 12px 8px 12px;padding-inline-start:4px;background:var(--panel);border-bottom:1px solid var(--line);min-height:58px}
+.av{width:38px;height:38px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px;flex:none;background:var(--acc)}
+.who{flex:1;min-width:0;margin-inline-start:8px}
+#ctitle{font-weight:700}
+#csub{font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#csub.on{color:#2e9e5b}
+#msgs{flex:1;overflow-y:auto;padding:14px max(14px,calc((100% - 860px)/2));display:flex;flex-direction:column;gap:2px}
+.row{display:flex;align-items:center;gap:4px;max-width:82%;align-self:flex-start;margin-top:8px}
+.row.cont{margin-top:1px}
+.row.mine{align-self:flex-end;flex-direction:row-reverse}
+.m{padding:7px 12px 5px;border-radius:16px;background:var(--theirs);box-shadow:var(--shadow);white-space:pre-wrap;overflow-wrap:anywhere;min-width:64px;border-start-start-radius:5px}
+.row.mine .m{background:var(--mine);border-start-start-radius:16px;border-start-end-radius:5px}
+.row.cont .m{border-start-start-radius:16px;border-start-end-radius:16px}
+.m .w{font-size:13px;font-weight:700;color:var(--acc)}
+.m .at{font-size:11px;color:var(--mute);text-align:end;margin-top:1px;white-space:nowrap}
+.row.pend .m{opacity:.65}
+.cf{display:block;margin-top:6px;padding:6px 9px;border-radius:8px;border-inline-start:3px solid var(--acc);background:rgba(127,140,165,.14);font-size:14px}
+.day{align-self:center;font-size:12px;color:var(--mute);background:var(--panel);padding:2px 12px;border-radius:12px;margin:10px 0 2px;box-shadow:var(--shadow)}
+.empty{margin:auto;color:var(--mute);text-align:center;padding:24px}
+.empty svg{width:54px;height:54px;stroke-width:1.3;opacity:.5;display:block;margin:0 auto 8px}
+#compose{display:flex;align-items:flex-end;gap:6px;padding:10px 12px;background:var(--panel);border-top:1px solid var(--line);padding-bottom:max(10px,env(safe-area-inset-bottom))}
+#compose textarea{flex:1;resize:none;border:1.5px solid transparent;border-radius:20px;padding:8px 14px;background:var(--bg);max-height:140px;outline:0}
+#compose textarea:focus{border-color:var(--acc)}
+#sendbtn{background:var(--acc);color:#fff;width:40px;height:40px}
+#sendbtn:hover{background:var(--acc);filter:brightness(1.06)}
+#sendbtn svg{transform:scaleX(-1)}
+@media (max-width:760px){.row{max-width:92%}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<header><a href="./" aria-label="חזרה לצ'אטים">&#8250;</a><b>Claude</b><span id="stat"></span></header>
+<div id="convhead">
+  <a class="ib" href="./" aria-label="חזרה לצ'אטים"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></a>
+  <div class="av">C</div>
+  <div class="who"><div id="ctitle">Claude</div><div id="csub"></div></div>
+</div>
 <div id="msgs"><div class="empty">טוען...</div></div>
-<form id="f">
-  <textarea id="text" rows="1" placeholder="כתוב ל-Claude..." aria-label="הודעה ל-Claude"></textarea>
-  <button id="send" type="submit" aria-label="שליחה"><svg viewBox="0 0 24 24"><path d="M21 12 4 4l3 8-3 8zM7 12h7"/></svg></button>
+<form id="compose">
+  <textarea id="text" rows="1" placeholder="כתוב הודעה..." aria-label="הודעה ל-Claude"></textarea>
+  <button type="submit" class="ib" id="sendbtn" title="שליחה" aria-label="שליחה"><svg viewBox="0 0 24 24"><path d="M21 12 4 4l3 8-3 8zM7 12h7"/></svg></button>
 </form>
 <script>
 "use strict";
@@ -64,37 +95,51 @@ async function api(op, body) {
   if (!r.ok || j.error) throw new Error(j.error || "תקלה");
   return j;
 }
-function when(ms) { const d = new Date(ms); return d.toLocaleDateString("he-IL", { day: "numeric", month: "numeric" }) + " " + d.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" }); }
+// אותו תאריך ושעה כמו באתר הצאט
+const fmtTime = (t) => new Date(t).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" });
+const fmtDay = (t) => { const d = new Date(t), n = new Date(); if (d.toDateString() === n.toDateString()) return "היום"; const y = new Date(n - 864e5); if (d.toDateString() === y.toDateString()) return "אתמול"; return d.toLocaleDateString("he-IL", { day: "numeric", month: "numeric", year: d.getFullYear() === n.getFullYear() ? undefined : "2-digit" }); };
+function setSub(text, on) { const s = $("csub"); s.textContent = text; s.className = on ? "on" : ""; }
 async function load() {
   let j;
-  try { j = await api("claude_history"); } catch (e) { $("stat").textContent = e.message; return; }
+  try { j = await api("claude_history"); } catch (e) { setSub(e.message); return; }
   const items = j.items || [];
   const waiting = items.length && items[items.length - 1].from === "me";
-  $("stat").textContent = j.live ? "מחובר עכשיו" : waiting ? "ההודעה ממתינה – התשובה תגיע כש-Claude יתחבר" : "";
-  const s = JSON.stringify(items.map((m) => [m.id, m.status]));
+  if (j.live) setSub("מחובר עכשיו", true);
+  else setSub(waiting ? "ההודעה ממתינה – התשובה תגיע כש-Claude יתחבר" : "לא מחובר כרגע");
+  const s = JSON.stringify(items.map((m) => [m.id, m.status])) + "|" + fmtDay(Date.now());
   if (s === sig) return;
   sig = s;
-  const box = $("msgs"), atEnd = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+  const box = $("msgs"), atEnd = box.scrollHeight - box.scrollTop - box.clientHeight < 90;
   box.textContent = "";
-  if (!items.length) box.appendChild(el("div", "empty", "אפשר לכתוב כאן ל-Claude. התשובה תופיע כאן."));
+  if (!items.length) box.appendChild(el("div", "empty", "אין הודעות. אפשר לכתוב כאן ל-Claude, והתשובה תופיע כאן."));
+  let lastDay = "", prev = null;
   for (const m of items) {
-    const d = el("div", "m " + (m.from === "me" ? "me" : "claude"), m.text);
+    const day = fmtDay(m.at);
+    if (day !== lastDay) { box.appendChild(el("div", "day", day)); lastDay = day; prev = null; }
+    const mine = m.from === "me";
+    const cont = !!prev && prev.from === m.from && new Date(m.at) - new Date(prev.at) < 5 * 60000;
+    const row = el("div", "row" + (mine ? " mine" : "") + (cont ? " cont" : "") + (mine && m.status === "new" ? " pend" : ""));
+    const d = el("div", "m");
+    if (!mine && !cont) d.appendChild(el("div", "w", "Claude"));
+    d.appendChild(document.createTextNode(m.text));
     if (m.confirm) d.appendChild(el("span", "cf", "ממתין לאישור: " + m.confirm + " (אפשר לכתוב כאן 'מאשר' או 'לבטל')"));
-    d.appendChild(el("span", "t", when(m.at) + (m.from === "me" && m.status === "new" ? " · נשלח" : "")));
-    box.appendChild(d);
+    d.appendChild(el("div", "at", fmtTime(m.at) + (mine && m.status === "new" ? " · נשלח" : "")));
+    row.appendChild(d);
+    box.appendChild(row);
+    prev = m;
   }
   if (atEnd || first) box.scrollTop = box.scrollHeight;
   first = false;
 }
-$("text").addEventListener("input", (e) => { const t = e.target; t.style.height = "auto"; t.style.height = Math.min(160, t.scrollHeight) + "px"; });
-$("text").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); $("f").requestSubmit(); } });
-$("f").onsubmit = async (e) => {
+$("text").addEventListener("input", (e) => { const t = e.target; t.style.height = "auto"; t.style.height = Math.min(140, t.scrollHeight) + "px"; });
+$("text").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); $("compose").requestSubmit(); } });
+$("compose").onsubmit = async (e) => {
   e.preventDefault();
   const t = $("text"), text = t.value.trim();
   if (!text || sending) return;
   sending = true;
   try { await api("claude_send", { text }); t.value = ""; t.style.height = "auto"; first = true; await load(); }
-  catch (err) { $("stat").textContent = err.message; }
+  catch (err) { setSub(err.message); }
   finally { sending = false; }
 };
 if (token) { load(); setInterval(() => { if (!document.hidden) load(); }, 6000); }
