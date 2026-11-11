@@ -6,224 +6,363 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://ydcfafijktzasrkkxyux.supabase.co; img-src data: blob:; media-src blob:; base-uri 'none'; form-action 'none'">
-<meta name="theme-color" content="#1f3a5f">
-<title>הצ'אטים שלי</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231f3a5f'/%3E%3Cpath d='M22 30h56v32H44l-14 12V62h-8z' fill='%23fff'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#f6f8fc">
+<title>צ'אט</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230b57d0'/%3E%3Cpath d='M24 26h52v36H46L32 76V62h-8z' fill='%23fff'/%3E%3C/svg%3E">
+<script>try{var t=(JSON.parse(localStorage.getItem("chat_prefs")||"{}")||{}).theme;document.documentElement.dataset.theme=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches)?"dark":"light"}catch(e){}</script>
 <style>
 :root{
-  --bg:#f3f5f9;--panel:#fff;--ink:#1b2333;--mute:#69728a;--line:#e3e7ef;--hover:#eef2f8;
-  --brand:#1f3a5f;--brand2:#2c5282;--acc:#d97757;--acc-ink:#fff;--link:#1f5fae;
-  --mine:#dbe9ff;--theirs:#fff;--chatbg:#e9edf4;--bad:#c33131;--mark:#ffe58a;
-  --shadow:0 1px 2px rgba(20,30,50,.08),0 4px 14px rgba(20,30,50,.06);
-  --pop:0 8px 30px rgba(15,25,45,.22);
+  --bg:#f6f8fc;--panel:#fff;--ink:#1f1f1f;--mute:#5f6368;--line:#e1e3e1;--hover:rgba(31,31,31,.06);--rowh:#f6f8fc;
+  --sel:#d3e3fd;--selink:#041e49;--acc:#0b57d0;--accink:#fff;--link:#0b57d0;--fab:#c2e7ff;--fabink:#001d35;
+  --field:#e9eef6;--soft:#f0f4f9;--bad:#b3261e;--mark:#fde293;--tome:#fef7e0;
+  --pop:0 2px 6px 2px rgba(60,64,67,.15),0 1px 2px rgba(60,64,67,.3);--fs:14px;color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root{
-  --bg:#0e131c;--panel:#161d2b;--ink:#e7ebf3;--mute:#93a0b8;--line:#263044;--hover:#1e2738;
-  --brand:#16263f;--brand2:#1f3a5f;--acc:#e08a6c;--link:#8fb8f0;
-  --mine:#23457a;--theirs:#1d2638;--chatbg:#0b1018;--bad:#ff7b7b;--mark:#7a6410;
-  --shadow:0 1px 2px rgba(0,0,0,.4);--pop:0 8px 30px rgba(0,0,0,.6);
-}}
+:root[data-theme=dark]{
+  --bg:#1b1c1d;--panel:#131314;--ink:#e3e3e3;--mute:#a8abaf;--line:#3c4043;--hover:rgba(227,227,227,.08);--rowh:#1e1f21;
+  --sel:#004a77;--selink:#c2e7ff;--acc:#a8c7fa;--accink:#062e6f;--link:#a8c7fa;--fab:#004a77;--fabink:#c2e7ff;
+  --field:#28292b;--soft:#232427;--bad:#f2b8b5;--mark:#5c4b00;--tome:#2b2819;
+  --pop:0 4px 16px rgba(0,0,0,.7);color-scheme:dark;
+}
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;font-family:system-ui,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:"Google Sans",Roboto,"Segoe UI",system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-tap-highlight-color:transparent;overflow:hidden}
 button,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none;padding:0}
-button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button:disabled{cursor:default;opacity:.55}
+:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
 .hide{display:none!important}
-svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.ib{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;transition:background .15s}
+.grow{flex:1;min-width:0}
+svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.ib{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none;color:var(--mute);transition:background .15s}
 .ib:hover{background:var(--hover)}
-.ib.on{color:var(--acc)}
+.ib.on{color:var(--acc);background:var(--sel)}
+.ib.sm{width:32px;height:32px}
+.ib.sm svg{width:18px;height:18px}
+.av{width:40px;height:40px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:500;font-size:17px;flex:none;user-select:none}
+.av.sq{border-radius:30%}
+.av.s24{width:24px;height:24px;font-size:12px}
+.av.s32{width:32px;height:32px;font-size:14px}
+.av.s72{width:72px;height:72px;font-size:30px}
+.btn{background:var(--acc);color:var(--accink);padding:10px 24px;border-radius:20px;font-weight:500;transition:box-shadow .15s}
+.btn:hover{box-shadow:var(--pop)}
+.chip{padding:5px 14px;border-radius:8px;border:1px solid var(--line);font-size:13px;font-weight:500;white-space:nowrap;color:var(--ink)}
+.chip:hover{background:var(--hover)}
+.chip.on{background:var(--sel);border-color:transparent;color:var(--selink)}
+.empty{margin:auto;color:var(--mute);text-align:center;padding:28px 16px}
+.empty svg{width:56px;height:56px;stroke-width:1.2;opacity:.45;display:block;margin:0 auto 10px}
 
 /* כניסה */
-#login{min-height:100%;display:grid;place-items:center;padding:20px;background:linear-gradient(160deg,var(--brand),var(--brand2))}
-#login .card{width:100%;max-width:360px;background:var(--panel);border-radius:20px;padding:30px 26px;text-align:center;box-shadow:var(--pop)}
-#login .logo{width:64px;height:64px;border-radius:18px;background:var(--brand);color:#fff;display:grid;place-items:center;margin:0 auto 14px}
-#login .logo svg{width:34px;height:34px}
-#login h2{margin:0;font-size:22px}
-#login p{margin:4px 0 0;color:var(--mute)}
-#login input{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);text-align:center;font-size:22px;letter-spacing:6px;margin:18px 0 12px}
-.btn{background:var(--acc);color:var(--acc-ink);padding:12px 18px;border-radius:12px;font-weight:700;width:100%;transition:filter .15s}
-.btn:hover{filter:brightness(1.06)}
-.btn:disabled{opacity:.6}
+#login{min-height:100%;display:grid;place-items:center;padding:20px}
+#login .card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:36px 32px;text-align:center}
+#login .logo{width:56px;height:56px;border-radius:16px;background:var(--acc);color:var(--accink);display:grid;place-items:center;margin:0 auto 16px}
+#login .logo svg{width:30px;height:30px}
+#login h2{margin:0;font-size:24px;font-weight:400}
+#login p{margin:6px 0 0;color:var(--mute)}
+#login input{width:100%;padding:14px;border:1px solid var(--mute);border-radius:6px;background:none;text-align:center;font-size:22px;letter-spacing:6px;margin:24px 0 16px;outline:0}
+#login input:focus{border:2px solid var(--acc);padding:13px}
 .err{color:var(--bad);min-height:1.5em;margin-top:10px;font-size:14px}
 
 /* מבנה */
-#app{display:flex;height:100%}
-#list{width:360px;flex:none;border-inline-end:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;min-height:0}
-#top{background:var(--brand);color:#fff;padding:10px 12px 10px 8px;display:flex;align-items:center;gap:2px;min-height:58px}
-#top h1{font-size:19px;margin:0 6px 0 0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#top .ib:hover{background:rgba(255,255,255,.14)}
-#top .ib.on{color:#ffd0bd}
-.searchrow{display:flex;gap:8px;padding:12px 12px 8px}
-.field{flex:1;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:22px;background:var(--bg);border:1.5px solid transparent;color:var(--mute);min-width:0}
-.field:focus-within{border-color:var(--acc)}
-.field input{flex:1;min-width:0;border:0;background:none;padding:9px 0;outline:0;color:var(--ink)}
-#newbtn{background:var(--acc);color:#fff}
-#newbtn:hover{background:var(--acc);filter:brightness(1.06)}
-.tabs{display:flex;gap:6px;padding:0 12px 10px;overflow-x:auto}
-.tabs button{padding:5px 13px;border-radius:20px;background:var(--bg);font-size:14px;white-space:nowrap;color:var(--mute);transition:background .15s}
-.tabs button.on{background:var(--brand2);color:#fff}
-.tabs b{font-weight:600;margin-inline-start:4px}
-#spaces{overflow-y:auto;flex:1;padding:0 6px 8px}
-.sp{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:12px;width:100%;text-align:start;transition:background .12s}
-.sp:hover{background:var(--hover)}
-.sp.on{background:var(--mine)}
-.av{width:44px;height:44px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
-.av.sm{width:38px;height:38px;font-size:16px}
+#app{display:grid;grid-template-columns:256px minmax(0,1fr) auto;grid-template-rows:64px minmax(0,1fr);height:100%}
+body.navx #app{grid-template-columns:0 minmax(0,1fr) auto}
+body.navx #nav{display:none}
+body.navx #main{margin-inline-start:16px}
+#top{grid-column:1/-1;display:flex;align-items:center;gap:2px;padding:8px 8px 8px 12px;min-width:0}
+.brand{display:flex;align-items:center;gap:10px;width:206px;flex:none;font-size:22px;padding-inline-start:4px;color:var(--ink)}
+.brand i{width:32px;height:32px;border-radius:9px;background:var(--acc);color:var(--accink);display:grid;place-items:center}
+.brand i svg{width:19px;height:19px;stroke-width:2.2}
+#sbox{flex:1;max-width:720px;height:48px;border-radius:24px;background:var(--field);display:flex;align-items:center;padding:0 4px;gap:2px;min-width:0;transition:background .15s,box-shadow .15s}
+#sbox:focus-within{background:var(--panel);box-shadow:var(--pop)}
+#sbox input{flex:1;min-width:0;border:0;background:none;outline:0;font-size:16px;padding:0 4px}
+#sbox input::-webkit-search-cancel-button{display:none}
+#offline{background:var(--bad);color:var(--panel);border-radius:12px;padding:3px 10px;font-size:12px;margin:0 8px;white-space:nowrap}
+#nav{overflow-y:auto;padding:4px 0 16px;min-height:0}
+#newbtn{display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 20px 0 24px;margin:4px 8px 12px;border-radius:16px;background:var(--fab);color:var(--fabink);font-weight:500;font-size:14px;transition:box-shadow .15s}
+#newbtn:hover{box-shadow:var(--pop)}
+#newbtn svg{width:22px;height:22px}
+.ni{display:flex;align-items:center;gap:12px;width:calc(100% - 8px);height:32px;padding:0 16px 0 12px;border-radius:0 16px 16px 0;text-align:start;color:var(--ink);text-decoration:none;font-size:14px;position:relative}
+[dir=rtl] .ni{border-radius:16px 0 0 16px}
+.ni:hover{background:var(--hover)}
+.ni.on{background:var(--sel);color:var(--selink);font-weight:700}
+.ni svg{width:18px;height:18px;color:var(--mute)}
+.ni.on svg{color:inherit}
+.ni .t{flex:1;min-width:0;display:flex;flex-direction:column}
+.ni .nm,.ni .d{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ni .d,.ni .tm{display:none}
+.ni.un{font-weight:700}
+.ni.muted .nm{opacity:.6}
+.ni .ic{width:14px;height:14px}
+.ud{width:8px;height:8px;border-radius:50%;background:var(--acc);flex:none}
+.cnt{font-size:12px;font-weight:700;margin-inline-start:auto}
 .spw{position:relative}
-.spw>.more{position:absolute;inset-inline-end:8px;top:50%;margin-top:-17px;width:34px;height:34px;background:var(--panel);box-shadow:var(--shadow);opacity:0}
+.spw>.more{position:absolute;inset-inline-end:12px;top:50%;transform:translateY(-50%);opacity:0;background:var(--panel)}
 .spw:hover>.more,.spw>.more:focus-visible{opacity:1}
-.sp .t{flex:1;min-width:0}
-.sp .n{display:flex;gap:8px;align-items:baseline}
-.sp .n span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sp .n small{flex:none;font-size:12px;color:var(--mute);font-weight:400}
-.sp .d{font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sp.un .n{font-weight:700}
-.sp.un .d{color:var(--ink);font-weight:600}
-.sp.un .n small{color:var(--acc);font-weight:700}
-.dot{width:11px;height:11px;border-radius:50%;background:var(--acc);flex:none}
-.sp.muted .n,.sp.muted .av{opacity:.55}
+.navs{margin-bottom:8px}
+.filt{display:flex;gap:6px;padding:4px 16px 4px;flex-wrap:wrap}
+.sec{display:flex;align-items:center;margin-top:10px;padding-inline-end:8px}
+.sh{flex:1;display:flex;align-items:center;gap:8px;height:32px;padding:0 12px;font-weight:500;font-size:14px;color:var(--ink);border-radius:16px 0 0 16px;text-align:start}
+.sh:hover{background:var(--hover)}
+.sh svg{width:18px;height:18px;transition:transform .15s}
+.sh.x svg{transform:rotate(90deg)}
+.nempty{color:var(--mute);font-size:13px;padding:2px 50px 4px 12px}
+#main{grid-column:2;min-width:0;min-height:0;display:flex;flex-direction:column;background:var(--panel);border-radius:16px;margin:0 0 16px 16px;overflow:hidden;position:relative}
+body.side #main{margin-inline-end:0}
+#side{grid-column:3;width:min(420px,34vw);min-height:0;display:flex;flex-direction:column;background:var(--panel);border-radius:16px;margin:0 8px 16px 16px;overflow:hidden}
+.vh{display:flex;align-items:center;gap:6px;min-height:64px;padding:8px 12px 8px 16px;border-bottom:1px solid var(--line);flex:none}
+.vh h2{margin:0;font-size:20px;font-weight:400;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vh .who{flex:1;min-width:0;margin-inline-start:4px}
+.vh .who b{display:block;font-size:16px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vh .who small{display:block;color:var(--mute);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.back{display:none}
+.view{flex:1;min-height:0;display:flex;flex-direction:column}
+.chips{display:flex;gap:8px;padding:12px 20px 4px;overflow-x:auto;flex:none;align-items:center}
+.list{flex:1;overflow-y:auto;padding:4px 0 24px}
+.hr{display:flex;align-items:center;gap:14px;width:100%;padding:10px 20px;text-align:start;border-bottom:1px solid var(--line)}
+.hr:hover{background:var(--rowh);box-shadow:inset 0 -1px 0 var(--line),0 1px 3px rgba(60,64,67,.12)}
+.hr .t{flex:1;min-width:0}
+.hr .n{display:flex;gap:8px;align-items:baseline}
+.hr .n span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px}
+.hr .n small{flex:none;font-size:12px;color:var(--mute)}
+.hr .d{font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hr .d em{color:var(--bad);font-style:normal}
+.hr.un .n span,.hr.un .n small{font-weight:700;color:var(--ink)}
+.hr.un .d{color:var(--ink);font-weight:500}
+.lh{font-size:12px;font-weight:500;color:var(--mute);padding:16px 20px 6px;letter-spacing:.2px}
+.card{display:block;width:calc(100% - 32px);margin:8px 16px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;text-align:start;position:relative}
+.card:hover{box-shadow:var(--pop);border-color:transparent}
+.card .ch{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.card .ch b{font-weight:500}
+.card .ch small{color:var(--mute);font-size:12px;display:block}
+.card .ct{white-space:pre-wrap;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.card .x{position:absolute;top:8px;inset-inline-end:8px}
+mark{background:var(--mark);color:inherit;border-radius:3px}
 
 /* שיחה */
-#conv{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--chatbg);position:relative}
-#convhead{display:flex;align-items:center;gap:4px;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--line);min-height:58px}
-#convhead .who{flex:1;min-width:0;margin-inline-start:8px}
-#ctitle{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#csub{font-size:13px;color:var(--mute)}
-#back{display:none}
-.bar{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--panel);border-bottom:1px solid var(--line);font-size:14px}
-.bar .grow{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.chip{padding:4px 12px;border-radius:16px;background:var(--bg);font-size:14px}
-.chip:hover{background:var(--hover)}
-#summary{margin:10px 14px 0;padding:12px 14px;background:var(--panel);border-radius:14px;box-shadow:var(--shadow);border-inline-start:4px solid var(--acc);font-size:15px;max-height:40%;overflow-y:auto}
-#summary .sh{display:flex;align-items:center;font-weight:700;margin-bottom:4px}
-#summary .sh span{flex:1}
-#sumtext{white-space:pre-wrap}
-#msgs{flex:1;overflow-y:auto;padding:14px max(14px,calc((100% - 860px)/2));display:flex;flex-direction:column;gap:2px}
-.row{display:flex;align-items:center;gap:4px;max-width:82%;align-self:flex-start;margin-top:8px}
-.row.cont{margin-top:1px}
-.row.mine{align-self:flex-end;flex-direction:row-reverse}
-.m{padding:7px 12px 5px;border-radius:16px;background:var(--theirs);box-shadow:var(--shadow);white-space:pre-wrap;overflow-wrap:anywhere;min-width:64px;border-start-start-radius:5px}
-.row.mine .m{background:var(--mine);border-start-start-radius:16px;border-start-end-radius:5px}
-.row.cont .m{border-start-start-radius:16px;border-start-end-radius:16px}
-.m .w{font-size:13px;font-weight:700}
-.m.tome{box-shadow:var(--shadow),inset 3px 0 0 var(--acc)}
-.m.flash{animation:flash 1.2s}
-@keyframes flash{0%,60%{outline:2.5px solid var(--acc)}100%{outline:2.5px solid transparent}}
-.m .men{color:var(--link);font-weight:600;background:rgba(31,95,174,.1);border-radius:5px;padding:0 3px}
-.m code{background:rgba(127,140,165,.2);border-radius:5px;padding:1px 5px;font-family:ui-monospace,Consolas,monospace;font-size:14px;direction:ltr;unicode-bidi:embed}
-.m pre{margin:4px 0;background:rgba(127,140,165,.2);border-radius:8px;padding:8px 10px;font-family:ui-monospace,Consolas,monospace;font-size:14px;direction:ltr;text-align:left;white-space:pre-wrap}
-.q{display:block;width:100%;text-align:start;border-inline-start:3px solid var(--acc);background:rgba(127,140,165,.14);border-radius:6px;padding:4px 9px;margin-bottom:5px;font-size:13px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.q b{display:block;color:var(--ink);font-size:12px}
-.m .at{font-size:11px;color:var(--mute);text-align:end;margin-top:1px;white-space:nowrap}
-.m a{color:var(--link)}
-.m mark{background:var(--mark);color:inherit;border-radius:3px}
-.row .more{width:30px;height:30px;opacity:0;color:var(--mute)}
-.row:hover .more,.row .more:focus-visible{opacity:1}
-@media (hover:none){.row .more{opacity:.7}}
-.row.pend .m{opacity:.65}
-.row.fail .m{opacity:1;outline:1.5px solid var(--bad)}
-.fail .at{color:var(--bad);white-space:normal}
-.fail .at button{color:var(--link);text-decoration:underline;margin-inline-start:8px;font-size:12px}
-.reacts{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
-.reacts button{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:0 8px;font-size:13px;line-height:22px}
-.reacts button:hover{border-color:var(--acc)}
-.file{display:flex;align-items:center;gap:8px;margin-top:4px;padding:7px 10px;border-radius:10px;background:rgba(127,140,165,.14);font-size:14px;text-align:start;width:100%;color:inherit;text-decoration:none}
-.file:hover{background:rgba(127,140,165,.24)}
+.msgs{flex:1;overflow-y:auto;padding:8px 0 16px;display:flex;flex-direction:column;overscroll-behavior:contain}
+.row{display:flex;gap:12px;padding:6px 20px 2px;position:relative;scroll-margin:60px}
+.row.cont{padding-top:1px}
+.row:hover,.row.sel{background:var(--rowh)}
+.row.tome{background:var(--tome)}
+.row.flash{animation:flash 1.6s}
+@keyframes flash{0%,50%{background:var(--sel)}100%{background:transparent}}
+.gut{width:32px;flex:none;font-size:10.5px;color:var(--mute);text-align:center;padding-top:4px;visibility:hidden;white-space:nowrap}
+.row.cont:hover .gut{visibility:visible}
+.mb{flex:1;min-width:0}
+.hd{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.hd b{font-size:14px;font-weight:500}
+.hd time,.hd small{font-size:12px;color:var(--mute)}
+.st{width:13px;height:13px;color:#e8a600;fill:#e8a600;align-self:center}
+.mt{white-space:pre-wrap;overflow-wrap:anywhere;font-size:var(--fs)}
+.mt .ed{font-size:11px;color:var(--mute)}
+.men{color:var(--link);font-weight:500;background:var(--sel);border-radius:4px;padding:0 3px}
+.mt code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:0 4px;font-family:ui-monospace,Consolas,monospace;font-size:.92em;direction:ltr;unicode-bidi:embed}
+.mt pre{margin:4px 0;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-family:ui-monospace,Consolas,monospace;font-size:13px;direction:ltr;text-align:left;white-space:pre-wrap}
+.mt a{color:var(--link)}
+.q{display:block;max-width:100%;text-align:start;border-inline-start:3px solid var(--mute);padding:2px 10px;margin:2px 0 4px;font-size:13px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q b{display:block;color:var(--ink);font-size:12px;font-weight:500}
+.rx{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.rx button{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:0 8px;font-size:13px;line-height:24px;height:26px}
+.rx button:hover{border-color:var(--acc)}
+.rx .add{color:var(--mute);display:grid;place-items:center;opacity:0}
+.rx .add svg{width:16px;height:16px}
+.row:hover .rx .add,.row.sel .rx .add{opacity:1}
+.file{display:flex;align-items:center;gap:10px;margin-top:6px;padding:10px 14px;border-radius:8px;border:1px solid var(--line);font-size:13px;text-align:start;max-width:340px;width:100%;color:inherit;text-decoration:none}
+.file:hover{background:var(--hover)}
 .file span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pic{margin-top:4px;border-radius:10px;overflow:hidden;min-width:140px;min-height:90px;background:rgba(127,140,165,.14);color:var(--mute);font-size:13px;display:grid;place-items:center}
+.file svg{color:var(--acc)}
+.pic{margin-top:6px;border-radius:8px;overflow:hidden;min-width:140px;min-height:90px;max-width:360px;background:var(--soft);color:var(--mute);font-size:13px;display:grid;place-items:center}
 .pic img{display:block;max-width:100%;max-height:300px}
-.m audio,.m video{display:block;margin-top:4px;max-width:100%;border-radius:10px}
-.m video{max-height:300px}
-.rep{display:inline-flex;align-items:center;gap:5px;margin-top:5px;font-size:13px;color:var(--link);font-weight:600}
-.rep svg{width:15px;height:15px}
-.day,.newline{align-self:center;font-size:12px;color:var(--mute);background:var(--panel);padding:2px 12px;border-radius:12px;margin:10px 0 2px;box-shadow:var(--shadow)}
-.newline{align-self:stretch;text-align:center;background:none;box-shadow:none;color:var(--acc);font-weight:700;display:flex;align-items:center;gap:10px;padding:0}
-.newline::before,.newline::after{content:"";flex:1;height:1.5px;background:var(--acc);opacity:.5}
-.older{align-self:center;margin-bottom:6px}
-.older.chip{background:var(--panel);box-shadow:var(--shadow)}
-.empty{margin:auto;color:var(--mute);text-align:center;padding:24px}
-.empty svg{width:54px;height:54px;stroke-width:1.3;opacity:.5;display:block;margin:0 auto 8px}
-#down{position:absolute;inset-inline-end:18px;bottom:86px;width:42px;height:42px;border-radius:50%;background:var(--panel);box-shadow:var(--pop);display:grid;place-items:center}
-#down.new::after{content:"";position:absolute;top:2px;inset-inline-end:2px;width:11px;height:11px;border-radius:50%;background:var(--acc)}
-#compose{display:flex;align-items:flex-end;gap:6px;padding:10px 12px;background:var(--panel);border-top:1px solid var(--line);padding-bottom:max(10px,env(safe-area-inset-bottom))}
-#compose textarea{flex:1;resize:none;border:1.5px solid transparent;border-radius:20px;padding:8px 14px;background:var(--bg);max-height:140px;outline:0}
-#compose textarea:focus{border-color:var(--acc)}
-#sendbtn{background:var(--acc);color:#fff;width:40px;height:40px}
-#sendbtn:hover{background:var(--acc);filter:brightness(1.06)}
-#sendbtn svg{transform:scaleX(-1)}
-#mic.rec{background:var(--bad);color:#fff;width:auto;padding:0 12px;gap:6px;border-radius:20px;display:flex;font-size:14px}
-#sugg{position:absolute;bottom:64px;inset-inline:12px;max-width:340px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--pop);padding:5px;z-index:20;max-height:260px;overflow-y:auto}
-#sugg button{display:flex;align-items:center;gap:10px;width:100%;padding:6px 8px;border-radius:9px;text-align:start}
-#sugg button.on,#sugg button:hover{background:var(--hover)}
-#sugg .av{width:30px;height:30px;font-size:14px}
-#filebar{flex-wrap:wrap}
-.fchip{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border-radius:14px;padding:3px 6px 3px 10px;max-width:100%}
+.mb audio,.mb video{display:block;margin-top:6px;max-width:100%;border-radius:8px}
+.mb video{max-height:300px}
+.rep{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-size:13px;color:var(--link);font-weight:500;padding:2px 8px;margin-inline-start:-8px;border-radius:12px}
+.rep:hover{background:var(--sel)}
+.rep svg{width:16px;height:16px}
+.tb{position:absolute;top:-18px;inset-inline-end:20px;display:none;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--pop);padding:2px;z-index:2}
+.tb button{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--mute);font-size:17px}
+.tb button:hover{background:var(--hover)}
+.tb button.on{color:#e8a600}
+.tb button.on svg{fill:#e8a600}
+.tb svg{width:18px;height:18px}
+.row:hover .tb,.row.sel .tb{display:flex}
+.row:first-child .tb{top:2px}
+@media (hover:none){.row:hover .tb{display:none}.row.sel .tb{display:flex}.row:hover:not(.sel):not(.tome){background:none}}
+.pend .mb{opacity:.6}
+.fail .mb{opacity:1}
+.stt{font-size:12px;color:var(--mute)}
+.fail .stt{color:var(--bad)}
+.stt button{color:var(--link);text-decoration:underline;margin-inline-start:8px;font-size:12px}
+.day,.newline{display:flex;align-items:center;gap:14px;margin:16px 20px 6px;color:var(--mute);font-size:12px;font-weight:500}
+.day::before,.day::after,.newline::before,.newline::after{content:"";flex:1;height:1px;background:var(--line)}
+.newline{color:var(--bad)}
+.newline::before,.newline::after{background:var(--bad);opacity:.5}
+.older{align-self:center;margin:8px}
+#down{position:absolute;inset-inline-start:50%;transform:translateX(50%);bottom:110px;display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:18px;background:var(--panel);color:var(--acc);box-shadow:var(--pop);font-weight:500;font-size:13px;z-index:3}
+#down svg{width:16px;height:16px}
+#down.new{background:var(--acc);color:var(--accink)}
+.bar{display:flex;align-items:center;gap:8px;padding:6px 20px;font-size:13px;color:var(--mute)}
+.bar b{color:var(--ink);font-weight:500}
+.bar .grow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#findbar{border-bottom:1px solid var(--line)}
+#findbar input{flex:1;min-width:0;border:0;border-radius:18px;background:var(--field);padding:7px 14px;outline:0}
+#summary{margin:10px 20px 0;padding:12px 16px;background:var(--soft);border-radius:12px;font-size:14px;max-height:40%;overflow-y:auto;flex:none}
+#summary .sh2{display:flex;align-items:center;font-weight:500;margin-bottom:4px}
+#summary .sh2 span{flex:1}
+#sumtext{white-space:pre-wrap}
+.cwrap{flex:none;padding:0 16px 16px;padding-bottom:max(16px,env(safe-area-inset-bottom))}
+.compose{display:flex;flex-wrap:wrap;align-items:flex-end;background:var(--soft);border-radius:24px;padding:4px 6px;border:1px solid transparent;transition:border-color .15s}
+.compose:focus-within{border-color:var(--line);background:var(--panel);box-shadow:var(--pop)}
+.compose textarea{flex:1 1 280px;min-width:0;resize:none;border:0;background:none;padding:9px 12px;max-height:180px;outline:0;font-size:var(--fs);line-height:1.45}
+.tools{display:flex;align-items:center;gap:0;margin-inline-start:auto}
+.tools .ib{width:36px;height:36px}
+.tools .send{color:var(--acc)}
+.tools .send svg{transform:scaleX(-1)}
+.tools .send:disabled{color:var(--mute)}
+.cc{font-size:11px;color:var(--mute);padding:0 6px}
+.cc.bad{color:var(--bad)}
+.mic.rec{background:var(--bad);color:#fff;width:auto;padding:0 12px;gap:6px;border-radius:18px;display:flex;font-size:13px}
+.fmtbar{flex-basis:100%;display:flex;gap:2px;padding:2px 6px;border-bottom:1px solid var(--line)}
+.fmtbar button{min-width:32px;height:30px;border-radius:6px;font-size:15px;color:var(--mute)}
+.fmtbar button:hover{background:var(--hover)}
+.filebar{display:flex;flex-wrap:wrap;gap:6px;padding:4px 4px 8px}
+.fchip{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 6px 4px 10px;max-width:100%;font-size:13px}
 .fchip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fchip button{width:22px;height:22px;border-radius:50%;flex:none}
-.fchip button:hover{background:var(--hover)}
-#emo{position:fixed;z-index:35;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--pop);padding:8px;width:300px;max-width:calc(100vw - 16px);display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-height:250px;overflow-y:auto}
-#emo button{height:34px;border-radius:8px;font-size:20px}
+.fchip button{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center}
+.fchip button svg{width:14px;height:14px}
+.cwrap .bar{padding:4px 8px}
+.pane{position:relative}
+.pane.drag::after{content:"שחררו כדי לצרף";position:absolute;inset:8px;border:2px dashed var(--acc);border-radius:16px;background:rgba(11,87,208,.08);display:grid;place-items:center;font-weight:500;font-size:18px;pointer-events:none;z-index:5}
+#sugg{position:fixed;z-index:30;background:var(--panel);border-radius:12px;box-shadow:var(--pop);padding:6px 0;width:280px;max-height:260px;overflow-y:auto}
+#sugg button{display:flex;align-items:center;gap:10px;width:100%;padding:6px 14px;text-align:start}
+#sugg button.on,#sugg button:hover{background:var(--hover)}
+#emo{position:fixed;z-index:35;background:var(--panel);border-radius:12px;box-shadow:var(--pop);padding:8px;width:320px;max-width:calc(100vw - 16px);max-height:300px;overflow-y:auto}
+#emo .g{display:grid;grid-template-columns:repeat(8,1fr);gap:2px}
+#emo .l{font-size:12px;color:var(--mute);padding:4px 4px 2px}
+#emo button{height:36px;border-radius:8px;font-size:21px}
 #emo button:hover{background:var(--hover)}
-.seg{display:flex;gap:6px;padding:4px 14px 0}
-.seg button{flex:1;padding:6px;border-radius:10px;background:var(--bg);font-size:14px;color:var(--mute)}
-.seg button.on{background:var(--brand2);color:#fff}
-.picked{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px}
-.sect{font-size:13px;color:var(--mute);font-weight:700;padding:12px 16px 4px}
-.modal .in{margin:8px 14px;padding:9px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);outline:0}
-.modal .in:focus{border-color:var(--acc)}
-.modal .btn{width:auto;margin:6px 14px 12px;flex:none}
-.modal .rowbtn{display:flex;align-items:center;gap:10px;width:calc(100% - 12px);margin:0 6px;padding:9px 10px;border-radius:12px;text-align:start}
-.modal .rowbtn:hover{background:var(--hover)}
-.modal .rowbtn.danger{color:var(--bad)}
-.modal .scroll{overflow-y:auto;padding-bottom:10px}
-.mrow{display:flex;align-items:center;gap:10px;padding:6px 16px}
-.mrow .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mrow small{color:var(--mute)}
-.mrow .x{font-size:13px;color:var(--bad);padding:3px 9px;border-radius:12px}
-.mrow .x:hover{background:var(--hover)}
-#conv.drag::after{content:"שחרר כדי לצרף את הקובץ";position:absolute;inset:8px;border:2.5px dashed var(--acc);border-radius:16px;background:rgba(217,119,87,.12);display:grid;place-items:center;font-weight:700;font-size:18px;pointer-events:none}
 
-/* תפריט, חלונות, הודעות קופצות */
-#menu{position:fixed;z-index:30;background:var(--panel);border-radius:14px;box-shadow:var(--pop);padding:6px;min-width:190px;border:1px solid var(--line)}
-#menu .emo{display:flex;justify-content:space-between;padding:2px 2px 6px;border-bottom:1px solid var(--line);margin-bottom:4px}
-#menu .emo button{width:34px;height:34px;border-radius:50%;font-size:19px}
-#menu .emo button:hover{background:var(--hover);transform:scale(1.15)}
-#menu .it{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:9px;text-align:start;font-size:15px}
+/* חלון צד: שרשור ופרטים */
+#side .msgs{padding-top:12px}
+#side .row{padding-inline:16px}
+#side .tb{inset-inline-end:12px}
+#infob{flex:1;overflow-y:auto;padding-bottom:20px}
+.ihead{text-align:center;padding:20px 16px 8px}
+.ihead .av{margin:0 auto 10px}
+.ihead b{display:block;font-size:20px;font-weight:400}
+.ihead small{color:var(--mute)}
+.iacts{display:flex;justify-content:center;gap:16px;padding:8px 0 4px}
+.iacts button{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--mute);width:72px}
+.iacts button i{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--acc)}
+.iacts button.on i{background:var(--sel)}
+
+/* תפריטים וחלונות */
+#menu{position:fixed;z-index:30;background:var(--panel);border-radius:8px;box-shadow:var(--pop);padding:6px 0;min-width:220px;max-height:calc(100vh - 16px);overflow-y:auto}
+#menu .emo{display:flex;justify-content:space-between;padding:2px 8px 6px;border-bottom:1px solid var(--line);margin-bottom:4px}
+#menu .emo button{width:34px;height:34px;border-radius:50%;font-size:19px;display:grid;place-items:center}
+#menu .emo button:hover{background:var(--hover)}
+#menu .it{display:flex;align-items:center;gap:14px;width:100%;padding:8px 16px;text-align:start;font-size:14px}
 #menu .it:hover{background:var(--hover)}
 #menu .it.danger{color:var(--bad)}
-#menu .it svg{width:17px;height:17px}
-.over{position:fixed;inset:0;z-index:40;background:rgba(10,16,28,.55);display:grid;place-items:center;padding:16px}
-.modal{width:100%;max-width:420px;max-height:80vh;background:var(--panel);border-radius:18px;box-shadow:var(--pop);display:flex;flex-direction:column;overflow:hidden}
-.modal .mh{display:flex;align-items:center;padding:12px 10px 4px 16px;font-weight:700;font-size:17px}
+#menu .it svg{width:18px;height:18px;color:var(--mute)}
+#menu .it.danger svg{color:var(--bad)}
+.over{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.4);display:grid;place-items:center;padding:16px}
+.modal{width:100%;max-width:460px;max-height:84vh;background:var(--panel);border-radius:28px;box-shadow:var(--pop);display:flex;flex-direction:column;overflow:hidden}
+.modal .mh{display:flex;align-items:center;padding:18px 16px 6px 24px;font-size:22px}
 .modal .mh span{flex:1}
-.modal .field{margin:8px 14px;flex:none}
-#people{overflow-y:auto;padding:0 6px 10px;min-height:80px;display:flex;flex-direction:column}
-#people .sp .d{direction:ltr;text-align:end}
-#viewer img{max-width:100%;max-height:calc(100vh - 110px);border-radius:10px;box-shadow:var(--pop);display:block;margin:0 auto}
+.modal .scroll{overflow-y:auto;padding-bottom:16px}
+.in{display:block;width:calc(100% - 48px);margin:8px 24px;padding:12px 14px;border-radius:6px;border:1px solid var(--mute);background:none;outline:0}
+.in:focus{border:2px solid var(--acc);padding:11px 13px}
+.modal .btn{margin:8px 24px 18px;align-self:flex-start}
+.seg{display:flex;gap:0;margin:8px 24px;border:1px solid var(--mute);border-radius:20px;overflow:hidden;flex:none}
+.seg button{flex:1;padding:8px 10px;font-size:13px;font-weight:500}
+.seg button+button{border-inline-start:1px solid var(--mute)}
+.seg button.on{background:var(--sel);color:var(--selink)}
+.picked{display:flex;flex-wrap:wrap;gap:6px;padding:0 24px}
+.sect{font-size:13px;color:var(--mute);font-weight:500;padding:16px 24px 6px}
+.rowbtn{display:flex;align-items:center;gap:14px;width:100%;padding:10px 24px;text-align:start}
+.rowbtn:hover{background:var(--hover)}
+.rowbtn.danger{color:var(--bad)}
+.rowbtn svg{color:var(--mute)}
+.rowbtn.danger svg{color:inherit}
+.rowbtn small{color:var(--mute);margin-inline-start:auto;white-space:nowrap}
+.rowbtn .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sws .t{white-space:normal}
+.mrow{display:flex;align-items:center;gap:12px;padding:6px 24px}
+.mrow .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow small{color:var(--mute)}
+.mrow .x{font-size:13px;color:var(--bad);padding:4px 10px;border-radius:14px}
+.mrow .x:hover{background:var(--hover)}
+.pp{display:flex;align-items:center;gap:14px;width:100%;padding:8px 24px;text-align:start}
+.pp:hover{background:var(--hover)}
+.pp .t{flex:1;min-width:0}
+.pp .d{font-size:12px;color:var(--mute);direction:ltr;text-align:end;overflow:hidden;text-overflow:ellipsis}
+#people{overflow-y:auto;min-height:90px;display:flex;flex-direction:column;padding-bottom:12px}
+.srow{display:flex;align-items:center;gap:12px;padding:8px 24px}
+.srow>span{flex:1}
+.srow .seg{margin:0;flex:none}
+.sw{width:36px;height:20px;border-radius:10px;background:var(--line);position:relative;flex:none;transition:background .15s}
+.sw::after{content:"";position:absolute;top:2px;inset-inline-start:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:inset-inline-start .15s}
+.sw.on{background:var(--acc)}
+.sw.on::after{inset-inline-start:18px}
+.keys{width:calc(100% - 48px);margin:0 24px;border-collapse:collapse;font-size:13px}
+.keys td{padding:6px 0;border-bottom:1px solid var(--line)}
+.keys td:last-child{text-align:end;white-space:nowrap}
+kbd{font-family:inherit;font-size:12px;background:var(--soft);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:1px 6px;direction:ltr;display:inline-block}
+#viewer img{max-width:100%;max-height:calc(100vh - 110px);border-radius:8px;display:block;margin:0 auto}
 #viewer .vb{display:flex;gap:10px;justify-content:center;margin-top:12px}
-#viewer .vb button{background:var(--panel);padding:8px 16px;border-radius:20px}
-#toast{position:fixed;z-index:50;bottom:84px;left:50%;transform:translateX(-50%);background:#222b3b;color:#fff;padding:9px 18px;border-radius:22px;font-size:14px;box-shadow:var(--pop);max-width:90vw;text-align:center}
-
-@media (max-width:760px){
-  #list{width:100%;border:0}
-  #conv{display:none}
-  body.open #list{display:none}
-  body.open #conv{display:flex}
-  #back{display:grid}
-  .row{max-width:92%}
-  #convhead{padding-inline-start:4px}
+#viewer .vb button{background:var(--panel);padding:8px 18px;border-radius:20px}
+#toast{position:fixed;z-index:50;bottom:24px;left:50%;transform:translateX(-50%);background:#303030;color:#f2f2f2;padding:12px 18px;border-radius:6px;font-size:14px;box-shadow:var(--pop);max-width:calc(100vw - 48px)}
+body.dense .row{padding-top:3px}
+body.dense .row.cont{padding-top:0}
+body.dense .hr{padding-block:6px}
+body.dense .hr .av{width:32px;height:32px;font-size:14px}
+@media (max-width:1100px) and (min-width:761px){
+  #side{position:fixed;top:64px;bottom:16px;inset-inline-end:16px;width:400px;z-index:15;margin:0;box-shadow:var(--pop)}
+  body.side #main{margin-inline-end:16px}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:760px){
+  #app{display:flex;flex-direction:column}
+  #top{padding:8px 12px;gap:4px}
+  .brand,.wide,#navbtn{display:none}
+  #nav{flex:1;padding-bottom:96px}
+  #newbtn{position:fixed;bottom:max(16px,env(safe-area-inset-bottom));inset-inline-end:16px;z-index:10;margin:0;box-shadow:var(--pop)}
+  .navs{display:flex;gap:8px;overflow-x:auto;padding:4px 12px 8px}
+  .navs .ni{width:auto;height:32px;border-radius:8px!important;border:1px solid var(--line);padding:0 12px;flex:none;white-space:nowrap;font-size:13px}
+  .ni.sp{width:100%;height:auto;min-height:64px;padding:8px 16px;border-radius:0!important;gap:14px}
+  .ni.sp .av{width:40px;height:40px;font-size:17px}
+  .ni .d{display:block;font-size:13px;color:var(--mute);font-weight:400}
+  .ni.un .d{color:var(--ink);font-weight:500}
+  .ni .tm{display:block;font-size:12px;color:var(--mute);font-weight:400;align-self:flex-start;margin-top:3px}
+  .ni.sp.on{background:none;color:inherit;font-weight:inherit}
+  .ni.un .tm{color:var(--acc);font-weight:700}
+  .spw>.more{display:none}
+  .sec{margin-top:6px}
+  #main{display:none;margin:0;border-radius:0}
+  body.open #main{display:flex;flex:1}
+  body.open #nav,body.open:not(.srch) #top,body.open #newbtn{display:none}
+  .back{display:grid}
+  .vh{padding-inline-start:4px;min-height:56px}
+  #side{position:fixed;inset:0;width:auto;margin:0;border-radius:0;z-index:20}
+  #side .x2{display:none}
+  .row,#side .row{padding-inline:12px}
+  .tb{inset-inline-end:8px}
+  .cwrap{padding:0 8px 8px}
+  .chips,.lh{padding-inline:12px}
+  .hr{padding-inline:12px}
+  .card{width:calc(100% - 24px);margin-inline:12px}
+  .modal{max-height:92vh;border-radius:20px}
+  #toast{bottom:88px}
+  #down{bottom:96px}
+}
+@media (min-width:761px){#side .back{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <div id="login" class="hide">
   <div class="card">
-    <div class="logo"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div>
-    <h2>הצ'אטים שלי</h2>
-    <p>כניסה עם הקוד הסודי של הקו</p>
+    <div class="logo" data-i="chat"></div>
+    <h2>כניסה לצ'אט</h2>
+    <p>עם הקוד הסודי של הקו</p>
     <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" aria-label="קוד סודי">
     <button class="btn" id="go">כניסה</button>
     <div class="err" id="lerr"></div>
@@ -231,80 +370,94 @@ svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:
 </div>
 
 <div id="app" class="hide">
-  <aside id="list">
-    <div id="top">
-      <h1>הצ'אטים שלי</h1>
-      <button class="ib" id="bell" title="התראות על הודעות חדשות" aria-label="התראות על הודעות חדשות"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7 2.5 7h-17S6 15 6 9zM10 20a2 2 0 0 0 4 0"/></svg></button>
-      <button class="ib" id="refresh" title="רענון" aria-label="רענון"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 6M20 5v6h-6"/></svg></button>
-      <button class="ib" id="logout" title="יציאה" aria-label="יציאה"><svg viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/></svg></button>
+  <header id="top">
+    <button class="ib" id="navbtn" data-i="menu" title="תפריט ראשי" aria-label="תפריט ראשי"></button>
+    <div class="brand"><i data-i="chat"></i>צ'אט</div>
+    <label id="sbox"><span class="ib sm" data-i="search"></span><input id="search" type="search" placeholder="חיפוש בצ'אט" aria-label="חיפוש בצ'אט" autocomplete="off"><button class="ib sm hide" id="sclear" data-i="x" aria-label="ניקוי החיפוש"></button></label>
+    <span class="grow wide"></span>
+    <span id="offline" class="hide">אין חיבור</span>
+    <button class="ib wide" id="helpbtn" data-i="help" title="קיצורי מקלדת (?)" aria-label="קיצורי מקלדת"></button>
+    <button class="ib wide" id="bell" data-i="bell" title="התראות" aria-label="התראות"></button>
+    <button class="ib wide" id="refresh" data-i="refresh" title="רענון" aria-label="רענון"></button>
+    <button class="ib" id="setbtn" data-i="gear" title="הגדרות" aria-label="הגדרות"></button>
+    <button class="ib wide" id="logout" data-i="out" title="יציאה" aria-label="יציאה"></button>
+  </header>
+  <nav id="nav" aria-label="ניווט">
+    <button id="newbtn" data-i="edit">צ'אט חדש</button>
+    <div class="navs">
+      <button class="ni" data-v="home" data-i="home">בית</button>
+      <button class="ni" data-v="mentions" data-i="at">אזכורים</button>
+      <button class="ni" data-v="starred" data-i="star">מסומנים בכוכב</button>
+      <a class="ni" href="claude.html" data-i="bot">שיחה עם Claude</a>
     </div>
-    <div class="searchrow">
-      <label class="field"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="search" type="search" placeholder="חיפוש שיחה" aria-label="חיפוש שיחה"></label>
-      <button class="ib" id="newbtn" title="שיחה חדשה" aria-label="שיחה חדשה"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
-    </div>
-    <div class="tabs">
-      <button data-f="all" class="on">הכל</button>
-      <button data-f="unread">לא נקראו<b id="ucount"></b></button>
-      <button data-f="dm">פרטיים</button>
-      <button data-f="group">קבוצות</button>
-    </div>
-    <div id="spaces"><div class="empty">טוען...</div></div>
+    <div id="lists"></div>
+  </nav>
+  <main id="main">
+    <section id="home" class="view">
+      <div class="vh"><button class="ib back" data-i="back" aria-label="חזרה"></button><h2 id="vtitle">בית</h2><span id="vacts"></span></div>
+      <div class="chips" id="vchips"></div>
+      <div class="list" id="vlist"></div>
+    </section>
+    <section id="conv" class="view pane hide">
+      <div class="vh" id="convhead">
+        <button class="ib back" id="back" data-i="back" aria-label="חזרה"></button>
+        <div id="cav"></div>
+        <div class="who"><b id="ctitle"></b><small id="csub"></small></div>
+        <button class="ib" id="findbtn" data-i="search" title="חיפוש בשיחה" aria-label="חיפוש בשיחה"></button>
+        <button class="ib wide" id="sum" data-i="sum" title="סיכום השיחה" aria-label="סיכום השיחה"></button>
+        <button class="ib" id="infobtn" data-i="info" title="פרטים, חברים וקבצים" aria-label="פרטים, חברים וקבצים"></button>
+        <button class="ib" id="cmore" data-i="more" title="עוד" aria-label="עוד פעולות"></button>
+      </div>
+      <div id="findbar" class="bar hide"><input id="find" type="search" placeholder="חיפוש בהודעות של השיחה" aria-label="חיפוש בהודעות של השיחה"><span id="findn"></span><button class="ib sm" id="findx" data-i="x" aria-label="סגירת החיפוש"></button></div>
+      <div id="summary" class="hide"><div class="sh2"><span>סיכום השיחה</span><button class="ib sm" id="sumx" data-i="x" aria-label="סגירת הסיכום"></button></div><div id="sumtext"></div></div>
+      <div id="mmsgs" class="msgs" role="log"></div>
+      <button id="down" class="hide" data-i="down">להודעות האחרונות</button>
+    </section>
+  </main>
+  <aside id="side" class="hide">
+    <div class="vh"><button class="ib back" id="sideback" data-i="back" aria-label="חזרה"></button><div class="who"><b id="sidet"></b><small id="sides"></small></div><button class="ib x2" id="sidex" data-i="x" aria-label="סגירה"></button></div>
+    <div id="thpane" class="view pane"><div id="tmsgs" class="msgs" role="log"></div></div>
+    <div id="infob"></div>
   </aside>
-
-  <section id="conv">
-    <div id="convhead" class="hide">
-      <button class="ib" id="back" aria-label="חזרה"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
-      <div class="av sm" id="cav"></div>
-      <div class="who"><div id="ctitle"></div><div id="csub"></div></div>
-      <button class="ib" id="infobtn" title="פרטי השיחה, חברים וקבצים" aria-label="פרטי השיחה, חברים וקבצים"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg></button>
-      <button class="ib" id="findbtn" title="חיפוש בשיחה" aria-label="חיפוש בשיחה"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
-      <button class="ib" id="sum" title="סיכום השיחה" aria-label="סיכום השיחה"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h8"/></svg></button>
-      <button class="ib" id="mute" title="השתקה" aria-label="השתקה"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7 2.5 7h-17S6 15 6 9zM10 20a2 2 0 0 0 4 0M4 3l16 18"/></svg></button>
-    </div>
-    <div id="findbar" class="bar hide">
-      <label class="field"><input id="find" type="search" placeholder="חיפוש בהודעות של השיחה" aria-label="חיפוש בהודעות של השיחה"></label>
-      <span id="findn"></span>
-      <button class="ib" id="findx" aria-label="סגירת החיפוש"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    </div>
-    <div id="thbar" class="bar hide"><button class="chip" id="thback">חזרה לשיחה</button><b>שרשור</b></div>
-    <div id="summary" class="hide">
-      <div class="sh"><span>סיכום השיחה</span><button class="ib" id="sumx" aria-label="סגירת הסיכום"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-      <div id="sumtext"></div>
-    </div>
-    <div id="msgs"></div>
-    <button id="down" class="hide" aria-label="לסוף השיחה"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
-    <div id="editbar" class="bar hide"><b>תיקון הודעה</b><span class="grow"></span><button class="chip" id="editx">ביטול</button></div>
-    <div id="quotebar" class="bar hide"><b>ציטוט</b><span class="grow" id="quotetext"></span><button class="chip" id="quotex">ביטול</button></div>
-    <div id="filebar" class="bar hide"></div>
-    <div id="sugg" class="hide"></div>
-    <form id="compose" class="hide">
-      <button type="button" class="ib" id="attach" title="צירוף קובץ" aria-label="צירוף קובץ"><svg viewBox="0 0 24 24"><path d="M20 11.5 12 19.5a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.7 17.2a1.7 1.7 0 0 1-2.4-2.4l7.7-7.7"/></svg></button>
-      <input type="file" id="fileinput" class="hide" multiple>
-      <button type="button" class="ib" id="emobtn" title="אמוג'י" aria-label="אמוג'י"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5v.01M15 9.5v.01"/></svg></button>
-      <textarea id="text" rows="1" placeholder="כתוב הודעה..." aria-label="הודעה"></textarea>
-      <button type="button" class="ib" id="mic" title="הקלטה קולית" aria-label="הקלטה קולית"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg><span id="mict"></span></button>
-      <button type="submit" class="ib" id="sendbtn" title="שליחה" aria-label="שליחה"><svg viewBox="0 0 24 24"><path d="M21 12 4 4l3 8-3 8zM7 12h7"/></svg></button>
-    </form>
-  </section>
 </div>
 
-<div id="menu" class="hide"></div>
+<template id="ctpl"><div class="cwrap">
+  <div class="bar editbar hide"><b>עריכת הודעה</b><span class="grow"></span><button type="button" class="chip editx">ביטול</button></div>
+  <div class="bar quotebar hide"><b>ציטוט</b><span class="grow qt"></span><button type="button" class="chip quotex">ביטול</button></div>
+  <div class="filebar hide"></div>
+  <form class="compose">
+    <div class="fmtbar hide"><button type="button" data-w="*" title="מודגש (Ctrl+B)"><b>B</b></button><button type="button" data-w="_" title="נטוי (Ctrl+I)"><i>I</i></button><button type="button" data-w="~" title="קו חוצה (Ctrl+Shift+X)"><s>S</s></button><button type="button" data-w="`" title="קוד">&lt;/&gt;</button><button type="button" data-w="```" title="בלוק קוד">{ }</button></div>
+    <textarea rows="1" aria-label="הודעה"></textarea>
+    <div class="tools">
+      <span class="cc"></span>
+      <button type="button" class="ib fmtb" data-i="fmt" title="עיצוב טקסט" aria-label="עיצוב טקסט"></button>
+      <button type="button" class="ib emob" data-i="smile" title="אמוג'י" aria-label="אמוג'י"></button>
+      <button type="button" class="ib attb" data-i="attach" title="צירוף קובץ" aria-label="צירוף קובץ"></button>
+      <button type="button" class="ib mic" data-i="mic" title="הקלטה קולית" aria-label="הקלטה קולית"><span class="mict"></span></button>
+      <button type="submit" class="ib send" data-i="send" title="שליחה" aria-label="שליחה"></button>
+    </div>
+    <input type="file" class="hide" multiple>
+  </form>
+</div></template>
+
+<div id="menu" class="hide" role="menu"></div>
 <div id="emo" class="hide"></div>
+<div id="sugg" class="hide"></div>
 <div id="sheet" class="over hide">
-  <div class="modal">
-    <div class="mh"><span id="sheett"></span><button class="ib" id="sheetx" aria-label="סגירה"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="sheett">
+    <div class="mh"><span id="sheett"></span><button class="ib" id="sheetx" data-i="x" aria-label="סגירה"></button></div>
     <div class="scroll" id="sheetb"></div>
   </div>
 </div>
 <div id="newdm" class="over hide">
-  <div class="modal">
-    <div class="mh"><span>שיחה חדשה</span><button class="ib" id="newx" aria-label="סגירה"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <div class="seg"><button id="modedm" class="on">שיחה פרטית</button><button id="modegrp">קבוצה חדשה</button></div>
-    <input id="gname" class="in hide" placeholder="שם הקבוצה" aria-label="שם הקבוצה" maxlength="80">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="צ'אט חדש">
+    <div class="mh"><span>צ'אט חדש</span><button class="ib" id="newx" data-i="x" aria-label="סגירה"></button></div>
+    <div class="seg"><button id="modedm" class="on">צ'אט עם אדם</button><button id="modegrp">יצירת מרחב</button></div>
+    <input id="gname" class="in hide" placeholder="שם המרחב" aria-label="שם המרחב" maxlength="80">
     <div id="picked" class="picked hide"></div>
-    <label class="field"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pq" type="search" placeholder="שם או כתובת מייל" aria-label="שם או כתובת מייל"></label>
+    <input id="pq" class="in" type="search" placeholder="שם או כתובת מייל" aria-label="שם או כתובת מייל" autocomplete="off">
     <div id="people"></div>
-    <button class="btn hide" id="gcreate">פתיחת הקבוצה</button>
+    <button class="btn hide" id="gcreate">יצירה</button>
   </div>
 </div>
 <div id="viewer" class="over hide"><div><img id="vimg" alt=""><div class="vb"><button id="vdl">הורדה</button><button id="vx">סגירה</button></div></div></div>
@@ -314,61 +467,90 @@ svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:
 "use strict";
 // דרך הגשר ב-Supabase, כי נטפרי חוסם workers.dev
 const API = "https://ydcfafijktzasrkkxyux.supabase.co/functions/v1/chat-netfree/";
-const TITLE = "הצ'אטים שלי";
+const TITLE = "צ'אט";
 const EMOJIS = ["👍", "🙏", "✅", "😊", "👏", "❗"];
-const MORE_EMOJIS = "👍 👎 🙏 👏 🙌 💪 🤝 ✋ 👋 ☝️ ✅ ❌ ❗ ❓ ⭐ 🔥 💯 🎉 🎁 🏆 😊 🙂 😀 😄 😁 😅 😂 😉 😎 🤔 😮 😢 😔 😴 🤒 😇 ⏰ 📅 📌 📎 📞 📧 💡 🔑 🔒 💰 🛒 🚗 ✈️ 🏠 🏢 📚 ✏️ 📝 📊 📈 🍎 🍞 ☕ 🍷 🕯️ 🌹 ☀️ 🌧️".split(" ");
-const MAX_FILES = 5;
-const MAX_FILE = 8 * 1024 * 1024;
+const EMO_GROUPS = [
+  ["סמלים וידיים", "👍 👎 🙏 👏 🙌 💪 🤝 ✋ 👋 ☝️ 👌 ✌️ ✅ ❌ ❗ ❓ ⭐ 🔥 💯 🎉 🎁 🏆 ✔️ ➕"],
+  ["פרצופים", "😊 🙂 😀 😄 😁 😅 😂 😉 😎 🤔 😮 😢 😔 😴 🤒 😇 🤗 🤩 😬 🙃 😐 😌 🥲 🫡"],
+  ["חפצים", "⏰ 📅 📌 📎 📞 📧 💡 🔑 🔒 💰 🛒 🚗 ✈️ 🏠 🏢 📚 ✏️ 📝 📊 📈 🖨️ 💻 📱 🧾"],
+  ["אוכל וטבע", "🍎 🍞 ☕ 🍷 🕯️ 🌹 ☀️ 🌧️ ❄️ 🌙 🌳 🍇 🍰 🥗 🍕 🥛"],
+];
+const MAX_FILES = 5, MAX_FILE = 8 * 1024 * 1024, MAX_TEXT = 4000;
 const $ = (id) => document.getElementById(id);
-const st = {
-  token: "", spaces: [], cur: null, thread: "", filter: "all",
-  latest: [], older: [], more: false, oldest: "", divider: "", loadedKey: "", loadingOlder: false,
-  q: "", pending: [], seq: 0, drafts: {}, files: [], edit: null, quote: null, mem: {},
-  nodes: new Map(), keepFromBottom: false, toBottom: false, lastId: "",
-  notif: false, seen: null, blobs: new Map(), timers: [],
-};
+const enc = encodeURIComponent;
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
   del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+  json(k, d) { try { return JSON.parse(this.get(k, "")) || d; } catch (e) { return d; } },
 };
-st.token = store.get("chat_token", "");
-st.notif = store.get("chat_notif", "") === "1";
-try { st.drafts = JSON.parse(store.get("chat_drafts", "{}")) || {}; } catch (e) { st.drafts = {}; }
+const prefs = Object.assign({ theme: "auto", fs: "m", dense: false, enter: true, sound: false }, store.json("chat_prefs", {}));
+const st = {
+  token: store.get("chat_token", ""), spaces: [], cur: null, view: "home", hf: "all", unonly: store.get("chat_unonly", "") === "1",
+  drafts: store.json("chat_drafts", {}), stars: store.json("chat_stars", {}), coll: store.json("chat_coll", {}), hidden: store.json("chat_hidden", {}),
+  recent: store.json("chat_emo", []), notif: store.get("chat_notif", "") === "1",
+  mem: {}, seen: null, blobs: new Map(), timers: [], cache: {}, pending: [], seq: 0, side: "", ment: null, scanAt: 0, scanning: false, prevView: "home",
+};
+const saveJ = (k, v) => store.set(k, JSON.stringify(v));
 
 function el(tag, cls, text) { const x = document.createElement(tag); if (cls) x.className = cls; if (text != null) x.textContent = text; return x; }
 // סמלים קבועים בלבד (לא טקסט מהשרת)
 const ICON = {
-  more: '<path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3"/>',
+  more: '<path d="M12 5v.01M12 12v.01M12 19v.01" stroke-width="3.2"/>',
   quote: '<path d="M10 7H6v5h4v2a3 3 0 0 1-3 3M18 7h-4v5h4v2a3 3 0 0 1-3 3"/>',
-  fwd: '<path d="M14 5l6 6-6 6M20 11H9a5 5 0 0 0-5 5v3"/>',
+  fwd: '<path d="M10 5 4 11l6 6M4 11h11a5 5 0 0 1 5 5v3"/>',
   smile: '<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5v.01M15 9.5v.01"/>',
   pin: '<path d="M9 4h6l-1 6 3 3H7l3-3zM12 13v7"/>',
   unread: '<path d="M4 6h16v12H4zM4 7l8 6 8-6"/>',
   mute: '<path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7 2.5 7h-17S6 15 6 9zM10 20a2 2 0 0 0 4 0M4 3l16 18"/>',
+  bell: '<path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7 2.5 7h-17S6 15 6 9zM10 20a2 2 0 0 0 4 0"/>',
   out: '<path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/>',
   x: '<path d="M6 6l12 12M18 6 6 18"/>',
   file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5"/>',
   play: '<path d="M7 5v14l12-7z"/>',
-  thread: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
+  thread: '<path d="M4 5h16v11H9l-5 4zM8 9h8M8 12h5"/>',
+  chat: '<path d="M4 5h16v11H9l-5 4z"/>',
   copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>',
   edit: '<path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/>',
   trash: '<path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/>',
+  star: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z"/>',
+  home: '<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/>',
+  at: '<circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  chev: '<path d="m6 9 6 6 6-6"/>',
+  back: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  dl: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  sum: '<path d="M5 6h14M5 12h14M5 18h8"/>',
+  check: '<path d="M5 12l5 5L20 7"/>',
+  hide: '<path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-3 3.4M6.6 7.6C4.3 9.2 3 12 3 12s4 6 9 6a9 9 0 0 0 4-1"/>',
+  gear: '<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17v.01"/>',
+  send: '<path d="M21 12 4 4l3 8-3 8zM7 12h7"/>',
+  attach: '<path d="M20 11.5 12 19.5a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.7 17.2a1.7 1.7 0 0 1-2.4-2.4l7.7-7.7"/>',
+  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+  fmt: '<path d="M5 20h14M8 16l4-11 4 11M9.5 12h5"/>',
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+  refresh: '<path d="M20 11a8 8 0 1 0-2.3 6M20 5v6h-6"/>',
+  down: '<path d="M12 5v14M6 13l6 6 6-6"/>',
+  people: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/>',
+  bot: '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13v1M15 13v1"/>',
 };
-function icon(name) { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("viewBox", "0 0 24 24"); s.innerHTML = ICON[name]; return s; }
+function icon(name, cls) { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("aria-hidden", "true"); if (cls) s.setAttribute("class", cls); s.innerHTML = ICON[name]; return s; }
+const hydrate = (root) => root.querySelectorAll("[data-i]").forEach((x) => { x.prepend(icon(x.dataset.i)); x.removeAttribute("data-i"); });
+hydrate(document);
+const ibtn = (ic, label, fn, cls) => { const b = el("button", "ib " + (cls || "sm")); b.type = "button"; b.title = label; b.setAttribute("aria-label", label); b.append(icon(ic)); b.onclick = fn; return b; };
 let toastTimer = 0;
 function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.remove("hide"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add("hide"), 3500); }
 
 async function api(op, body, q) {
   // בלי כותרות מיוחדות (בלי preflight): האסימון בפרמטר token, והגוף כ-text/plain. הגשר מתרגם.
-  const qs = (q || "") + (st.token ? ((q ? "&" : "?") + "token=" + encodeURIComponent(st.token)) : "");
+  const qs = (q || "") + (st.token ? ((q ? "&" : "?") + "token=" + enc(st.token)) : "");
   let r;
   try {
-    r = await fetch(API + op + qs, {
-      method: body ? "POST" : "GET",
-      headers: body ? { "content-type": "text/plain;charset=UTF-8" } : {},
-      body: body ? JSON.stringify(body) : undefined,
-    });
+    r = await fetch(API + op + qs, { method: body ? "POST" : "GET", headers: body ? { "content-type": "text/plain;charset=UTF-8" } : {}, body: body ? JSON.stringify(body) : undefined });
   } catch (e) { throw new Error("אין חיבור לשרת"); }
   const j = await r.json().catch(() => ({ error: "תקלה בחיבור" }));
   if (r.status === 401 && op !== "login") { logout(true); throw new Error(j.error || "צריך להיכנס"); }
@@ -378,19 +560,16 @@ async function api(op, body, q) {
 // קובץ מהשיחה: יורד ברקע ונשמר בזיכרון, כך שהאסימון לא מופיע בשורת הכתובת ולא בהיסטוריה
 function blobOf(a) {
   if (!st.blobs.has(a.ref)) {
-    const p = fetch(API + "file?ref=" + encodeURIComponent(a.ref) + "&name=" + encodeURIComponent(a.name) + "&token=" + encodeURIComponent(st.token))
-      .then(async (r) => { if (!r.ok) throw new Error("לא הצלחתי להוריד את הקובץ"); const b = await r.blob(); return { url: URL.createObjectURL(b), type: b.type || a.type || "" }; });
+    const p = fetch(API + "file?ref=" + enc(a.ref) + "&name=" + enc(a.name) + "&token=" + enc(st.token))
+      .then(async (r) => { if (!r.ok) throw new Error("לא הצלחתי להוריד את הקובץ"); const b = await r.blob(); return { url: URL.createObjectURL(b), type: b.type || a.type || "", blob: b }; });
     p.catch(() => st.blobs.delete(a.ref));
     st.blobs.set(a.ref, p);
   }
   return st.blobs.get(a.ref);
 }
+function saveAs(url, name) { const l = el("a"); l.href = url; l.download = name; document.body.append(l); l.click(); l.remove(); }
 async function download(a) {
-  try {
-    toast("מוריד את " + a.name + "...");
-    const b = await blobOf(a);
-    const l = el("a"); l.href = b.url; l.download = a.name; document.body.append(l); l.click(); l.remove();
-  } catch (e) { toast(e.message); }
+  try { toast("מוריד את " + a.name + "..."); saveAs((await blobOf(a)).url, a.name); } catch (e) { toast(e.message); }
 }
 
 function show(which) {
@@ -402,42 +581,65 @@ function logout(silent) {
   if (!silent && st.token) api("logout", {}).catch(() => {});
   st.token = "";
   store.del("chat_token"); store.del("chat_drafts");
-  st.drafts = {}; st.pending = []; st.seen = null; st.spaces = [];
+  st.drafts = {}; st.pending = []; st.seen = null; st.spaces = []; st.cache = {}; st.ment = null;
   for (const p of st.blobs.values()) p.then((b) => URL.revokeObjectURL(b.url)).catch(() => {});
   st.blobs.clear();
   st.timers.forEach(clearInterval); st.timers = [];
   document.title = TITLE;
   closeConv(true);
-  $("spaces").replaceChildren();
+  $("lists").replaceChildren();
   show("login");
 }
 $("go").onclick = async () => {
-  $("lerr").textContent = "";
-  $("go").disabled = true;
-  try {
-    const j = await api("login", { pin: $("pin").value.trim() });
-    st.token = j.token;
-    store.set("chat_token", st.token);
-    $("pin").value = "";
-    start();
-  } catch (e) { $("lerr").textContent = e.message; }
+  $("lerr").textContent = ""; $("go").disabled = true;
+  try { const j = await api("login", { pin: $("pin").value.trim() }); st.token = j.token; store.set("chat_token", st.token); $("pin").value = ""; start(); }
+  catch (e) { $("lerr").textContent = e.message; }
   $("go").disabled = false;
 };
 $("pin").onkeydown = (e) => { if (e.key === "Enter") $("go").click(); };
 $("logout").onclick = () => logout(false);
-$("refresh").onclick = () => { loadSpaces(); if (st.cur) loadMsgs(); };
+$("refresh").onclick = () => { loadSpaces(); if (st.cur) { loadMsgs(M); if (T.space) loadMsgs(T); } toast("מרענן..."); };
 
 const initial = (t) => (String(t || "?").trim()[0] || "?");
 function hue(t) { let h = 0; for (const c of String(t)) h = (h * 31 + c.codePointAt(0)) % 360; return h; }
-const colorOf = (t) => "hsl(" + hue(t) + " 42% 44%)";
-const nameColor = (t) => "hsl(" + hue(t) + " 55% " + (matchMedia("(prefers-color-scheme:dark)").matches ? 70 : 36) + "%)";
-const fmtTime = (iso) => { if (!iso) return ""; return new Date(iso).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" }); };
-const fmtDay = (iso) => { if (!iso) return ""; const d = new Date(iso), n = new Date(); if (d.toDateString() === n.toDateString()) return "היום"; const y = new Date(n - 864e5); if (d.toDateString() === y.toDateString()) return "אתמול"; return d.toLocaleDateString("he-IL", { day: "numeric", month: "numeric", year: d.getFullYear() === n.getFullYear() ? undefined : "2-digit" }); };
+const PAL = ["#1a73e8", "#c5221f", "#188038", "#e37400", "#8430ce", "#007b83", "#b0560c", "#5f6368", "#1967d2", "#a142f4", "#137333", "#d01884"];
+const colorOf = (t) => PAL[hue(t) % PAL.length];
+function avatar(name, cls) { const a = el("div", "av" + (cls ? " " + cls : ""), initial(name)); a.style.background = colorOf(name); a.setAttribute("aria-hidden", "true"); return a; }
+const spAv = (s, cls) => avatar(s.title, (cls || "") + (s.dm ? "" : " sq"));
+const fmtTime = (iso) => (iso ? new Date(iso).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" }) : "");
+const sameDay = (a, b) => a.toDateString() === b.toDateString();
+const fmtDay = (iso) => { if (!iso) return ""; const d = new Date(iso), n = new Date(); if (sameDay(d, n)) return "היום"; if (sameDay(d, new Date(n - 864e5))) return "אתמול"; return d.toLocaleDateString("he-IL", { day: "numeric", month: "numeric", year: d.getFullYear() === n.getFullYear() ? undefined : "2-digit" }); };
+const fmtSep = (iso) => { const d = new Date(iso), n = new Date(); if (sameDay(d, n)) return "היום"; if (sameDay(d, new Date(n - 864e5))) return "אתמול"; return d.toLocaleDateString("he-IL", { weekday: "long", day: "numeric", month: "long", year: d.getFullYear() === n.getFullYear() ? undefined : "numeric" }); };
 const fmtWhen = (iso) => { const day = fmtDay(iso); return day === "היום" ? fmtTime(iso) : day; };
+const fullDate = (iso) => (iso ? new Date(iso).toLocaleString("he-IL", { weekday: "long", day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "");
 const visible = () => document.visibilityState === "visible";
-const viewKey = () => (st.cur ? st.cur.space + "|" + st.thread : "");
+const isMob = () => matchMedia("(max-width:760px)").matches;
+const spaceOf = (id) => st.spaces.find((x) => x.space === id);
+const unreadOf = (s) => s.unread && !s.muted;
+const myName = () => { const m = st.cur && (st.mem[st.cur.space] || []).find((x) => x.me); return (m && m.name) || "אני"; };
 
-// ---------------------------------------------------------------- רשימת השיחות
+// ---- העדפות
+function applyPrefs() {
+  const dark = prefs.theme === "dark" || (prefs.theme === "auto" && matchMedia("(prefers-color-scheme:dark)").matches);
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  document.querySelector('meta[name="theme-color"]').content = dark ? "#1b1c1d" : "#f6f8fc";
+  document.documentElement.style.setProperty("--fs", { s: "13px", m: "14px", l: "16.5px" }[prefs.fs] || "14px");
+  document.body.classList.toggle("dense", !!prefs.dense);
+}
+function setPref(k, v) { prefs[k] = v; saveJ("chat_prefs", prefs); applyPrefs(); }
+matchMedia("(prefers-color-scheme:dark)").addEventListener("change", applyPrefs);
+applyPrefs();
+function ping() {
+  if (!prefs.sound) return;
+  try {
+    const a = ping.ac || (ping.ac = new AudioContext()), o = a.createOscillator(), g = a.createGain(), t = a.currentTime;
+    o.frequency.setValueAtTime(880, t); o.frequency.setValueAtTime(660, t + 0.1);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.15, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t + 0.34);
+  } catch (e) {}
+}
+
+// ---- רשימת השיחות
 async function loadSpaces() {
   try {
     const list = (await api("spaces")).spaces;
@@ -445,157 +647,310 @@ async function loadSpaces() {
     if (st.cur && !list.some((x) => x.space === st.cur.space)) list.unshift(st.cur);
     st.spaces = list;
     if (st.cur) { st.cur = list.find((x) => x.space === st.cur.space) || st.cur; setHead(); }
-    const unread = list.filter((s) => s.unread && !s.muted);
-    if (st.seen) for (const s of unread) {
+    if (st.seen) for (const s of list.filter(unreadOf)) {
       const here = st.cur && st.cur.space === s.space;
-      if (s.last > (st.seen[s.space] || "")) { if (here && visible()) loadMsgs(); else notify(s); }
+      if (s.last > (st.seen[s.space] || "")) { if (here && visible()) loadMsgs(M); else { notify(s); ping(); } }
     }
     st.seen = Object.fromEntries(list.map((s) => [s.space, s.unread ? s.last : ""]));
-    renderSpaces();
-  } catch (e) { if (!st.spaces.length && st.token) $("spaces").replaceChildren(el("div", "empty", e.message)); }
+    renderNav(); renderView();
+    if (!loadSpaces.done) { loadSpaces.done = 1; fromHash(); }
+  } catch (e) { if (!st.spaces.length && st.token) $("lists").replaceChildren(el("div", "empty", e.message)); }
 }
-function renderSpaces() {
-  const q = $("search").value.trim().toLowerCase();
-  const unread = st.spaces.filter((s) => s.unread && !s.muted).length;
-  document.title = (unread ? "(" + unread + ") " : "") + TITLE;
-  $("ucount").textContent = unread ? unread : "";
-  const list = st.spaces.filter((s) => (st.filter === "all" || (st.filter === "unread" ? s.unread && !s.muted : st.filter === "dm" ? s.dm : !s.dm)) && (!q || s.title.toLowerCase().includes(q)));
-  const box = $("spaces");
-  if (!list.length) { box.replaceChildren(el("div", "empty", q ? "לא נמצאה שיחה" : "אין שיחות")); return; }
-  list.sort((x, y) => !!y.pinned - !!x.pinned);
+// שיחה מוסתרת חוזרת לרשימה כשיש בה פעילות חדשה
+const isHidden = (s) => st.hidden[s.space] && s.last <= st.hidden[s.space] && !(st.cur && st.cur.space === s.space);
+function navList() {
+  const L = st.spaces.filter((s) => !isHidden(s) && (!st.unonly || unreadOf(s) || (st.cur && st.cur.space === s.space)));
+  return [["pins", "מוצמדים", L.filter((s) => s.pinned)], ["dms", "צ'אטים", L.filter((s) => s.dm && !s.pinned), () => openNew(false)], ["sps", "מרחבים", L.filter((s) => !s.dm && !s.pinned), () => openNew(true)]];
+}
+const preview = (s) => (s.preview ? (s.previewWho ? s.previewWho + ": " : "") + s.preview : s.dm ? "צ'אט" : "מרחב");
+function renderNav() {
+  const un = st.spaces.filter(unreadOf).length;
+  document.title = (un ? "(" + un + ") " : "") + TITLE;
+  document.querySelectorAll(".navs [data-v]").forEach((b) => b.classList.toggle("on", !st.cur && st.view === b.dataset.v && !isMob()));
   const out = [];
-  for (const s of list) {
-    const un = s.unread && !s.muted;
-    const w = el("div", "spw");
-    const b = el("button", "sp" + (st.cur && st.cur.space === s.space ? " on" : "") + (s.muted ? " muted" : "") + (un ? " un" : ""));
-    const av = el("div", "av", initial(s.title)); av.style.background = colorOf(s.title);
-    const t = el("div", "t"), n = el("div", "n");
-    n.append(el("span", "", s.title), el("small", "", s.last ? fmtWhen(s.last) : ""));
-    const sub = s.preview ? (s.previewWho ? s.previewWho + ": " : "") + s.preview : (s.dm ? "פרטי" : "קבוצה");
-    t.append(n, el("div", "d", (s.pinned ? "📌 " : "") + (s.muted ? "מושתק · " : "") + sub));
-    b.append(av, t);
-    if (un) b.append(el("span", "dot"));
-    b.onclick = () => openSpace(s);
-    const more = el("button", "ib more"); more.type = "button"; more.setAttribute("aria-label", "פעולות על השיחה"); more.append(icon("more"));
-    more.onclick = (e) => { e.stopPropagation(); spaceMenu(s, more); };
-    w.oncontextmenu = (e) => { e.preventDefault(); spaceMenu(s, b); };
-    w.append(b, more);
-    out.push(w);
+  const f = el("div", "filt");
+  const u = el("button", "chip" + (st.unonly ? " on" : ""), "לא נקראו" + (un ? " (" + un + ")" : "")); u.onclick = () => { st.unonly = !st.unonly; store.set("chat_unonly", st.unonly ? "1" : ""); renderNav(); };
+  f.append(u);
+  if (un) { const r = el("button", "chip", "סימון הכל כנקרא"); r.onclick = markAllRead; f.append(r); }
+  out.push(f);
+  for (const [id, title, list, add] of navList()) {
+    if (id === "pins" && !list.length) continue;
+    const h = el("div", "sec"), b = el("button", "sh" + (st.coll[id] ? " x" : ""));
+    b.setAttribute("aria-expanded", String(!st.coll[id]));
+    b.append(icon("chev"), el("span", "", title));
+    const n = list.filter(unreadOf).length; if (n) b.append(el("span", "cnt", n));
+    b.onclick = () => { st.coll[id] = !st.coll[id]; saveJ("chat_coll", st.coll); renderNav(); };
+    h.append(b); if (add) h.append(ibtn("plus", id === "dms" ? "צ'אט חדש" : "יצירת מרחב", add));
+    out.push(h);
+    if (st.coll[id]) continue;
+    if (!list.length) out.push(el("div", "nempty", st.unonly ? "אין כאן שיחות שלא נקראו" : "אין עדיין"));
+    for (const s of list) out.push(navItem(s));
   }
-  box.replaceChildren(...out);
+  $("lists").replaceChildren(...out);
 }
-$("search").oninput = renderSpaces;
-document.querySelectorAll(".tabs button").forEach((b) => b.onclick = () => {
-  document.querySelectorAll(".tabs button").forEach((x) => x.classList.toggle("on", x === b));
-  st.filter = b.dataset.f; renderSpaces();
-});
+function navItem(s) {
+  const un = unreadOf(s), w = el("div", "spw");
+  const b = el("button", "ni sp" + (st.cur && st.cur.space === s.space ? " on" : "") + (un ? " un" : "") + (s.muted ? " muted" : ""));
+  const t = el("span", "t"); t.append(el("span", "nm", s.title), el("span", "d", (st.drafts[s.space + "|"] ? "טיוטה: " + st.drafts[s.space + "|"] : preview(s))));
+  b.append(spAv(s, "s24"), t);
+  if (st.drafts[s.space + "|"]) b.append(icon("edit", "ic"));
+  if (s.muted) b.append(icon("mute", "ic"));
+  b.append(el("small", "tm", s.last ? fmtWhen(s.last) : ""));
+  if (un) b.append(el("span", "ud"));
+  b.title = s.title;
+  b.onclick = () => openSpace(s);
+  const more = ibtn("more", "אפשרויות", (e) => { e.stopPropagation(); spaceMenu(s, more); }, "sm more");
+  w.oncontextmenu = (e) => { e.preventDefault(); spaceMenu(s, b); };
+  w.append(b, more);
+  return w;
+}
+$("navbtn").onclick = () => document.body.classList.toggle("navx");
+document.querySelectorAll(".navs [data-v]").forEach((b) => b.onclick = () => go(b.dataset.v));
+async function markAllRead() {
+  const list = st.spaces.filter((s) => s.unread);
+  toast("מסמן " + list.length + " שיחות כנקראו...");
+  await Promise.all(list.map((s) => api("read", { space: s.space }).then(() => { s.unread = false; if (st.seen) st.seen[s.space] = ""; }).catch(() => {})));
+  renderNav(); renderView(); toast("כל השיחות סומנו כנקראו");
+}
 
-// ---------------------------------------------------------------- התראות
-function setBell() { const on = st.notif && "Notification" in window && Notification.permission === "granted"; $("bell").classList.toggle("on", on); $("bell").title = on ? "התראות פועלות (לחיצה מכבה)" : "התראות על הודעות חדשות"; return on; }
-$("bell").onclick = async () => {
+// ---- התראות
+function setBell() { const on = st.notif && "Notification" in window && Notification.permission === "granted"; $("bell").classList.toggle("on", on); $("bell").title = on ? "התראות פועלות (לחיצה מכבה)" : "הפעלת התראות על הודעות חדשות"; return on; }
+async function toggleBell() {
   if (!("Notification" in window)) return toast("הדפדפן הזה לא תומך בהתראות");
   if (setBell()) { st.notif = false; store.set("chat_notif", "0"); setBell(); return toast("ההתראות כובו"); }
   const p = Notification.permission === "granted" ? "granted" : await Notification.requestPermission();
   if (p !== "granted") return toast("ההתראות חסומות בהגדרות הדפדפן");
   st.notif = true; store.set("chat_notif", "1"); setBell(); toast("תקבל התראה על הודעה חדשה כל עוד האתר פתוח");
-};
+}
+$("bell").onclick = toggleBell;
 function notify(s) {
   if (!setBell()) return;
   try {
-    const n = new Notification(s.title, { body: s.preview ? (s.previewWho ? s.previewWho + ": " : "") + s.preview : "הודעה חדשה", tag: s.space });
-    n.onclick = () => { window.focus(); n.close(); const cur = st.spaces.find((x) => x.space === s.space); if (cur) openSpace(cur); };
+    const n = new Notification(s.title, { body: preview(s), tag: s.space });
+    n.onclick = () => { window.focus(); n.close(); const cur = spaceOf(s.space); if (cur) openSpace(cur); };
   } catch (e) {}
 }
 
-// ---------------------------------------------------------------- שיחה פתוחה
-function emptyState(text, withIcon) { const d = el("div", "empty"); if (withIcon) d.append(icon("thread")); d.append(text); st.nodes.clear(); delete $("msgs").dataset.key; $("msgs").replaceChildren(d); $("down").classList.add("hide"); }
+// ---- מסכים: בית, אזכורים, מסומנים, חיפוש
+function go(v) {
+  if (isMob() && !document.body.classList.contains("open")) history.pushState({ m: 1 }, "");
+  leaveConv();
+  st.view = v; document.body.classList.add("open");
+  renderNav(); renderView();
+  if (v === "mentions") scanMentions();
+}
+function leaveConv() {
+  if (!st.cur) return;
+  saveDraft(M); st.cur = null; M.space = ""; closeSide(); stopRec(true);
+  $("conv").classList.add("hide"); $("home").classList.remove("hide");
+}
+function hrow(s, q) {
+  const un = unreadOf(s), w = el("div", "spw");
+  const b = el("button", "hr" + (un ? " un" : ""));
+  const t = el("div", "t"), n = el("div", "n"), d = el("div", "d"), dr = st.drafts[s.space + "|"];
+  const nm = el("span"); nm.append(hl(s.title, q));
+  n.append(nm, el("small", "", s.last ? fmtWhen(s.last) : ""));
+  if (dr) d.append(el("em", "", "טיוטה: "), dr); else d.append((s.pinned ? "📌 " : "") + (s.muted ? "מושתק · " : "") + preview(s));
+  t.append(n, d); b.append(spAv(s), t);
+  if (un) b.append(el("span", "ud"));
+  b.onclick = () => openSpace(s);
+  const more = ibtn("more", "אפשרויות", (e) => { e.stopPropagation(); spaceMenu(s, more); }, "sm more");
+  w.oncontextmenu = (e) => { e.preventDefault(); spaceMenu(s, b); };
+  w.append(b, more); return w;
+}
+function hl(text, q) { const f = document.createDocumentFragment(); const low = text.toLowerCase(); let i = 0, j; if (q) while ((j = low.indexOf(q, i)) >= 0) { f.append(text.slice(i, j), el("mark", "", text.slice(j, j + q.length))); i = j + q.length; } f.append(text.slice(i)); return f; }
+// כרטיס של הודעה (באזכורים, במסומנים ובחיפוש): לחיצה פותחת את השיחה וקופצת להודעה
+function msgCard(m, q, onx) {
+  const b = el("div", "card"); b.tabIndex = 0; b.setAttribute("role", "button");
+  const h = el("div", "ch"), w = el("div");
+  w.append(el("b", "", m.mine ? "אתה" : m.who), el("small", "", (m.title || (spaceOf(m.space) || {}).title || "") + (m.inTh ? " · בשרשור" : "") + " · " + fmtWhen(m.at)));
+  h.append(avatar(m.mine ? "אני" : m.who, "s32"), w);
+  const t = el("div", "ct"); t.append(richText(m.text || (m.atts && m.atts.length ? "📎 " + m.atts[0].name : ""), q, false));
+  b.append(h, t);
+  b.title = fullDate(m.at);
+  if (onx) b.append(ibtn("x", "הסרת הכוכב", (e) => { e.stopPropagation(); onx(); }, "sm x"));
+  b.onclick = () => { const s = spaceOf(m.space) || { space: m.space, title: m.title || "צ'אט", dm: !!m.dm, last: "" }; openSpace(s, { jump: m.id, thread: m.inTh ? m.thread : "" }); };
+  b.onkeydown = (e) => { if (e.key === "Enter") b.click(); };
+  return b;
+}
+function renderView() {
+  if (st.cur) return;
+  const v = st.view, list = $("vlist"), chips = $("vchips"), acts = $("vacts");
+  document.body.classList.toggle("srch", v === "search");
+  acts.replaceChildren(); chips.replaceChildren(); chips.classList.remove("hide");
+  const out = [];
+  if (v === "home") {
+    $("vtitle").textContent = "בית";
+    for (const [k, label] of [["all", "הכל"], ["unread", "לא נקראו"], ["dm", "צ'אטים"], ["sp", "מרחבים"]]) {
+      const c = el("button", "chip" + (st.hf === k ? " on" : ""), label); c.onclick = () => { st.hf = k; renderView(); }; chips.append(c);
+    }
+    if (st.spaces.some((s) => s.unread)) acts.append(ibtn("check", "סימון הכל כנקרא", markAllRead, ""));
+    const L = st.spaces.filter((s) => !isHidden(s) && (st.hf === "all" || (st.hf === "unread" ? unreadOf(s) : st.hf === "dm" ? s.dm : !s.dm))).sort((a, b) => (b.last || "").localeCompare(a.last || ""));
+    for (const s of L) out.push(hrow(s));
+    if (!L.length) out.push(el("div", "empty", st.spaces.length ? "אין כאן שיחות" : "טוען..."));
+  } else if (v === "mentions") {
+    $("vtitle").textContent = "אזכורים";
+    chips.append(el("span", "stt", st.scanning ? "בודק את השיחות האחרונות..." : "הודעות שהזכירו אותך (או את כולם) בשיחות האחרונות"));
+    acts.append(ibtn("refresh", "בדיקה מחדש", () => scanMentions(true), ""));
+    const L = Object.values(st.cache).flatMap((c) => [...c.values()]).filter((m) => m.toMe && !m.mine).sort((a, b) => b.at.localeCompare(a.at));
+    for (const m of L.slice(0, 100)) out.push(msgCard(m));
+    if (!L.length) { const e = el("div", "empty"); e.append(icon("at"), st.scanning ? "מחפש..." : "אין אזכורים בהודעות האחרונות"); out.push(e); }
+  } else if (v === "starred") {
+    $("vtitle").textContent = "מסומנים בכוכב";
+    chips.append(el("span", "stt", "הודעות שסימנת בכוכב נשמרות בדפדפן הזה"));
+    const L = Object.values(st.stars).sort((a, b) => b.at.localeCompare(a.at));
+    for (const m of L) out.push(msgCard(m, "", () => { toggleStar(m); renderView(); }));
+    if (!L.length) { const e = el("div", "empty"); e.append(icon("star"), "אין הודעות מסומנות. אפשר לסמן הודעה בכוכב מהתפריט שלה."); out.push(e); }
+  } else if (v === "search") {
+    const q = $("search").value.trim().toLowerCase();
+    $("vtitle").textContent = "חיפוש: " + $("search").value.trim();
+    chips.classList.add("hide");
+    const sp = st.spaces.filter((s) => s.title.toLowerCase().includes(q));
+    out.push(el("div", "lh", "שיחות (" + sp.length + ")"));
+    for (const s of sp) out.push(hrow(s, q));
+    const seen = new Set(), ms = [];
+    for (const c of Object.values(st.cache)) for (const m of c.values()) if (!seen.has(m.id) && ((m.text || "") + " " + m.who + " " + (m.atts || []).map((a) => a.name).join(" ")).toLowerCase().includes(q)) { seen.add(m.id); ms.push(m); }
+    ms.sort((a, b) => b.at.localeCompare(a.at));
+    out.push(el("div", "lh", "הודעות (" + ms.length + ") · מתוך ההודעות שנטענו בשיחות שפתחת ובאזכורים"));
+    for (const m of ms.slice(0, 80)) out.push(msgCard(m, q));
+    if (!sp.length && !ms.length) out.push(el("div", "empty", "לא נמצא דבר"));
+  }
+  list.replaceChildren(...out);
+}
+// סריקת האזכורים: ההודעות האחרונות של כמה שיחות אחרונות (בלי לסמן אותן כנקראו)
+async function scanMentions(force) {
+  if (st.scanning || (!force && Date.now() - st.scanAt < 120000)) return;
+  st.scanning = true; renderView();
+  const list = st.spaces.slice().sort((a, b) => (b.last || "").localeCompare(a.last || "")).slice(0, 14);
+  let i = 0;
+  const work = async () => { while (i < list.length) { const s = list[i++]; try { remember(s.space, (await api("messages", null, "?space=" + enc(s.space))).messages || []); } catch (e) {} } };
+  await Promise.all([work(), work(), work(), work()]);
+  st.scanning = false; st.scanAt = Date.now();
+  if (st.view === "mentions") renderView();
+}
+function remember(space, msgs, th) {
+  const s = spaceOf(space) || {}, c = st.cache[space] || (st.cache[space] = new Map());
+  msgs.forEach((m, i) => { const o = c.get(m.id); c.set(m.id, Object.assign({}, m, { space, title: s.title, dm: s.dm, inTh: o ? o.inTh : !!th && i > 0 })); });
+}
+let sTimer = 0;
+$("search").oninput = () => {
+  const q = $("search").value.trim();
+  $("sclear").classList.toggle("hide", !q);
+  clearTimeout(sTimer);
+  sTimer = setTimeout(() => {
+    if (q) { if (st.view !== "search") st.prevView = st.cur ? "conv" : st.view; if (st.view !== "search" || st.cur) go("search"); else renderView(); }
+    else clearSearch();
+  }, 150);
+};
+$("search").onkeydown = (e) => {
+  if (e.key === "Enter") { const q = $("search").value.trim().toLowerCase(), s = st.spaces.find((x) => x.title.toLowerCase().includes(q)); if (s) { clearSearch(true); openSpace(s); } }
+  if (e.key === "Escape") { e.stopPropagation(); clearSearch(); $("search").blur(); }
+};
+function clearSearch(quiet) {
+  $("search").value = ""; $("sclear").classList.add("hide"); document.body.classList.remove("srch");
+  if (st.view === "search" && !quiet) { st.view = st.prevView === "conv" ? "home" : st.prevView; if (isMob()) document.body.classList.remove("open"); renderNav(); renderView(); }
+}
+$("sclear").onclick = () => { clearSearch(); $("search").focus(); };
+const focusSearch = () => { if (isMob() && document.body.classList.contains("open") && !document.body.classList.contains("srch")) history.back(); setTimeout(() => $("search").focus(), 30); };
+
+// ---- חלוניות הודעות: השיחה הראשית ושרשור בצד
+function mkPane(kind, host, box) {
+  const c = $("ctpl").content.firstElementChild.cloneNode(true); hydrate(c); host.append(c);
+  const q = (s) => c.querySelector(s);
+  const p = {
+    kind, host, box, root: c, form: q("form"), text: q("textarea"), fin: q("input[type=file]"), filebar: q(".filebar"), quotebar: q(".quotebar"), editbar: q(".editbar"), fmtbar: q(".fmtbar"), cc: q(".cc"), mic: q(".mic"), send: q(".send"),
+    space: "", thread: "", latest: [], older: [], more: false, oldest: "", divider: "", loadedKey: "", loadingOlder: false, nodes: new Map(), lastId: "",
+    keepFromBottom: false, toBottom: false, q: "", files: [], quote: null, edit: null,
+  };
+  wireCompose(p, q);
+  return p;
+}
+const pk = (p) => (p.space ? p.space + "|" + p.thread : "");
+let M, T, act;
+function emptyState(p, text, withIcon) { const d = el("div", "empty"); if (withIcon) d.append(icon("chat")); d.append(text); p.nodes.clear(); delete p.box.dataset.key; p.box.replaceChildren(d); if (p === M) $("down").classList.add("hide"); }
 function setHead() {
   const s = st.cur; if (!s) return;
   $("ctitle").textContent = s.title;
-  $("csub").textContent = (s.dm ? "שיחה פרטית" : "קבוצה") + (s.muted ? " · מושתקת" : "");
-  $("cav").textContent = initial(s.title); $("cav").style.background = colorOf(s.title);
-  $("mute").classList.toggle("hide", s.dm);
-  $("mute").classList.toggle("on", !!s.muted);
-  $("mute").title = s.muted ? "ביטול השתקה" : "השתקה";
-  $("mute").setAttribute("aria-label", $("mute").title);
+  const mem = st.mem[s.space];
+  $("csub").textContent = [s.dm ? "צ'אט" : mem && mem.length ? mem.length + " חברים" : "מרחב", s.muted ? "מושתק" : "", s.pinned ? "מוצמד" : "", s.last ? "פעילות אחרונה: " + fmtWhen(s.last) : ""].filter(Boolean).join(" · ");
+  $("cav").replaceChildren(spAv(s, "s32"));
 }
-function switchView() {
+function switchView(p) {
   // מעבר בין שיחות או שרשורים: טיוטה לכל מקום, בלי תיקון ובלי קובץ שנשארו ממקום אחר
-  st.edit = null; setFiles([]); setQuote(null); stopRec(true); hideSugg(); closeEmo();
-  $("editbar").classList.add("hide");
-  $("thbar").classList.toggle("hide", !st.thread);
-  $("text").placeholder = st.thread ? "תגובה בשרשור..." : "כתוב הודעה...";
-  $("text").value = st.drafts[viewKey()] || ""; grow();
-  st.latest = []; st.older = []; st.more = false; st.divider = ""; st.loadedKey = ""; st.lastId = "";
-  closeFind(); closeMenu();
-  emptyState("טוען...");
+  p.edit = null; setFiles(p, []); setQuote(p, null); if (rec && rec.p === p) stopRec(true); hideSugg(); closeEmo();
+  p.editbar.classList.add("hide");
+  const s = st.cur;
+  p.text.placeholder = p.thread ? "תגובה בשרשור" : s ? (s.dm ? "הודעה אל " + s.title : "הודעה במרחב " + s.title) : "";
+  p.text.value = st.drafts[pk(p)] || ""; grow(p); count(p);
+  p.latest = []; p.older = []; p.more = false; p.divider = ""; p.loadedKey = ""; p.lastId = "";
+  if (p === M) closeFind();
+  closeMenu(); emptyState(p, "טוען...");
 }
-async function openSpace(s) {
-  const mobile = matchMedia("(max-width:760px)").matches;
-  if (mobile && !document.body.classList.contains("open")) history.pushState({ conv: 1 }, "");
-  st.cur = s; st.thread = "";
-  document.body.classList.add("open");
-  $("convhead").classList.remove("hide");
-  $("summary").classList.add("hide");
-  $("compose").classList.remove("hide");
-  setHead(); switchView(); renderSpaces(); loadMembers(s.space);
-  if (!mobile) $("text").focus();
-  await loadMsgs();
+async function openSpace(s, o) {
+  o = o || {};
+  const mob = isMob();
+  if (mob && !document.body.classList.contains("open")) history.pushState({ m: 1 }, "");
+  if (document.body.classList.contains("srch")) clearSearch(true);
+  delete st.hidden[s.space]; saveJ("chat_hidden", st.hidden);
+  const same = st.cur && st.cur.space === s.space && M.loadedKey;
+  if (!same) { if (st.cur) saveDraft(M); st.cur = s; closeSide(); M.space = s.space; M.thread = ""; switchView(M); $("summary").classList.add("hide"); }
+  st.view = "conv"; document.body.classList.add("open");
+  $("home").classList.add("hide"); $("conv").classList.remove("hide"); grow(M);
+  setHead(); renderNav(); loadMembers(s.space);
+  if (!mob && !o.thread) M.text.focus();
+  if (!same) await loadMsgs(M);
+  if (o.thread) { await openThread(o.thread); if (o.jump) jumpTo(T, o.jump); }
+  else if (o.jump) jumpTo(M, o.jump);
 }
 function closeConv(quiet) {
-  st.cur = null; st.thread = "";
-  document.body.classList.remove("open");
-  stopRec(true); hideSugg(); closeEmo();
-  for (const id of ["convhead", "compose", "summary", "thbar", "editbar", "filebar", "findbar", "quotebar"]) $(id).classList.add("hide");
-  closeMenu();
-  emptyState("בחר שיחה מהרשימה", true);
-  if (!quiet) renderSpaces();
+  if (st.cur) saveDraft(M);
+  st.cur = null; M.space = ""; st.view = isMob() || st.view === "conv" ? "home" : st.view;
+  document.body.classList.remove("open", "srch");
+  stopRec(true); hideSugg(); closeEmo(); closeSide(); closeMenu();
+  $("conv").classList.add("hide"); $("home").classList.remove("hide");
+  if (!quiet) { renderNav(); renderView(); }
 }
-function setThread(t) { st.thread = t || ""; switchView(); loadMsgs(); }
-async function loadMsgs() {
-  const s = st.cur; if (!s) return;
-  const th = st.thread, key = viewKey();
+async function loadMsgs(p) {
+  if (!p.space || !st.cur) return;
+  const s = st.cur, key = pk(p), th = p.thread;
   try {
-    const j = th ? await api("thread", null, "?space=" + encodeURIComponent(s.space) + "&thread=" + encodeURIComponent(th))
-      : await api("messages", null, "?space=" + encodeURIComponent(s.space));
-    if (viewKey() !== key) return;
-    const cur = st.cur;
-    if (st.loadedKey !== key) {
-      st.loadedKey = key; st.older = []; st.more = !!j.more; st.oldest = j.oldest || "";
-      st.divider = !th && cur.unread && j.lastRead ? j.lastRead : "";
-    }
-    st.latest = j.messages || [];
-    st.pending = st.pending.filter((p) => p.state !== "sent");
-    paint();
+    const j = th ? await api("thread", null, "?space=" + enc(p.space) + "&thread=" + enc(th)) : await api("messages", null, "?space=" + enc(p.space));
+    if (pk(p) !== key) return;
+    if (p.loadedKey !== key) { p.loadedKey = key; p.older = []; p.more = !!j.more; p.oldest = j.oldest || ""; p.divider = !th && s.unread && j.lastRead ? j.lastRead : ""; }
+    p.latest = j.messages || [];
+    remember(p.space, p.latest, th);
+    st.pending = st.pending.filter((x) => x.state !== "sent");
+    paint(p);
+    if (th) setSideHead();
     // השיחה פתוחה מול העיניים: מסומנת כנקראה
-    if (!th && cur.unread && visible()) { cur.unread = false; if (st.seen) st.seen[cur.space] = ""; renderSpaces(); api("read", { space: cur.space }).catch(() => {}); }
-  } catch (e) { if (viewKey() === key && st.loadedKey !== key) emptyState(e.message); }
+    if (!th && s.unread && visible()) { s.unread = false; if (st.seen) st.seen[s.space] = ""; renderNav(); api("read", { space: s.space }).catch(() => {}); }
+  } catch (e) { if (pk(p) === key && p.loadedKey !== key) emptyState(p, e.message); }
 }
-async function loadOlder() {
-  if (st.loadingOlder || !st.oldest || !st.cur) return;
-  const key = viewKey();
-  st.loadingOlder = true; paint();
+async function loadOlder(p) {
+  if (p.loadingOlder || !p.oldest || !p.space) return;
+  const key = pk(p);
+  p.loadingOlder = true; paint(p);
   try {
-    const j = await api("messages", null, "?space=" + encodeURIComponent(st.cur.space) + "&before=" + encodeURIComponent(st.oldest));
-    if (viewKey() === key) { st.older = (j.messages || []).concat(st.older); st.more = !!j.more; st.oldest = j.oldest || ""; st.keepFromBottom = true; }
+    const j = await api("messages", null, "?space=" + enc(p.space) + "&before=" + enc(p.oldest));
+    if (pk(p) === key) { p.older = (j.messages || []).concat(p.older); p.more = !!j.more; p.oldest = j.oldest || ""; p.keepFromBottom = true; remember(p.space, j.messages || []); }
   } catch (e) { toast(e.message); }
-  st.loadingOlder = false; paint();
+  p.loadingOlder = false; paint(p);
 }
-function allMsgs() { const ids = new Set(st.latest.map((m) => m.id)); return st.older.filter((m) => !ids.has(m.id)).concat(st.latest); }
-function patchMsg(id, fn) { for (const arr of [st.older, st.latest]) { const i = arr.findIndex((m) => m.id === id); if (i >= 0) { const r = fn(arr[i]); if (r === null) arr.splice(i, 1); } } }
+function allMsgs(p) { const ids = new Set(p.latest.map((m) => m.id)); return p.older.filter((m) => !ids.has(m.id)).concat(p.latest); }
+function patchMsg(id, fn) { for (const p of [M, T]) for (const arr of [p.older, p.latest]) { const i = arr.findIndex((m) => m.id === id); if (i >= 0) { const r = fn(arr[i]); if (r === null) arr.splice(i, 1); } } }
 
-// חברי השיחה: לאזכורים (@) ולחלון פרטי השיחה
+// חברי השיחה: לאזכורים (@) ולחלון הפרטים
 async function loadMembers(space, force) {
   if (st.mem[space] && !force) return st.mem[space];
-  try { st.mem[space] = (await api("members", null, "?space=" + encodeURIComponent(space))).members; }
+  try { st.mem[space] = (await api("members", null, "?space=" + enc(space))).members; }
   catch (e) { if (!st.mem[space]) st.mem[space] = []; }
-  if (st.cur && st.cur.space === space) { st.nodes.clear(); paint(); }
+  if (st.cur && st.cur.space === space) { setHead(); for (const p of [M, T]) if (p.space) { p.nodes.clear(); paint(p); } }
   return st.mem[space];
 }
-const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const rxEsc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 function mentionRe() {
   const names = ((st.cur && st.mem[st.cur.space]) || []).map((m) => m.name).filter(Boolean).concat("כולם").sort((a, b) => b.length - a.length);
-  return "@(?:" + names.map(esc).join("|") + ")";
+  return "@(?:" + names.map(rxEsc).join("|") + ")";
 }
 // טקסט של הודעה: קישורים לחיצים, אזכורים, עיצוב (*מודגש* _נטוי_ ~מחוק~ `קוד`), והדגשה של מה שמחפשים
 function richText(text, q, marks) {
@@ -630,10 +985,11 @@ function richText(text, q, marks) {
   return frag;
 }
 const io = new IntersectionObserver((ents) => { for (const e of ents) if (e.isIntersecting) { io.unobserve(e.target); e.target._load(); } }, { rootMargin: "300px" });
+const driveUrl = (a) => "https://drive.google.com/file/d/" + enc(a.drive) + "/view";
 function attEl(a) {
   if (!a.ref) {
     if (!a.drive) { const d = el("div", "file"); d.append(icon("file"), el("span", "", a.name)); return d; }
-    const l = el("a", "file"); l.href = "https://drive.google.com/file/d/" + encodeURIComponent(a.drive) + "/view"; l.target = "_blank"; l.rel = "noopener noreferrer"; l.append(icon("file"), el("span", "", a.name)); return l;
+    const l = el("a", "file"); l.href = driveUrl(a); l.target = "_blank"; l.rel = "noopener noreferrer"; l.append(icon("file"), el("span", "", a.name)); return l;
   }
   if (/^image\//.test(a.type)) {
     const b = el("button", "pic", "טוען תמונה..."); b.type = "button"; b.setAttribute("aria-label", "תמונה: " + a.name);
@@ -649,112 +1005,170 @@ function attEl(a) {
   } : () => download(a);
   return b;
 }
-function msgEl(m, s, th, cont, q) {
-  const row = el("div", "row" + (m.mine ? " mine" : "") + (cont ? " cont" : ""));
-  const d = el("div", "m" + (m.toMe && !m.mine ? " tome" : ""));
-  if (!m.mine && !s.dm && !cont) { const w = el("div", "w", m.who); w.style.color = nameColor(m.who); d.append(w); }
+const canThread = (p, m) => p.kind === "main" && m.thread && st.cur && !st.cur.dm;
+function msgEl(p, m, s, cont, q) {
+  const row = el("div", "row" + (cont ? " cont" : "") + (m.toMe && !m.mine ? " tome" : ""));
+  const who = m.mine ? myName() : m.who;
+  if (cont) { const g = el("div", "gut", fmtTime(m.at)); g.title = fullDate(m.at); row.append(g); }
+  else row.append(avatar(who, "s32"));
+  const b = el("div", "mb");
+  if (!cont) {
+    const h = el("div", "hd"), t = el("time", "", fmtTime(m.at)); t.title = fullDate(m.at); t.dateTime = m.at;
+    h.append(el("b", "", m.mine ? who + " (אתה)" : who), t);
+    if (st.stars[m.id]) h.append(icon("star", "st"));
+    b.append(h);
+  } else if (st.stars[m.id]) b.append(icon("star", "st"));
   if (m.quote) {
     const qb = el("button", "q"); qb.type = "button";
     if (m.quote.who) qb.append(el("b", "", m.quote.who));
     qb.append(m.quote.text || "הודעה מצוטטת");
-    qb.onclick = () => jumpTo(m.quote.id);
-    d.append(qb);
+    qb.onclick = () => jumpTo(p, m.quote.id);
+    b.append(qb);
   }
-  if (m.text) { const t = el("div"); t.append(richText(m.fmt || m.text, q, !!m.fmt)); d.append(t); }
-  for (const a of m.atts || []) d.append(attEl(a));
+  if (m.text) { const t = el("div", "mt"); t.append(richText(m.fmt || m.text, q, !!m.fmt)); if (m.edited) t.append(el("span", "ed", " (נערך)")); b.append(t); }
+  for (const a of m.atts || []) b.append(attEl(a));
   if (m.reacts && m.reacts.length) {
-    const r = el("div", "reacts");
-    for (const x of m.reacts) { const b = el("button", "", x.e + " " + x.n); b.type = "button"; b.title = "לחיצה מוסיפה או מסירה את התגובה שלך"; b.onclick = () => react(m, x.e); r.append(b); }
-    d.append(r);
+    const r = el("div", "rx");
+    for (const x of m.reacts) { const e = el("button", "", x.e + " " + x.n); e.type = "button"; e.title = "לחיצה מוסיפה או מסירה את התגובה שלך"; e.onclick = () => react(p, m, x.e); e.oncontextmenu = (ev) => { ev.preventDefault(); showReactors(m); }; r.append(e); }
+    const add = el("button", "add"); add.type = "button"; add.title = "הוספת תגובה"; add.append(icon("smile")); add.onclick = (e) => { e.stopPropagation(); openEmoji(add, (x) => { closeEmo(); react(p, m, x); }); };
+    r.append(add); b.append(r);
   }
-  if (!th && m.thread && !s.dm) {
-    const b = el("button", "rep"); b.type = "button";
-    b.append(icon("thread"), m.replies ? m.replies + (m.replies === 1 ? " תגובה" : " תגובות") : "תגובה בשרשור");
-    b.onclick = () => setThread(m.thread); d.append(b);
+  if (canThread(p, m) && m.replies) {
+    const t = el("button", "rep"); t.type = "button";
+    t.append(icon("thread"), m.replies + (m.replies === 1 ? " תגובה" : " תגובות"));
+    t.onclick = () => openThread(m.thread); b.append(t);
   }
-  d.append(el("div", "at", (m.edited ? "נערך · " : "") + fmtTime(m.at)));
-  const more = el("button", "ib more"); more.type = "button"; more.setAttribute("aria-label", "פעולות על ההודעה"); more.append(icon("more"));
-  more.onclick = (e) => { e.stopPropagation(); openMenu(m, more); };
-  row.append(d, more);
+  // סרגל פעולות שמופיע במעבר עכבר (ובטלפון בנגיעה בהודעה)
+  const tb = el("div", "tb");
+  const tbb = (content, label, fn, cls) => { const x = el("button", cls || ""); x.type = "button"; x.title = label; x.setAttribute("aria-label", label); if (typeof content === "string" && !ICON[content]) x.textContent = content; else x.append(icon(content)); x.onclick = (e) => { e.stopPropagation(); fn(x); }; tb.append(x); return x; };
+  tbb("👍", "תגובה 👍", () => react(p, m, "👍"));
+  tbb("smile", "הוספת תגובה", (x) => openEmoji(x, (e) => { closeEmo(); react(p, m, e); }));
+  if (canThread(p, m)) tbb("thread", "תגובה בשרשור", () => openThread(m.thread));
+  tbb("quote", "ציטוט בתשובה", () => { setQuote(p, m); p.text.focus(); });
+  tbb("star", st.stars[m.id] ? "הסרת הכוכב" : "סימון בכוכב", () => { toggleStar(Object.assign({}, m, { space: s.space, title: s.title, dm: s.dm, inTh: p.kind === "th" && m.thread && m.id !== allMsgs(p)[0].id })); }, st.stars[m.id] ? "on" : "");
+  tbb("more", "עוד פעולות", (x) => openMenu(p, m, x));
+  row.append(b, tb);
+  row.oncontextmenu = (e) => { if (e.target.closest("a,img,audio,video")) return; e.preventDefault(); openMenu(p, m, row.querySelector(".tb button:last-child") || row); };
+  row.onclick = (e) => { if (!matchMedia("(hover:none)").matches || e.target.closest("a,button,audio,video")) return; const on = !row.classList.contains("sel"); document.querySelectorAll(".row.sel").forEach((x) => x.classList.remove("sel")); row.classList.toggle("sel", on); };
   return row;
 }
-function jumpTo(id) {
-  const n = st.nodes.get(id);
-  if (!n) return toast("ההודעה המצוטטת לא נטענה (אולי היא ישנה יותר)");
+async function jumpTo(p, id, tries) {
+  const n = p.nodes.get(id);
+  if (!n) {
+    if (p.more && (tries || 0) < 4) { await loadOlder(p); return jumpTo(p, id, (tries || 0) + 1); }
+    return toast("ההודעה לא נמצאה בהודעות שנטענו");
+  }
   n.el.scrollIntoView({ block: "center", behavior: "smooth" });
-  const b = n.el.querySelector(".m"); b.classList.remove("flash"); void b.offsetWidth; b.classList.add("flash");
+  n.el.classList.remove("flash"); void n.el.offsetWidth; n.el.classList.add("flash");
 }
 function pendEl(p) {
-  const row = el("div", "row mine " + (p.state === "failed" ? "fail" : "pend"));
-  const d = el("div", "m");
+  const row = el("div", "row " + (p.state === "failed" ? "fail" : "pend"));
+  row.append(avatar(myName(), "s32"));
+  const d = el("div", "mb"), h = el("div", "hd"); h.append(el("b", "", myName() + " (אתה)")); d.append(h);
   if (p.quote) { const qb = el("div", "q"); if (p.quote.who) qb.append(el("b", "", p.quote.who)); qb.append(p.quote.text || "הודעה מצוטטת"); d.append(qb); }
-  if (p.text) d.append(el("div", "", p.text));
+  if (p.text) d.append(el("div", "mt", p.text));
   for (const pf of p.files) { const f = el("div", "file"); f.append(icon("file"), el("span", "", pf.name)); d.append(f); }
-  const at = el("div", "at", p.state === "failed" ? "לא נשלח: " + p.err : "שולח...");
+  const at = el("div", "stt", p.state === "failed" ? "לא נשלח: " + p.err : "שולח...");
   if (p.state === "failed") {
     const again = el("button", "", "נסה שוב"); again.type = "button"; again.onclick = () => deliver(p);
-    const drop = el("button", "", "מחיקה"); drop.type = "button"; drop.onclick = () => { st.pending = st.pending.filter((x) => x !== p); paint(); };
+    const drop = el("button", "", "מחיקה"); drop.type = "button"; drop.onclick = () => { st.pending = st.pending.filter((x) => x !== p); repaint(p.key); };
     at.append(again, drop);
   }
   d.append(at); row.append(d);
   return row;
 }
+const repaint = (key) => { for (const p of [M, T]) if (pk(p) === key) paint(p); };
 // ציור ההודעות: רכיב של הודעה שלא השתנתה נשאר במקומו (בלי הבהוב, בלי לאבד סימון טקסט או הקלטה שמתנגנת)
-function paint() {
-  const s = st.cur; if (!s || st.loadedKey !== viewKey()) return;
-  const box = $("msgs"), key = viewKey(), th = st.thread;
-  const q = st.q.trim().toLowerCase();
-  const all = allMsgs();
+function paint(p) {
+  const s = st.cur; if (!s || !p.space || p.loadedKey !== pk(p)) return;
+  const box = p.box, key = pk(p), th = p.kind === "th";
+  const q = th ? "" : st.q.trim().toLowerCase();
+  const all = allMsgs(p);
   const list = q ? all.filter((m) => (m.text + " " + m.who + " " + (m.atts || []).map((a) => a.name).join(" ")).toLowerCase().includes(q)) : all;
-  $("findn").textContent = q ? (list.length ? list.length + " נמצאו" : "לא נמצא") : "";
-  const pend = q ? [] : st.pending.filter((p) => p.key === key);
+  if (!th) $("findn").textContent = q ? (list.length ? list.length + " נמצאו" : "לא נמצא") : "";
+  const pend = q ? [] : st.pending.filter((x) => x.key === key);
   const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 90;
   const fromBottom = box.scrollHeight - box.scrollTop;
   const fresh = box.dataset.key !== key;
-  if (fresh) st.nodes.clear();
+  if (fresh) p.nodes.clear();
   const used = new Set(), out = [];
-  const keep = (k, sig, make) => { let n = st.nodes.get(k); if (!n || n.sig !== sig) { n = { sig, el: make() }; st.nodes.set(k, n); } used.add(k); out.push(n.el); return n.el; };
-  if (st.more && !th) keep("older", String(st.loadingOlder), () => { const b = el("button", "older chip", st.loadingOlder ? "טוען..." : "הודעות ישנות יותר"); b.type = "button"; b.disabled = st.loadingOlder; b.onclick = loadOlder; return b; });
-  if (!list.length && !pend.length) keep("empty", q, () => el("div", "empty", q ? "לא נמצאו הודעות" : "אין הודעות. אפשר לכתוב את הראשונה."));
+  const keep = (k, sig, make) => { let n = p.nodes.get(k); if (!n || n.sig !== sig) { n = { sig, el: make() }; p.nodes.set(k, n); } used.add(k); out.push(n.el); return n.el; };
+  if (p.more && !th) keep("older", String(p.loadingOlder), () => { const b = el("button", "older chip", p.loadingOlder ? "טוען..." : "טעינת הודעות ישנות יותר"); b.type = "button"; b.disabled = p.loadingOlder; b.onclick = () => loadOlder(p); return b; });
+  if (!list.length && !pend.length) keep("empty", q, () => { const e = el("div", "empty"); e.append(icon("chat"), q ? "לא נמצאו הודעות" : "אין הודעות. אפשר לכתוב את הראשונה."); return e; });
   let lastDay = "", prev = null, divided = false, divEl = null;
+  const memSig = (st.mem[s.space] || []).length + "|" + myName();
   for (const m of list) {
-    const day = fmtDay(m.at);
-    if (day !== lastDay) { keep("day:" + new Date(m.at).toDateString(), day, () => el("div", "day", day)); lastDay = day; prev = null; }
-    if (st.divider && !divided && !q && !m.mine && m.at > st.divider) { divided = true; divEl = keep("new", "", () => el("div", "newline", "הודעות חדשות")); prev = null; }
-    const cont = !!prev && prev.mine === m.mine && prev.who === m.who && new Date(m.at) - new Date(prev.at) < 5 * 60000;
-    keep(m.id, JSON.stringify(m) + "|" + cont + "|" + q, () => msgEl(m, s, th, cont, q));
+    const day = new Date(m.at).toDateString();
+    if (day !== lastDay) { keep("day:" + day, fmtSep(m.at), () => el("div", "day", fmtSep(m.at))); lastDay = day; prev = null; }
+    if (p.divider && !divided && !q && !m.mine && m.at > p.divider) { divided = true; divEl = keep("new", "", () => el("div", "newline", "חדשות")); prev = null; }
+    const cont = !!prev && prev.mine === m.mine && prev.who === m.who && !m.quote && new Date(m.at) - new Date(prev.at) < 5 * 60000;
+    keep(m.id, JSON.stringify(m) + "|" + cont + "|" + q + "|" + !!st.stars[m.id] + "|" + memSig, () => msgEl(p, m, s, cont, q));
     prev = m;
   }
-  for (const p of pend) keep(p.id, p.state, () => pendEl(p));
+  for (const x of pend) keep(x.id, x.state, () => pendEl(x));
   // עדכון במקום: רק מה שהשתנה זז
   let ref = box.firstChild;
   for (const n of out) { if (n === ref) ref = ref.nextSibling; else box.insertBefore(n, ref); }
   while (ref) { const nx = ref.nextSibling; ref.remove(); ref = nx; }
-  for (const k of [...st.nodes.keys()]) if (!used.has(k)) st.nodes.delete(k);
+  for (const k of [...p.nodes.keys()]) if (!used.has(k)) p.nodes.delete(k);
   box.dataset.key = key;
   const lastMsg = all[all.length - 1];
-  const arrived = !fresh && lastMsg && st.lastId && lastMsg.id !== st.lastId && !lastMsg.mine;
-  st.lastId = lastMsg ? lastMsg.id : "";
+  const arrived = !fresh && lastMsg && p.lastId && lastMsg.id !== p.lastId && !lastMsg.mine;
+  p.lastId = lastMsg ? lastMsg.id : "";
   if (fresh && divEl) divEl.scrollIntoView({ block: "center" });
-  else if (fresh || atBottom || st.toBottom) box.scrollTop = box.scrollHeight;
-  else if (st.keepFromBottom) box.scrollTop = box.scrollHeight - fromBottom;
-  else if (arrived) $("down").classList.add("new");
-  st.keepFromBottom = false; st.toBottom = false;
-  onScroll();
+  else if (fresh || atBottom || p.toBottom) box.scrollTop = box.scrollHeight;
+  else if (p.keepFromBottom) box.scrollTop = box.scrollHeight - fromBottom;
+  else if (arrived && !th) $("down").classList.add("new");
+  p.keepFromBottom = false; p.toBottom = false;
+  if (!th) onScroll();
 }
 function onScroll() {
-  const box = $("msgs");
-  const far = box.scrollHeight - box.scrollTop - box.clientHeight > 220;
+  const box = M.box, far = box.scrollHeight - box.scrollTop - box.clientHeight > 220;
   $("down").classList.toggle("hide", !far || !st.cur);
   if (!far) $("down").classList.remove("new");
 }
-$("msgs").addEventListener("scroll", onScroll, { passive: true });
-$("down").onclick = () => { const b = $("msgs"); b.scrollTo({ top: b.scrollHeight, behavior: "smooth" }); };
-$("thback").onclick = () => setThread("");
-$("back").onclick = () => { if (st.thread) return setThread(""); if (history.state && history.state.conv) history.back(); else closeConv(); };
-window.addEventListener("popstate", () => { if (st.cur && matchMedia("(max-width:760px)").matches) closeConv(); });
+const toLatest = () => M.box.scrollTo({ top: M.box.scrollHeight, behavior: "smooth" });
+$("down").onclick = toLatest;
 
-// ---------------------------------------------------------------- תפריט הודעה: אמוג'י, העתקה, תיקון, מחיקה
+// ---- חלון הצד: שרשור או פרטים
+function showSide(kind) {
+  const mob = isMob();
+  if (mob && !st.side) history.pushState({ m: 2 }, "");
+  st.side = kind; document.body.classList.add("side");
+  $("side").classList.remove("hide");
+  $("thpane").classList.toggle("hide", kind !== "th"); $("infob").classList.toggle("hide", kind !== "info");
+  $("infobtn").classList.toggle("on", kind === "info");
+}
+function closeSide() {
+  if (!st.side) return;
+  if (T.space) saveDraft(T);
+  if (rec && rec.p === T) stopRec(true);
+  st.side = ""; T.space = ""; T.thread = "";
+  document.body.classList.remove("side"); $("side").classList.add("hide"); $("infobtn").classList.remove("on");
+}
+function setSideHead() {
+  const root = allMsgs(T)[0];
+  $("sidet").textContent = st.side === "th" ? "שרשור" : st.cur && st.cur.dm ? "פרטי הצ'אט" : "פרטי המרחב";
+  $("sides").textContent = st.cur ? st.cur.title + (st.side === "th" && root ? " · " + (allMsgs(T).length - 1) + " תגובות" : "") : "";
+}
+async function openThread(t) {
+  if (!st.cur) return;
+  if (st.side === "th" && T.thread === t) return;
+  showSide("th"); T.space = st.cur.space; T.thread = t; switchView(T); setSideHead();
+  if (!isMob()) setTimeout(() => T.text.focus(), 50);
+  await loadMsgs(T);
+}
+const sideBack = () => { if (isMob() && history.state && history.state.m === 2) history.back(); else closeSide(); };
+$("sidex").onclick = sideBack; $("sideback").onclick = sideBack;
+$("back").onclick = () => { if (history.state && history.state.m === 1) history.back(); else closeConv(); };
+document.querySelector("#home .back").onclick = () => { if (history.state && history.state.m === 1) history.back(); else closeConv(); };
+window.addEventListener("popstate", () => {
+  if (!isMob()) return;
+  if (st.side) return closeSide();
+  if (document.body.classList.contains("open")) { if (st.view === "search") clearSearch(); closeConv(); }
+});
+
+// ---- תפריטים
 function closeMenu() { $("menu").classList.add("hide"); }
 function placePop(pop, anchor) {
   pop.classList.remove("hide");
@@ -762,58 +1176,84 @@ function placePop(pop, anchor) {
   pop.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + "px";
   pop.style.top = (r.bottom + h + 8 > innerHeight ? Math.max(8, r.top - h - 6) : r.bottom + 6) + "px";
 }
-const menuItem = (ic, label, fn, cls) => { const b = el("button", "it" + (cls ? " " + cls : "")); b.type = "button"; b.append(icon(ic), el("span", "", label)); b.onclick = fn; return b; };
-// לוח אמוג'י מלא: לתגובה על הודעה או להוספה לטקסט
+const menuItem = (ic, label, fn, cls) => { const b = el("button", "it" + (cls ? " " + cls : "")); b.type = "button"; b.setAttribute("role", "menuitem"); b.append(icon(ic), el("span", "", label)); b.onclick = (e) => { if (!b.dataset.keep) closeMenu(); fn(e, b); }; return b; };
+const sureItem = (ic, label, again, fn) => { const b = menuItem(ic, label, (e) => { if (!b.dataset.sure) { e.stopPropagation(); b.dataset.sure = "1"; b.lastChild.textContent = again; delete b.dataset.keep; return; } fn(); }, "danger"); b.dataset.keep = "1"; return b; };
+function popMenu(items, anchor) { $("menu").replaceChildren(...items); placePop($("menu"), anchor); }
+// לוח אמוג'י: האחרונים שנבחרו למעלה
 function closeEmo() { $("emo").classList.add("hide"); }
 function openEmoji(anchor, pick) {
-  $("emo").replaceChildren(...MORE_EMOJIS.map((e) => { const b = el("button", "", e); b.type = "button"; b.setAttribute("aria-label", e); b.onclick = (ev) => { ev.stopPropagation(); pick(e); }; return b; }));
+  const groups = (st.recent.length ? [["בשימוש לאחרונה", st.recent.join(" ")]] : []).concat(EMO_GROUPS);
+  const out = [];
+  for (const [label, list] of groups) {
+    const g = el("div", "g");
+    for (const e of list.split(" ")) { const b = el("button", "", e); b.type = "button"; b.setAttribute("aria-label", e); b.onclick = (ev) => { ev.stopPropagation(); st.recent = [e].concat(st.recent.filter((x) => x !== e)).slice(0, 16); saveJ("chat_emo", st.recent); pick(e); }; g.append(b); }
+    out.push(el("div", "l", label), g);
+  }
+  $("emo").replaceChildren(...out);
   placePop($("emo"), anchor);
 }
-// תפריט של שיחה ברשימה: הצמדה, סימון כלא נקרא, השתקה
+const linkOf = (id) => location.href.split("#")[0] + "#" + id;
+async function copy(text, done) { try { await navigator.clipboard.writeText(text); toast(done || "הועתק"); } catch (e) { toast("ההעתקה נכשלה"); } }
+// הצמדה או השתקה (נשמרות בשרת)
+async function flip(s, op, after) {
+  const k = op === "pin" ? "pinned" : "muted";
+  try { s[k] = (await api(op, { space: s.space, on: !s[k] }))[k]; setHead(); renderNav(); renderView(); toast(op === "pin" ? (s[k] ? "הוצמד" : "ההצמדה בוטלה") : s[k] ? "הושתק" : "ההשתקה בוטלה"); if (after) after(); }
+  catch (e) { toast(e.message); }
+}
+// תפריט של שיחה ברשימה
 function spaceMenu(sp, anchor) {
   const items = [
-    menuItem("pin", sp.pinned ? "ביטול הצמדה" : "הצמדה לראש הרשימה", async () => { closeMenu(); try { sp.pinned = (await api("pin", { space: sp.space, on: !sp.pinned })).pinned; renderSpaces(); } catch (e) { toast(e.message); } }),
+    menuItem("pin", sp.pinned ? "ביטול הצמדה" : "הצמדה", () => flip(sp, "pin")),
   ];
-  if (sp.last && !sp.unread) items.push(menuItem("unread", "סימון כלא נקרא", async () => {
-    closeMenu();
+  if (sp.unread) items.push(menuItem("check", "סימון כנקרא", async () => { try { await api("read", { space: sp.space }); sp.unread = false; if (st.seen) st.seen[sp.space] = ""; renderNav(); renderView(); } catch (e) { toast(e.message); } }));
+  else if (sp.last) items.push(menuItem("unread", "סימון כלא נקרא", async () => {
     try {
       if (st.cur && st.cur.space === sp.space) closeConv(true);
-      await api("unread", { space: sp.space, at: sp.last }); sp.unread = true; if (st.seen) st.seen[sp.space] = sp.last; renderSpaces();
+      await api("unread", { space: sp.space, at: sp.last }); sp.unread = true; if (st.seen) st.seen[sp.space] = sp.last; renderNav(); renderView();
     } catch (e) { toast(e.message); }
   }));
-  if (!sp.dm) items.push(menuItem("mute", sp.muted ? "ביטול השתקה" : "השתקה", async () => { closeMenu(); try { sp.muted = (await api("mute", { space: sp.space, on: !sp.muted })).muted; setHead(); renderSpaces(); } catch (e) { toast(e.message); } }));
-  $("menu").replaceChildren(...items);
-  placePop($("menu"), anchor);
+  if (!sp.dm) items.push(menuItem(sp.muted ? "bell" : "mute", sp.muted ? "ביטול השתקה" : "השתקה", () => flip(sp, "mute")));
+  items.push(menuItem("link", "העתקת קישור לשיחה", () => copy(linkOf(sp.space), "הקישור הועתק")));
+  items.push(menuItem("hide", "הסתרה מהרשימה (עד הודעה חדשה)", () => { st.hidden[sp.space] = sp.last || "1"; saveJ("chat_hidden", st.hidden); if (st.cur && st.cur.space === sp.space) closeConv(true); renderNav(); renderView(); toast("השיחה הוסתרה"); }));
+  popMenu(items, anchor);
 }
-function openMenu(m, anchor) {
-  const menu = $("menu"), s = st.cur;
+function openMenu(p, m, anchor) {
+  const s = st.cur;
   const emo = el("div", "emo");
-  for (const e of EMOJIS) { const b = el("button", "", e); b.type = "button"; b.setAttribute("aria-label", "תגובה " + e); b.onclick = () => { closeMenu(); react(m, e); }; emo.append(b); }
+  for (const e of EMOJIS) { const b = el("button", "", e); b.type = "button"; b.setAttribute("aria-label", "תגובה " + e); b.onclick = () => { closeMenu(); react(p, m, e); }; emo.append(b); }
   const plus = el("button"); plus.type = "button"; plus.setAttribute("aria-label", "עוד אמוג'י"); plus.append(icon("smile"));
-  plus.onclick = (ev) => { ev.stopPropagation(); closeMenu(); openEmoji(anchor, (e) => { closeEmo(); react(m, e); }); };
+  plus.onclick = (ev) => { ev.stopPropagation(); closeMenu(); openEmoji(anchor, (e) => { closeEmo(); react(p, m, e); }); };
   emo.append(plus);
-  const item = menuItem;
   const items = [emo];
-  items.push(item("quote", "ציטוט ותשובה", () => { closeMenu(); setQuote(m); $("text").focus(); }));
-  if (m.text) items.push(item("fwd", "העברה לשיחה אחרת", () => { closeMenu(); forward(m); }));
-  if (m.reacts && m.reacts.length) items.push(item("smile", "מי הגיב", () => { closeMenu(); showReactors(m); }));
-  if (m.text) items.push(item("copy", "העתקה", async () => { closeMenu(); try { await navigator.clipboard.writeText(m.text); toast("הועתק"); } catch (e) { toast("ההעתקה נכשלה"); } }));
-  if (!st.thread && m.thread && !s.dm) items.push(item("thread", "תגובה בשרשור", () => { closeMenu(); setThread(m.thread); }));
+  if (canThread(p, m)) items.push(menuItem("thread", "תגובה בשרשור", () => openThread(m.thread)));
+  items.push(menuItem("quote", "ציטוט בתשובה", () => { setQuote(p, m); p.text.focus(); }));
+  if (m.text || (m.atts || []).some((a) => a.ref)) items.push(menuItem("fwd", "העברה לשיחה אחרת", () => forward(m)));
+  items.push(menuItem("star", st.stars[m.id] ? "הסרת הכוכב" : "סימון בכוכב", () => toggleStar(Object.assign({}, m, { space: s.space, title: s.title, dm: s.dm, inTh: p.kind === "th" && m.id !== allMsgs(p)[0].id }))));
+  if (m.text) items.push(menuItem("copy", "העתקת הטקסט", () => copy(m.text)));
+  if (m.text) items.push(menuItem("quote", "העתקה כציטוט", () => copy(m.text.split("\n").map((l) => "> " + l).join("\n") + "\n— " + (m.mine ? myName() : m.who) + ", " + fullDate(m.at))));
+  items.push(menuItem("link", "העתקת קישור להודעה", () => copy(linkOf(m.id), "הקישור הועתק")));
+  if (m.reacts && m.reacts.length) items.push(menuItem("smile", "מי הגיב", () => showReactors(m)));
+  if (p.kind === "main" && !m.mine) items.push(menuItem("unread", "סימון כלא נקרא מכאן", async () => { try { await api("unread", { space: s.space, at: m.at }); s.unread = true; if (st.seen) st.seen[s.space] = s.last; closeConv(); toast("סומן כלא נקרא"); } catch (e) { toast(e.message); } }));
   if (m.mine) {
-    if (m.text) items.push(item("edit", "תיקון", () => { closeMenu(); startEdit(m); }));
-    const del = item("trash", "מחיקה", (e) => {
-      if (!del.dataset.sure) { e.stopPropagation(); del.dataset.sure = "1"; del.lastChild.textContent = "ללחוץ שוב כדי למחוק"; return; }
-      closeMenu(); removeMsg(m);
-    }, "danger");
-    items.push(del);
+    if (m.text) items.push(menuItem("edit", "עריכה", () => startEdit(p, m)));
+    items.push(sureItem("trash", "מחיקה", "ללחוץ שוב כדי למחוק", () => { closeMenu(); removeMsg(p, m); }));
   }
-  menu.replaceChildren(...items);
-  placePop(menu, anchor);
+  popMenu(items, anchor);
 }
-document.addEventListener("click", (e) => { if (!$("menu").contains(e.target)) closeMenu(); if (!$("emo").contains(e.target)) closeEmo(); if (!$("sugg").contains(e.target)) hideSugg(); });
-$("msgs").addEventListener("scroll", closeEmo, { passive: true });
-$("msgs").addEventListener("scroll", closeMenu, { passive: true });
-async function react(m, e) {
+document.addEventListener("click", (e) => {
+  if (!$("menu").contains(e.target)) closeMenu();
+  if (!$("emo").contains(e.target)) closeEmo();
+  if (!$("sugg").contains(e.target)) hideSugg();
+});
+for (const b of [$("mmsgs"), $("tmsgs")]) b.addEventListener("scroll", () => { closeEmo(); closeMenu(); }, { passive: true });
+$("mmsgs").addEventListener("scroll", onScroll, { passive: true });
+function toggleStar(m) {
+  if (st.stars[m.id]) { delete st.stars[m.id]; toast("הכוכב הוסר"); }
+  else { st.stars[m.id] = { id: m.id, space: m.space, title: m.title, dm: !!m.dm, who: m.who, mine: !!m.mine, text: (m.text || "").slice(0, 1500), at: m.at, thread: m.thread || "", inTh: !!m.inTh, atts: (m.atts || []).slice(0, 1).map((a) => ({ name: a.name })) }; toast("סומן בכוכב"); }
+  saveJ("chat_stars", st.stars);
+  for (const p of [M, T]) paint(p);
+}
+async function react(p, m, e) {
   const s = st.cur; if (!s) return;
   try {
     const j = await api("react", { space: s.space, id: m.id, emoji: e });
@@ -822,211 +1262,259 @@ async function react(m, e) {
       if (j.on) { if (i >= 0) rs[i].n++; else rs.push({ e, n: 1 }); } else if (i >= 0) { if (--rs[i].n <= 0) rs.splice(i, 1); }
       x.reacts = rs;
     });
-    paint(); loadMsgs();
+    paint(M); paint(T); loadMsgs(p);
   } catch (err) { toast(err.message); }
 }
-function startEdit(m) {
-  st.edit = m; setFiles([]); setQuote(null);
-  $("editbar").classList.remove("hide");
-  $("text").value = m.text; grow(); $("text").focus();
+function startEdit(p, m) {
+  p.edit = m; setFiles(p, []); setQuote(p, null);
+  p.editbar.classList.remove("hide");
+  p.text.value = m.text; grow(p); p.text.focus();
 }
-function stopEdit() { st.edit = null; $("editbar").classList.add("hide"); $("text").value = st.drafts[viewKey()] || ""; grow(); }
-$("editx").onclick = stopEdit;
-async function removeMsg(m) {
+function stopEdit(p) { p.edit = null; p.editbar.classList.add("hide"); p.text.value = st.drafts[pk(p)] || ""; grow(p); }
+async function removeMsg(p, m) {
   const s = st.cur; if (!s) return;
-  try { await api("delete", { space: s.space, id: m.id }); patchMsg(m.id, () => null); paint(); toast("ההודעה נמחקה"); loadMsgs(); }
+  try { await api("delete", { space: s.space, id: m.id }); patchMsg(m.id, () => null); if (st.cache[s.space]) st.cache[s.space].delete(m.id); paint(M); paint(T); toast("ההודעה נמחקה"); loadMsgs(p); }
   catch (e) { toast(e.message); }
 }
 
-// ---------------------------------------------------------------- כתיבה ושליחה
-function grow() { const t = $("text"); t.style.height = ""; t.style.height = Math.min(t.scrollHeight + 3, 140) + "px"; }
+// ---- כתיבה ושליחה
+function grow(p) { const t = p.text; t.style.height = ""; if (t.scrollHeight) t.style.height = Math.min(t.scrollHeight + 2, 180) + "px"; }
+function count(p) { const n = p.text.value.length; p.cc.textContent = n > MAX_TEXT - 500 ? n + "/" + MAX_TEXT : ""; p.cc.classList.toggle("bad", n > MAX_TEXT); p.send.disabled = !p.text.value.trim() && !p.files.length; }
 let draftTimer = 0;
-function saveDraft() {
-  if (st.edit || !st.cur) return;
-  const k = viewKey(), v = $("text").value;
+function saveDraft(p) {
+  if (p.edit || !p.space) return;
+  const k = pk(p), v = p.text.value;
   if (v.trim()) st.drafts[k] = v; else delete st.drafts[k];
-  clearTimeout(draftTimer); draftTimer = setTimeout(() => store.set("chat_drafts", JSON.stringify(st.drafts)), 400);
+  clearTimeout(draftTimer); draftTimer = setTimeout(() => { saveJ("chat_drafts", st.drafts); if (!st.cur || isMob()) renderView(); }, 400);
 }
-$("text").oninput = () => { grow(); saveDraft(); updateSugg(); };
-$("text").onkeydown = (e) => {
-  if (sugg.list.length) {
+function keyCompose(p, e) {
+  if (sugg.list.length && sugg.p === p) {
     if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); sugg.i = (sugg.i + (e.key === "ArrowDown" ? 1 : sugg.list.length - 1)) % sugg.list.length; return drawSugg(); }
     if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); return pickSugg(sugg.i); }
     if (e.key === "Escape") { e.stopPropagation(); return hideSugg(); }
   }
-  if ((e.ctrlKey || e.metaKey) && (e.code === "KeyB" || e.code === "KeyI")) { e.preventDefault(); return wrapSel(e.code === "KeyB" ? "*" : "_"); }
-  if (e.key === "Enter" && !e.shiftKey && !e.isComposing && matchMedia("(min-width:761px)").matches) { e.preventDefault(); $("compose").requestSubmit(); }
-  if (e.key === "Escape" && st.edit) { e.stopPropagation(); stopEdit(); }
-};
-function setFiles(list) {
-  st.files = list;
-  const bar = $("filebar"); bar.classList.toggle("hide", !list.length);
-  bar.replaceChildren(...list.map((f) => {
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && !e.shiftKey && (e.code === "KeyB" || e.code === "KeyI")) { e.preventDefault(); return wrapSel(p, e.code === "KeyB" ? "*" : "_"); }
+  if (mod && e.shiftKey && e.code === "KeyX") { e.preventDefault(); return wrapSel(p, "~"); }
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing && (prefs.enter ? !isMob() : mod)) { e.preventDefault(); p.form.requestSubmit(); return; }
+  if (e.key === "ArrowUp" && !p.text.value && !p.edit) { const m = allMsgs(p).filter((x) => x.mine && x.text).pop(); if (m) { e.preventDefault(); startEdit(p, m); } return; }
+  if (e.key === "Escape" && p.edit) { e.stopPropagation(); stopEdit(p); }
+}
+function setFiles(p, list) {
+  p.files = list;
+  p.filebar.classList.toggle("hide", !list.length);
+  p.filebar.replaceChildren(...list.map((f) => {
     const c = el("span", "fchip"), x = el("button"); x.type = "button"; x.setAttribute("aria-label", "הסרת " + f.name); x.append(icon("x"));
-    x.onclick = () => setFiles(st.files.filter((y) => y !== f));
-    c.append(el("span", "", f.name + " · " + (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + " מגה" : Math.max(1, Math.round(f.size / 1024)) + " ק\"ב")), x);
+    x.onclick = () => setFiles(p, p.files.filter((y) => y !== f));
+    c.append(icon("file"), el("span", "", f.name + " · " + (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + " מגה" : Math.max(1, Math.round(f.size / 1024)) + " ק\"ב")), x);
     return c;
   }));
+  count(p);
 }
-function setQuote(m) { st.quote = m; $("quotebar").classList.toggle("hide", !m); $("quotetext").textContent = m ? (m.mine ? "" : m.who + ": ") + (m.text || "קובץ מצורף") : ""; }
-function pickFile(f) {
-  if (!f || !st.cur) return;
-  if (st.edit) return toast("אי אפשר לצרף קובץ בזמן תיקון הודעה");
-  if (st.files.length >= MAX_FILES) return toast("אפשר לצרף עד " + MAX_FILES + " קבצים להודעה");
-  if (st.files.reduce((n, x) => n + x.size, 0) + f.size > MAX_FILE) return toast("הקבצים גדולים מדי (עד 8 מגה יחד)");
+function setQuote(p, m) { p.quote = m; p.quotebar.classList.toggle("hide", !m); p.quotebar.querySelector(".qt").textContent = m ? (m.mine ? "" : m.who + ": ") + (m.text || "קובץ מצורף") : ""; }
+function pickFile(p, f) {
+  if (!f || !p.space) return;
+  if (p.edit) return toast("אי אפשר לצרף קובץ בזמן עריכת הודעה");
+  if (p.files.length >= MAX_FILES) return toast("אפשר לצרף עד " + MAX_FILES + " קבצים להודעה");
+  if (p.files.reduce((n, x) => n + x.size, 0) + f.size > MAX_FILE) return toast("הקבצים גדולים מדי (עד 8 מגה יחד)");
   if (!f.size) return toast("הקובץ ריק");
-  const key = viewKey(), rd = new FileReader();
-  rd.onload = () => { if (viewKey() !== key) return; setFiles(st.files.concat({ name: f.name || "file", type: f.type || "application/octet-stream", size: f.size, data: String(rd.result).split(",")[1] || "" })); $("text").focus(); };
+  const key = pk(p), rd = new FileReader();
+  rd.onload = () => { if (pk(p) !== key) return; setFiles(p, p.files.concat({ name: f.name || "file", type: f.type || "application/octet-stream", size: f.size, data: String(rd.result).split(",")[1] || "" })); p.text.focus(); };
   rd.onerror = () => toast("לא הצלחתי לקרוא את הקובץ");
   rd.readAsDataURL(f);
 }
+// הקריאה של כל קובץ מסתיימת לפני הבא, כדי שהמגבלות ייבדקו נכון
+async function pickFiles(p, list) { for (const f of [...list]) { pickFile(p, f); await new Promise((r) => setTimeout(r, 60)); } }
 // הקלטה קולית: לחיצה מתחילה, לחיצה נוספת מסיימת ומצרפת את ההקלטה להודעה
 let rec = null;
 function stopRec(discard) {
   if (!rec) return;
   const r = rec; rec = null; r.discard = !!discard;
-  clearInterval(r.timer); $("mic").classList.remove("rec"); $("mict").textContent = "";
+  clearInterval(r.timer); r.p.mic.classList.remove("rec"); r.p.mic.querySelector(".mict").textContent = "";
   try { r.mr.stop(); } catch (e) {}
   r.stream.getTracks().forEach((t) => t.stop());
 }
-$("mic").onclick = async () => {
-  if (rec) return stopRec(false);
-  if (st.edit) return toast("אי אפשר להקליט בזמן תיקון הודעה");
+async function toggleRec(p) {
+  if (rec) { const same = rec.p === p; stopRec(!same); if (same) return; }
+  if (p.edit) return toast("אי אפשר להקליט בזמן עריכת הודעה");
   if (!navigator.mediaDevices || !window.MediaRecorder) return toast("הדפדפן הזה לא תומך בהקלטה");
   let stream;
   try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { return toast("אין גישה למיקרופון"); }
-  const mr = new MediaRecorder(stream), chunks = [], r = { mr, stream, discard: false, start: Date.now() };
+  const mr = new MediaRecorder(stream), chunks = [], r = { p, mr, stream, discard: false, start: Date.now() }, t = p.mic.querySelector(".mict");
   mr.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
   mr.onstop = () => {
     if (r.discard || !chunks.length) return;
     const type = (mr.mimeType || "audio/webm").split(";")[0];
-    pickFile(new File(chunks, "הקלטה קולית." + (type.includes("ogg") ? "ogg" : type.includes("mp4") ? "m4a" : "webm"), { type }));
+    pickFile(p, new File(chunks, "הקלטה קולית." + (type.includes("ogg") ? "ogg" : type.includes("mp4") ? "m4a" : "webm"), { type }));
   };
-  r.timer = setInterval(() => { const sec = Math.floor((Date.now() - r.start) / 1000); $("mict").textContent = Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0"); if (sec >= 300) stopRec(false); }, 500);
-  rec = r; $("mic").classList.add("rec"); $("mict").textContent = "0:00"; mr.start();
-};
-// הוספת טקסט במקום הסמן, ועיטוף הטקסט המסומן (Ctrl+B מודגש, Ctrl+I נטוי)
-function insertText(t) { const x = $("text"), a = x.selectionStart, b = x.selectionEnd; x.setRangeText(t, a, b, "end"); x.focus(); grow(); saveDraft(); }
-function wrapSel(mark) { const x = $("text"), a = x.selectionStart, b = x.selectionEnd; if (a === b) return; x.setRangeText(mark + x.value.slice(a, b) + mark, a, b, "select"); grow(); saveDraft(); }
-$("emobtn").onclick = (e) => { e.stopPropagation(); if (!$("emo").classList.contains("hide")) return closeEmo(); openEmoji($("emobtn"), insertText); };
+  r.timer = setInterval(() => { const sec = Math.floor((Date.now() - r.start) / 1000); t.textContent = Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0"); if (sec >= 300) stopRec(false); }, 500);
+  rec = r; p.mic.classList.add("rec"); t.textContent = "0:00"; mr.start();
+}
+// הוספת טקסט במקום הסמן, ועיטוף הטקסט המסומן בסימני עיצוב
+function insertText(p, t) { const x = p.text, a = x.selectionStart, b = x.selectionEnd; x.setRangeText(t, a, b, "end"); x.focus(); grow(p); saveDraft(p); count(p); }
+function wrapSel(p, mark) {
+  const x = p.text, a = x.selectionStart, b = x.selectionEnd, sel = x.value.slice(a, b);
+  const open = mark === "```" ? "```\n" : mark, close = mark === "```" ? "\n```" : mark;
+  x.setRangeText(open + sel + close, a, b, sel ? "select" : "start");
+  if (!sel) x.setSelectionRange(a + open.length, a + open.length);
+  x.focus(); grow(p); saveDraft(p); count(p);
+}
 // אזכור: אחרי @ מוצעים חברי השיחה
-let sugg = { list: [], i: 0, from: 0 };
+let sugg = { list: [], i: 0, from: 0, p: null };
 function hideSugg() { $("sugg").classList.add("hide"); sugg.list = []; }
-function updateSugg() {
-  const x = $("text"), s = st.cur; if (!s || st.edit) return hideSugg();
+function updateSugg(p) {
+  const x = p.text, s = st.cur; if (!s || p.edit) return hideSugg();
   const m = /(^|\s)@([^\s@]*)$/.exec(x.value.slice(0, x.selectionStart));
   const mem = st.mem[s.space] || [];
   if (!m || !mem.length) return hideSugg();
   const q = m[2].toLowerCase();
-  const list = mem.filter((p) => !p.me && p.name && p.name.toLowerCase().includes(q)).slice(0, 6);
+  const list = mem.filter((u) => !u.me && u.name && u.name.toLowerCase().includes(q)).slice(0, 6);
   if (!s.dm && "כולם".includes(q)) list.push({ name: "כולם", uid: "users/all" });
   if (!list.length) return hideSugg();
-  sugg = { list, i: 0, from: x.selectionStart - m[2].length - 1 };
+  sugg = { list, i: 0, from: x.selectionStart - m[2].length - 1, p };
   drawSugg();
 }
 function drawSugg() {
-  $("sugg").replaceChildren(...sugg.list.map((p, i) => {
+  const box = $("sugg");
+  box.replaceChildren(...sugg.list.map((u, i) => {
     const b = el("button", i === sugg.i ? "on" : ""); b.type = "button";
-    const av = el("div", "av", initial(p.name)); av.style.background = colorOf(p.name);
-    b.append(av, el("span", "", p.name)); b.onmousedown = (e) => { e.preventDefault(); pickSugg(i); }; return b;
+    b.append(avatar(u.name, "s32"), el("span", "", u.name)); b.onmousedown = (e) => { e.preventDefault(); pickSugg(i); }; return b;
   }));
-  $("sugg").classList.remove("hide");
+  box.classList.remove("hide");
+  const r = sugg.p.form.getBoundingClientRect();
+  box.style.left = Math.max(8, Math.min(r.right - box.offsetWidth, innerWidth - box.offsetWidth - 8)) + "px";
+  box.style.top = Math.max(8, r.top - box.offsetHeight - 6) + "px";
 }
-function pickSugg(i) { const p = sugg.list[i], x = $("text"); if (!p) return; x.setRangeText("@" + p.name + " ", sugg.from, x.selectionStart, "end"); hideSugg(); x.focus(); saveDraft(); }
+function pickSugg(i) { const u = sugg.list[i], p = sugg.p, x = p.text; if (!u) return; x.setRangeText("@" + u.name + " ", sugg.from, x.selectionStart, "end"); hideSugg(); x.focus(); saveDraft(p); }
 // לפני השליחה: @שם הופך לאזכור אמיתי של גוגל
 function withMentions(text, space) {
-  const mem = (st.mem[space] || []).filter((p) => p.name && !p.me).concat({ name: "כולם", uid: "users/all" }).sort((a, b) => b.name.length - a.name.length);
-  for (const p of mem) text = text.split("@" + p.name).join("<" + p.uid + ">");
+  const mem = (st.mem[space] || []).filter((u) => u.name && !u.me).concat({ name: "כולם", uid: "users/all" }).sort((a, b) => b.name.length - a.name.length);
+  for (const u of mem) text = text.split("@" + u.name).join("<" + u.uid + ">");
   return text;
 }
-$("quotex").onclick = () => setQuote(null);
-$("attach").onclick = () => $("fileinput").click();
-// הקריאה של כל קובץ מסתיימת לפני הבא, כדי שהמגבלות ייבדקו נכון
-async function pickFiles(list) { for (const f of [...list]) { pickFile(f); await new Promise((r) => setTimeout(r, 60)); } }
-$("fileinput").onchange = () => { pickFiles($("fileinput").files); $("fileinput").value = ""; };
-$("text").addEventListener("paste", (e) => { const fs = [...(e.clipboardData && e.clipboardData.files || [])]; if (fs.length) { e.preventDefault(); pickFiles(fs); } });
-const conv = $("conv");
-const hasFiles = (e) => e.dataTransfer && [...e.dataTransfer.types].includes("Files");
-conv.addEventListener("dragover", (e) => { if (st.cur && hasFiles(e)) { e.preventDefault(); conv.classList.add("drag"); } });
-conv.addEventListener("dragleave", (e) => { if (!conv.contains(e.relatedTarget)) conv.classList.remove("drag"); });
-conv.addEventListener("drop", (e) => { conv.classList.remove("drag"); if (!st.cur || !hasFiles(e)) return; e.preventDefault(); pickFiles(e.dataTransfer.files); });
-
-$("compose").onsubmit = async (e) => {
-  e.preventDefault();
-  const s = st.cur, t = $("text").value.trim(); if (!s) return;
-  if (st.edit) {
-    const m = st.edit; if (!t) return;
-    if (t === m.text) return stopEdit();
-    try { await api("edit", { space: s.space, id: m.id, text: t }); patchMsg(m.id, (x) => { x.text = t; x.edited = true; }); stopEdit(); paint(); loadMsgs(); }
-    catch (err) { toast("התיקון לא נשמר: " + err.message); }
+function wireCompose(p, q) {
+  p.text.oninput = () => { grow(p); saveDraft(p); updateSugg(p); count(p); };
+  p.text.onfocus = () => { act = p; };
+  p.text.onkeydown = (e) => keyCompose(p, e);
+  p.text.addEventListener("paste", (e) => { const fs = [...((e.clipboardData && e.clipboardData.files) || [])]; if (fs.length) { e.preventDefault(); pickFiles(p, fs); } });
+  q(".attb").onclick = () => p.fin.click();
+  p.fin.onchange = () => { pickFiles(p, p.fin.files); p.fin.value = ""; };
+  q(".emob").onclick = (e) => { e.stopPropagation(); if (!$("emo").classList.contains("hide")) return closeEmo(); openEmoji(q(".emob"), (x) => insertText(p, x)); };
+  q(".fmtb").onclick = () => { const on = p.fmtbar.classList.toggle("hide"); q(".fmtb").classList.toggle("on", !on); p.text.focus(); };
+  p.fmtbar.querySelectorAll("button").forEach((b) => b.onclick = () => wrapSel(p, b.dataset.w));
+  p.mic.onclick = () => toggleRec(p);
+  q(".editx").onclick = () => stopEdit(p);
+  q(".quotex").onclick = () => setQuote(p, null);
+  p.form.onsubmit = (e) => { e.preventDefault(); submit(p); };
+  const h = p.host, hasFiles = (e) => e.dataTransfer && [...e.dataTransfer.types].includes("Files");
+  h.addEventListener("dragover", (e) => { if (p.space && hasFiles(e)) { e.preventDefault(); h.classList.add("drag"); } });
+  h.addEventListener("dragleave", (e) => { if (!h.contains(e.relatedTarget)) h.classList.remove("drag"); });
+  h.addEventListener("drop", (e) => { h.classList.remove("drag"); if (!p.space || !hasFiles(e)) return; e.preventDefault(); e.stopPropagation(); pickFiles(p, e.dataTransfer.files); });
+}
+async function submit(p) {
+  const s = st.cur, t = p.text.value.trim(); if (!s || !p.space) return;
+  if (t.length > MAX_TEXT) return toast("ההודעה ארוכה מדי (עד " + MAX_TEXT + " תווים)");
+  if (p.edit) {
+    const m = p.edit; if (!t) return;
+    if (t === m.text) return stopEdit(p);
+    try { await api("edit", { space: s.space, id: m.id, text: t }); patchMsg(m.id, (x) => { x.text = t; x.fmt = ""; x.edited = true; }); stopEdit(p); paint(M); paint(T); loadMsgs(p); }
+    catch (err) { toast("העריכה לא נשמרה: " + err.message); }
     return;
   }
-  if (rec) return toast("קודם לסיים את ההקלטה (לחיצה על המיקרופון)");
-  if (!t && !st.files.length) return;
+  if (rec && rec.p === p) return toast("קודם לסיים את ההקלטה (לחיצה על המיקרופון)");
+  if (!t && !p.files.length) return;
   // ההודעה מופיעה מיד, והשליחה ממשיכה ברקע
-  const p = { id: "p" + (++st.seq), key: viewKey(), space: s.space, thread: st.thread, text: t, files: st.files, quote: st.quote, state: "sending", err: "" };
-  st.pending.push(p);
-  $("text").value = ""; grow(); setFiles([]); setQuote(null); hideSugg();
-  delete st.drafts[p.key]; store.set("chat_drafts", JSON.stringify(st.drafts));
-  deliver(p);
-};
-async function deliver(p) {
-  p.state = "sending"; p.err = ""; st.toBottom = true; paint();
+  const x = { id: "p" + (++st.seq), key: pk(p), space: s.space, thread: p.thread, text: t, files: p.files, quote: p.quote, state: "sending", err: "" };
+  st.pending.push(x);
+  p.text.value = ""; grow(p); setFiles(p, []); setQuote(p, null); hideSugg();
+  delete st.drafts[x.key]; saveJ("chat_drafts", st.drafts);
+  if (!p.fmtbar.classList.contains("hide")) p.text.focus();
+  deliver(x);
+}
+async function deliver(x) {
+  x.state = "sending"; x.err = "";
+  for (const p of [M, T]) if (pk(p) === x.key) { p.toBottom = true; paint(p); }
   try {
-    const body = { space: p.space, text: withMentions(p.text, p.space) };
-    if (p.thread) body.thread = p.thread;
-    if (p.files.length) body.files = p.files.map((f) => ({ name: f.name, type: f.type, data: f.data }));
-    if (p.quote) body.quote = { id: p.quote.id, upd: p.quote.upd, text: (p.quote.text || "").slice(0, 80) };
+    const body = { space: x.space, text: withMentions(x.text, x.space) };
+    if (x.thread) body.thread = x.thread;
+    if (x.files.length) body.files = x.files.map((f) => ({ name: f.name, type: f.type, data: f.data }));
+    if (x.quote) body.quote = { id: x.quote.id, upd: x.quote.upd, text: (x.quote.text || "").slice(0, 80) };
     await api("send", body);
-    p.state = "sent";
-    if (viewKey() === p.key) { st.toBottom = true; await loadMsgs(); }
-    st.pending = st.pending.filter((x) => x !== p); paint();
-  } catch (e) { p.state = "failed"; p.err = e.message; paint(); }
+    x.state = "sent";
+    const s = spaceOf(x.space);
+    if (s) { s.last = new Date().toISOString(); s.preview = x.text || "📎 " + (x.files[0] || {}).name; s.previewWho = "אתה"; renderNav(); }
+    for (const p of [M, T]) if (pk(p) === x.key) { p.toBottom = true; await loadMsgs(p); }
+    if (x.thread && pk(M) === x.space + "|") loadMsgs(M);
+    st.pending = st.pending.filter((y) => y !== x); repaint(x.key);
+  } catch (e) { x.state = "failed"; x.err = e.message; repaint(x.key); }
 }
 
-// ---------------------------------------------------------------- חיפוש בשיחה, סיכום, השתקה
+// ---- חיפוש בשיחה, סיכום, עוד
 function closeFind() { st.q = ""; $("find").value = ""; $("findbar").classList.add("hide"); $("findbtn").classList.remove("on"); }
-$("findbtn").onclick = () => { if (!$("findbar").classList.contains("hide")) { closeFind(); st.toBottom = true; return paint(); } $("findbar").classList.remove("hide"); $("findbtn").classList.add("on"); $("find").focus(); };
-$("findx").onclick = () => { closeFind(); st.toBottom = true; paint(); };
-$("find").oninput = () => { st.q = $("find").value; st.toBottom = true; paint(); };
-$("sum").onclick = async () => {
+function toggleFind() { if (!st.cur) return; if (!$("findbar").classList.contains("hide")) { closeFind(); M.toBottom = true; return paint(M); } $("findbar").classList.remove("hide"); $("findbtn").classList.add("on"); $("find").focus(); }
+$("findbtn").onclick = toggleFind;
+$("findx").onclick = () => { closeFind(); M.toBottom = true; paint(M); };
+$("find").oninput = () => { st.q = $("find").value; M.toBottom = true; paint(M); };
+async function summarize() {
   const s = st.cur; if (!s) return;
   $("summary").classList.remove("hide"); $("sumtext").textContent = "מסכם...";
   try { const j = await api("summary", { space: s.space }); if (st.cur && st.cur.space === s.space) $("sumtext").textContent = j.summary; }
   catch (e) { $("sumtext").textContent = e.message; }
-};
-$("sumx").onclick = () => $("summary").classList.add("hide");
-$("mute").onclick = async () => {
-  const s = st.cur; if (!s) return;
-  try { const j = await api("mute", { space: s.space, on: !s.muted }); s.muted = j.muted; setHead(); renderSpaces(); toast(s.muted ? "הקבוצה הושתקה" : "ההשתקה בוטלה"); }
-  catch (e) { toast(e.message); }
-};
-
-// ---------------------------------------------------------------- שיחה חדשה או קבוצה חדשה
-let pqTimer = 0, pqSeq = 0, grp = false, picked = [];
-function peopleMsg(t) { $("people").replaceChildren(el("div", "empty", t)); }
-function personRow(p, onPick) {
-  const b = el("button", "sp"); b.type = "button";
-  const av = el("div", "av", initial(p.name)); av.style.background = colorOf(p.name);
-  const t = el("div", "t"), e = el("div", "d", p.email); e.dir = "ltr";
-  t.append(el("div", "n", p.name), e);
-  b.append(av, t); b.onclick = () => onPick(p, b); return b;
 }
-// חיפוש אנשים משותף: לשיחה חדשה, לקבוצה חדשה ולהוספת חבר
+$("sum").onclick = summarize;
+$("sumx").onclick = () => $("summary").classList.add("hide");
+// ייצוא ההודעות שנטענו לקובץ טקסט
+function exportChat() {
+  const s = st.cur; if (!s) return;
+  const lines = allMsgs(M).map((m) => "[" + new Date(m.at).toLocaleString("he-IL") + "] " + (m.mine ? myName() : m.who) + ": " + (m.text || "") + (m.atts || []).map((a) => " [קובץ: " + a.name + "]").join(""));
+  const url = URL.createObjectURL(new Blob(["﻿" + s.title + "\n\n" + lines.join("\n")], { type: "text/plain;charset=utf-8" }));
+  saveAs(url, s.title.replace(/[\\/:*?"<>|]/g, "_") + ".txt"); setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+$("cmore").onclick = (e) => {
+  e.stopPropagation(); const s = st.cur; if (!s) return;
+  const items = [
+    menuItem("sum", "סיכום השיחה", summarize),
+    menuItem("info", "פרטים, חברים וקבצים", showInfo),
+    menuItem("pin", s.pinned ? "ביטול הצמדה" : "הצמדה", () => flip(s, "pin")),
+  ];
+  if (!s.dm) items.push(menuItem(s.muted ? "bell" : "mute", s.muted ? "ביטול השתקה" : "השתקת המרחב", () => flip(s, "mute")));
+  items.push(
+    menuItem("unread", "סימון כלא נקרא", async () => { try { await api("unread", { space: s.space, at: s.last || new Date().toISOString() }); s.unread = true; if (st.seen) st.seen[s.space] = s.last; closeConv(); } catch (err) { toast(err.message); } }),
+    menuItem("link", "העתקת קישור לשיחה", () => copy(linkOf(s.space), "הקישור הועתק")),
+    menuItem("dl", "שמירת השיחה כקובץ טקסט", exportChat),
+  );
+  if (!s.dm) items.push(sureItem("out", "יציאה מהמרחב", "ללחוץ שוב כדי לצאת", () => { closeMenu(); leave(s); }));
+  popMenu(items, $("cmore"));
+};
+async function leave(s) { try { await api("leave", { space: s.space }); st.spaces = st.spaces.filter((x) => x.space !== s.space); closeConv(); toast("יצאת מהמרחב"); } catch (e) { toast(e.message); } }
+
+// ---- צ'אט חדש או מרחב חדש
+let pqTimer = 0, pqSeq = 0, grp = false, picked = [];
+const emailRe = /^[^\s@"\\/]+@[^\s@"\\/]+\.[^\s@"\\/]+$/;
+function personRow(p, onPick) {
+  const b = el("button", "pp"); b.type = "button";
+  const t = el("div", "t"), e = el("div", "d", p.email);
+  t.append(el("div", "", p.name), e);
+  b.append(avatar(p.name), t); b.onclick = () => onPick(p, b); return b;
+}
+// חיפוש אנשים משותף: לצ'אט חדש, למרחב חדש ולהוספת חבר. כתובת מייל מלאה אפשר לבחור גם בלי חיפוש
 function peopleSearch(input, box, onPick, hint) {
   const msg = (t) => box.replaceChildren(el("div", "empty", t));
+  msg(hint);
   input.oninput = () => {
     clearTimeout(pqTimer);
     const q = input.value.trim(), n = ++pqSeq;
     if (q.length < 2) return msg(hint);
+    const direct = emailRe.test(q) ? [{ name: q.split("@")[0], email: q.toLowerCase() }] : [];
     pqTimer = setTimeout(async () => {
-      msg("מחפש...");
+      if (!direct.length) msg("מחפש..."); else box.replaceChildren(...direct.map((p) => personRow(p, onPick)));
       try {
-        const j = await api("people", null, "?q=" + encodeURIComponent(q));
+        const j = await api("people", null, "?q=" + enc(q));
         if (n !== pqSeq) return;
-        if (!j.people.length) return msg("לא נמצא אף אחד בשם הזה");
-        box.replaceChildren(...j.people.map((p) => personRow(p, onPick)));
-      } catch (e) { if (n === pqSeq) msg(e.message); }
+        const list = j.people.concat(direct.filter((d) => !j.people.some((p) => p.email === d.email)));
+        if (!list.length) return msg("לא נמצא. אפשר להקליד כתובת מייל מלאה.");
+        box.replaceChildren(...list.map((p) => personRow(p, onPick)));
+      } catch (e) { if (n === pqSeq && !direct.length) msg(e.message); }
     }, 350);
   };
 }
@@ -1043,22 +1531,22 @@ function setMode(g) {
   $("modedm").classList.toggle("on", !g); $("modegrp").classList.toggle("on", g);
   for (const id of ["gname", "picked", "gcreate"]) $(id).classList.toggle("hide", !g);
   $("pq").value = ""; $("gname").value = ""; drawPicked();
-  peopleMsg(g ? "חפש אנשים והוסף אותם לקבוצה" : "הקלד שם כדי לחפש");
+  peopleSearch($("pq"), $("people"), (p, b) => {
+    if (!grp) return startDm(p, b);
+    if (!picked.some((y) => y.email === p.email)) picked.push(p);
+    drawPicked(); $("pq").value = ""; $("people").replaceChildren(el("div", "empty", "אפשר להוסיף עוד אנשים")); $("pq").focus();
+  }, g ? "חפשו אנשים והוסיפו אותם למרחב" : "הקלידו שם או כתובת מייל");
   (g ? $("gname") : $("pq")).focus();
 }
+function openNew(g) { closeMenu(); $("newdm").classList.remove("hide"); setMode(!!g); }
 $("modedm").onclick = () => setMode(false);
 $("modegrp").onclick = () => setMode(true);
-$("newbtn").onclick = () => { $("newdm").classList.remove("hide"); setMode(false); };
+$("newbtn").onclick = () => openNew(false);
 const closeNew = () => $("newdm").classList.add("hide");
 $("newx").onclick = closeNew;
 $("newdm").onclick = (e) => { if (e.target === $("newdm")) closeNew(); };
-peopleSearch($("pq"), $("people"), (p, b) => {
-  if (!grp) return startDm(p, b);
-  if (!picked.some((y) => y.email === p.email)) picked.push(p);
-  drawPicked(); $("pq").value = ""; peopleMsg("אפשר להוסיף עוד אנשים"); $("pq").focus();
-}, "הקלד שם כדי לחפש");
 function enterSpace(j) {
-  let s = st.spaces.find((x) => x.space === j.space);
+  let s = spaceOf(j.space);
   if (!s) { s = { space: j.space, dm: !!j.dm, title: j.title, last: "", unread: false, muted: false }; st.spaces.unshift(s); }
   closeNew(); openSpace(s);
 }
@@ -1069,14 +1557,14 @@ async function startDm(p, btn) {
 }
 $("gcreate").onclick = async () => {
   const name = $("gname").value.trim();
-  if (!name) { $("gname").focus(); return toast("צריך לתת שם לקבוצה"); }
+  if (!name) { $("gname").focus(); return toast("צריך לתת שם למרחב"); }
   $("gcreate").disabled = true;
   try { enterSpace(await api("group", { name, emails: picked.map((p) => p.email) })); }
   catch (e) { toast(e.message); }
   $("gcreate").disabled = false;
 };
 
-// ---------------------------------------------------------------- חלון כללי: פרטי שיחה, העברה, מי הגיב
+// ---- חלון כללי: העברה, מי הגיב, הגדרות, קיצורים
 function openSheet(title, nodes) { $("sheett").textContent = title; $("sheetb").replaceChildren(...nodes); $("sheet").classList.remove("hide"); }
 const closeSheet = () => $("sheet").classList.add("hide");
 $("sheetx").onclick = closeSheet;
@@ -1085,64 +1573,127 @@ const sure = (btn, label, fn) => { btn.onclick = () => { if (!btn.dataset.sure) 
 async function showReactors(m) {
   openSheet("מי הגיב", [el("div", "empty", "טוען...")]);
   try {
-    const j = await api("reactors", null, "?space=" + encodeURIComponent(st.cur.space) + "&id=" + encodeURIComponent(m.id));
+    const j = await api("reactors", null, "?space=" + enc(st.cur.space) + "&id=" + enc(m.id));
     openSheet("מי הגיב", j.reactors.length ? j.reactors.map((r) => { const d = el("div", "mrow"); d.append(el("span", "", r.e), el("span", "t", r.who.join(", "))); return d; }) : [el("div", "empty", "אין תגובות")]);
   } catch (e) { openSheet("מי הגיב", [el("div", "empty", e.message)]); }
 }
+const b64 = (blob) => new Promise((ok, bad) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(",")[1] || ""); r.onerror = bad; r.readAsDataURL(blob); });
+// העברה: הטקסט וגם הקבצים שצורפו (עד 8 מגה), עם הערה מאיפה ההודעה
 function forward(m) {
-  openSheet("העברה לשיחה אחרת", st.spaces.filter((x) => x.space !== st.cur.space).map((x) => {
-    const b = el("button", "sp"); b.type = "button";
-    const av = el("div", "av sm", initial(x.title)); av.style.background = colorOf(x.title);
-    b.append(av, el("div", "t", x.title));
-    b.onclick = async () => { b.disabled = true; try { await api("send", { space: x.space, text: m.text }); closeSheet(); toast("ההודעה הועברה אל " + x.title); loadSpaces(); } catch (e) { b.disabled = false; toast(e.message); } };
-    return b;
-  }));
+  const from = st.cur, inp = el("input", "in"); inp.type = "search"; inp.placeholder = "חיפוש שיחה"; inp.setAttribute("aria-label", "חיפוש שיחה");
+  const note = el("input", "in"); note.placeholder = "הוספת הערה (לא חובה)"; note.setAttribute("aria-label", "הערה");
+  const box = el("div");
+  const draw = () => {
+    const q = inp.value.trim().toLowerCase();
+    box.replaceChildren(...st.spaces.filter((x) => x.space !== from.space && x.title.toLowerCase().includes(q)).map((x) => {
+      const b = el("button", "rowbtn"); b.type = "button"; b.append(spAv(x, "s32"), el("span", "t", x.title));
+      b.onclick = async () => {
+        b.disabled = true;
+        try {
+          const files = [];
+          let size = 0;
+          for (const a of (m.atts || []).filter((a) => a.ref).slice(0, MAX_FILES)) { const r = await blobOf(a); size += r.blob.size; if (size > MAX_FILE) break; files.push({ name: a.name, type: r.type || a.type, data: await b64(r.blob) }); }
+          const head = (note.value.trim() ? note.value.trim() + "\n" : "") + "הועבר מ" + (from.dm ? "צ'אט עם " : "") + from.title + " (" + (m.mine ? myName() : m.who) + "):\n";
+          await api("send", Object.assign({ space: x.space, text: head + (m.text || "") }, files.length ? { files } : {}));
+          closeSheet(); toast("ההודעה הועברה אל " + x.title); loadSpaces();
+        } catch (e) { b.disabled = false; toast(e.message); }
+      };
+      return b;
+    }));
+  };
+  inp.oninput = draw; draw();
+  openSheet("העברה לשיחה אחרת", [note, inp, box]); inp.focus();
 }
+// פרטי השיחה בחלון הצד: חברים, הוספה והסרה, שינוי שם, קבצים שנשלחו, יציאה
 async function showInfo() {
   const s = st.cur; if (!s) return;
+  if (st.side === "info") return closeSide();
+  showSide("info"); setSideHead();
   const draw = (mem) => {
+    if (!st.cur || st.cur.space !== s.space || st.side !== "info") return;
     const nodes = [];
+    const h = el("div", "ihead"); h.append(spAv(s, "s72"), el("b", "", s.title), el("small", "", (s.dm ? "צ'אט" : "מרחב") + (s.last ? " · פעילות אחרונה " + fullDate(s.last) : "")));
+    nodes.push(h);
+    const acts = el("div", "iacts");
+    const act = (ic, label, on, fn) => { const b = el("button", on ? "on" : ""); b.type = "button"; const i = el("i"); i.append(icon(ic)); b.append(i, label); b.onclick = fn; acts.append(b); };
+    act("pin", s.pinned ? "מוצמד" : "הצמדה", s.pinned, () => flip(s, "pin", () => draw(mem)));
+    if (!s.dm) act(s.muted ? "mute" : "bell", s.muted ? "מושתק" : "השתקה", s.muted, () => flip(s, "mute", () => draw(mem)));
+    act("search", "חיפוש", false, () => { if (isMob()) sideBack(); toggleFind(); });
+    act("link", "קישור", false, () => copy(linkOf(s.space), "הקישור הועתק"));
+    nodes.push(acts);
     if (!s.dm) {
-      const nm = el("input", "in"); nm.value = s.title; nm.maxLength = 80; nm.setAttribute("aria-label", "שם הקבוצה");
-      const save = el("button", "chip", "שמירת השם");
-      save.onclick = async () => { const v = nm.value.trim(); if (!v || v === s.title) return; try { s.title = (await api("rename", { space: s.space, name: v })).title; setHead(); renderSpaces(); toast("השם עודכן"); } catch (e) { toast(e.message); } };
-      const r = el("div", "mrow"); nm.style.flex = "1"; nm.style.margin = "0"; r.append(nm, save); nodes.push(r);
+      nodes.push(el("div", "sect", "שם המרחב"));
+      const nm = el("input", "in"); nm.value = s.title; nm.maxLength = 80; nm.setAttribute("aria-label", "שם המרחב");
+      nm.onkeydown = async (e) => { if (e.key !== "Enter") return; const v = nm.value.trim(); if (!v || v === s.title) return; try { s.title = (await api("rename", { space: s.space, name: v })).title; setHead(); renderNav(); setSideHead(); toast("השם עודכן"); } catch (err) { toast(err.message); } };
+      nodes.push(nm);
       nodes.push(el("div", "sect", "חברים" + (mem ? " (" + mem.length + ")" : "")));
       if (!mem) nodes.push(el("div", "empty", "טוען..."));
       for (const p of mem || []) {
-        const row = el("div", "mrow"), av = el("div", "av sm", initial(p.name)); av.style.background = colorOf(p.name);
-        row.append(av, el("span", "t", p.name + (p.me ? " (אתה)" : "")));
+        const row = el("div", "mrow");
+        row.append(avatar(p.name, "s32"), el("span", "t", p.name + (p.me ? " (אתה)" : "")));
         if (p.manager) row.append(el("small", "", "מנהל"));
-        if (!p.me) { const x = el("button", "x"); x.type = "button"; x.append("הסרה"); sure(x, "ללחוץ שוב להסרה", async () => { try { await api("removemember", { space: s.space, mid: p.mid }); toast(p.name + " הוסר מהקבוצה"); draw(await loadMembers(s.space, true)); } catch (e) { toast(e.message); } }); row.append(x); }
+        if (!p.me) { const x = el("button", "x"); x.type = "button"; x.append("הסרה"); sure(x, "ללחוץ שוב", async () => { try { await api("removemember", { space: s.space, mid: p.mid }); toast(p.name + " הוסר מהמרחב"); draw(await loadMembers(s.space, true)); } catch (e) { toast(e.message); } }); row.append(x); }
         nodes.push(row);
       }
       nodes.push(el("div", "sect", "הוספת חבר"));
-      const f = el("label", "field"), inp = el("input"); inp.type = "search"; inp.placeholder = "שם או כתובת מייל"; inp.setAttribute("aria-label", "הוספת חבר לפי שם או כתובת מייל"); f.append(inp);
+      const inp = el("input", "in"); inp.type = "search"; inp.placeholder = "שם או כתובת מייל"; inp.setAttribute("aria-label", "הוספת חבר לפי שם או כתובת מייל");
       const box = el("div");
-      peopleSearch(inp, box, async (p, b) => { b.disabled = true; try { await api("addmember", { space: s.space, email: p.email }); toast(p.name + " נוסף לקבוצה"); draw(await loadMembers(s.space, true)); } catch (e) { b.disabled = false; toast(e.message); } }, "");
-      nodes.push(f, box);
+      peopleSearch(inp, box, async (p, b) => { b.disabled = true; try { await api("addmember", { space: s.space, email: p.email }); toast(p.name + " נוסף למרחב"); draw(await loadMembers(s.space, true)); } catch (e) { b.disabled = false; toast(e.message); } }, "");
+      nodes.push(inp, box);
     }
-    const atts = allMsgs().flatMap((m) => (m.atts || []).map((a) => ({ a, m })));
+    const atts = allMsgs(M).flatMap((m) => (m.atts || []).map((a) => ({ a, m })));
     nodes.push(el("div", "sect", "קבצים בהודעות שנטענו" + (atts.length ? " (" + atts.length + ")" : "")));
-    if (!atts.length) nodes.push(el("div", "empty", "אין קבצים"));
+    if (!atts.length) nodes.push(el("div", "nempty", "אין קבצים"));
     for (const { a, m } of atts.reverse()) {
-      const b = el("button", "rowbtn"); b.type = "button"; b.append(icon("file"), el("span", "t", a.name), el("small", "", fmtDay(m.at)));
-      b.onclick = () => (a.ref ? download(a) : a.drive ? window.open("https://drive.google.com/file/d/" + encodeURIComponent(a.drive) + "/view", "_blank", "noopener") : toast("אי אפשר להוריד את הקובץ הזה"));
+      const b = el("button", "rowbtn"); b.type = "button"; b.append(icon(/^image\//.test(a.type) ? "file" : /^(audio|video)/.test(a.type) ? "play" : "file"), el("span", "t", a.name), el("small", "", fmtDay(m.at)));
+      b.title = (m.mine ? myName() : m.who) + " · " + fullDate(m.at);
+      b.onclick = () => (a.ref ? download(a) : a.drive ? window.open(driveUrl(a), "_blank", "noopener") : toast("אי אפשר להוריד את הקובץ הזה"));
       nodes.push(b);
     }
     if (!s.dm) {
-      const out = el("button", "rowbtn danger"); out.type = "button"; out.append(icon("out"), el("span", "", "יציאה מהקבוצה"));
-      sure(out, "ללחוץ שוב כדי לצאת מהקבוצה", async () => { try { await api("leave", { space: s.space }); closeSheet(); st.spaces = st.spaces.filter((x) => x.space !== s.space); closeConv(); toast("יצאת מהקבוצה"); } catch (e) { toast(e.message); } });
+      const out = el("button", "rowbtn danger"); out.type = "button"; out.append(icon("out"), el("span", "", "יציאה מהמרחב"));
+      sure(out, "ללחוץ שוב כדי לצאת מהמרחב", () => leave(s));
       nodes.push(el("div", "sect", ""), out);
     }
-    if (st.cur === s || (st.cur && st.cur.space === s.space)) openSheet(s.dm ? "פרטי השיחה" : "פרטי הקבוצה", nodes);
+    $("infob").replaceChildren(...nodes);
   };
   draw(s.dm ? [] : st.mem[s.space] || null);
   if (!s.dm) draw(await loadMembers(s.space, true));
 }
 $("infobtn").onclick = showInfo;
+function settings() {
+  const nodes = [];
+  const seg = (label, key, opts) => {
+    const r = el("div", "srow"), g = el("div", "seg");
+    for (const [v, t] of opts) { const b = el("button", prefs[key] === v ? "on" : "", t); b.type = "button"; b.onclick = () => { setPref(key, v); settings(); }; g.append(b); }
+    r.append(el("span", "", label), g); nodes.push(r);
+  };
+  const tog = (label, on, fn) => { const b = el("button", "rowbtn sws"); b.type = "button"; b.setAttribute("role", "switch"); b.setAttribute("aria-checked", String(!!on)); b.append(el("span", "t", label), el("span", "sw" + (on ? " on" : ""))); b.onclick = fn; nodes.push(b); };
+  nodes.push(el("div", "sect", "תצוגה"));
+  seg("ערכת צבעים", "theme", [["auto", "אוטומטית"], ["light", "בהירה"], ["dark", "כהה"]]);
+  seg("גודל הטקסט", "fs", [["s", "קטן"], ["m", "רגיל"], ["l", "גדול"]]);
+  seg("צפיפות", "dense", [[false, "רגילה"], [true, "צפופה"]]);
+  nodes.push(el("div", "sect", "כתיבה והתראות"));
+  tog("Enter שולח הודעה (כשכבוי: Ctrl+Enter)", prefs.enter, () => { setPref("enter", !prefs.enter); settings(); });
+  tog("התראות בשולחן העבודה על הודעות חדשות", setBell(), async () => { await toggleBell(); settings(); });
+  tog("צליל כשמגיעה הודעה חדשה", prefs.sound, () => { setPref("sound", !prefs.sound); ping(); settings(); });
+  nodes.push(el("div", "sect", ""));
+  const row = (ic, label, fn, cls) => { const b = el("button", "rowbtn" + (cls ? " " + cls : "")); b.type = "button"; b.append(icon(ic), el("span", "t", label)); b.onclick = fn; nodes.push(b); };
+  row("help", "קיצורי מקלדת", help);
+  row("refresh", "רענון", () => { closeSheet(); $("refresh").click(); });
+  row("out", "יציאה מהחשבון באתר", () => { closeSheet(); logout(false); }, "danger");
+  openSheet("הגדרות", nodes);
+}
+$("setbtn").onclick = settings;
+function help() {
+  const t = el("table", "keys");
+  const K = [["חיפוש", "/", "Ctrl+K"], ["צ'אט חדש", "N"], ["מסך הבית", "H"], ["אזכורים", "M"], ["מסומנים בכוכב", "S"], ["שיחה קודמת / הבאה", "Alt+↑", "Alt+↓"], ["שיחה שלא נקראה, הבאה", "Alt+Shift+↓"], ["כתיבת הודעה", "R"], ["חיפוש בשיחה", "F"], ["פרטי השיחה", "I"], ["קפיצה להודעות האחרונות", "J"], ["סימון הכל כנקרא", "Shift+Esc"], ["שליחה / שורה חדשה", "Enter", "Shift+Enter"], ["מודגש, נטוי, קו חוצה", "Ctrl+B", "Ctrl+I", "Ctrl+Shift+X"], ["עריכת ההודעה האחרונה שלי", "↑"], ["סגירה / ביטול", "Esc"], ["העזרה הזו", "?"]];
+  for (const [label, ...keys] of K) { const r = el("tr"), a = el("td", "", label), b = el("td"); keys.forEach((k, i) => { if (i) b.append(" "); b.append(el("kbd", "", k)); }); r.append(a, b); t.append(r); }
+  openSheet("קיצורי מקלדת", [t]);
+}
+$("helpbtn").onclick = help;
 
-// ---------------------------------------------------------------- תצוגת תמונה
+// ---- תצוגת תמונה
 let viewing = null;
 function openViewer(a, url) { viewing = a; $("vimg").src = url; $("vimg").alt = a.name; $("viewer").classList.remove("hide"); }
 const closeViewer = () => { $("viewer").classList.add("hide"); $("vimg").removeAttribute("src"); viewing = null; };
@@ -1150,27 +1701,62 @@ $("vx").onclick = closeViewer;
 $("vdl").onclick = () => { if (viewing) download(viewing); };
 $("viewer").onclick = (e) => { if (e.target === $("viewer") || e.target === $("viewer").firstElementChild) closeViewer(); };
 
+// ---- מקלדת
+const navOrder = () => navList().filter(([id]) => !st.coll[id]).flatMap(([, , l]) => l);
+function stepChat(d, unread) {
+  const L = navOrder(); if (!L.length) return;
+  let i = st.cur ? L.findIndex((s) => s.space === st.cur.space) : -1;
+  for (let n = 0; n < L.length; n++) { i = (i + d + L.length) % L.length; if (!unread || unreadOf(L[i])) return openSpace(L[i]); }
+  if (unread) toast("אין שיחות שלא נקראו");
+}
 document.addEventListener("keydown", (e) => {
-  if (e.key !== "Escape") return;
-  if (!$("viewer").classList.contains("hide")) return closeViewer();
-  if (!$("emo").classList.contains("hide")) return closeEmo();
-  if (!$("sheet").classList.contains("hide")) return closeSheet();
-  if (!$("newdm").classList.contains("hide")) return closeNew();
-  if (!$("menu").classList.contains("hide")) return closeMenu();
-  if (!$("findbar").classList.contains("hide")) { closeFind(); st.toBottom = true; return paint(); }
-  if (st.thread) return setThread("");
+  if (!st.token || $("app").classList.contains("hide")) return;
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable;
+  if (e.key === "Escape") {
+    if (e.shiftKey && !typing) return markAllRead();
+    if (!$("viewer").classList.contains("hide")) return closeViewer();
+    if (!$("emo").classList.contains("hide")) return closeEmo();
+    if (!$("menu").classList.contains("hide")) return closeMenu();
+    if (!$("sheet").classList.contains("hide")) return closeSheet();
+    if (!$("newdm").classList.contains("hide")) return closeNew();
+    if (!$("findbar").classList.contains("hide")) { closeFind(); M.toBottom = true; return paint(M); }
+    if (st.side) return sideBack();
+    return;
+  }
+  if ((e.ctrlKey || e.metaKey) && !e.altKey && e.code === "KeyK") { e.preventDefault(); return focusSearch(); }
+  if (e.altKey && !e.ctrlKey && !e.metaKey && (e.key === "ArrowDown" || e.key === "ArrowUp")) { e.preventDefault(); return stepChat(e.key === "ArrowDown" ? 1 : -1, e.shiftKey); }
+  if (typing || e.ctrlKey || e.metaKey || e.altKey || !$("sheet").classList.contains("hide") || !$("newdm").classList.contains("hide")) return;
+  const k = e.code === "Slash" ? (e.shiftKey ? "?" : "/") : e.key === "/" || e.key === "?" ? e.key : e.code;
+  const map = { "/": focusSearch, "?": help, KeyN: () => openNew(false), KeyH: () => go("home"), KeyM: () => go("mentions"), KeyS: () => go("starred"), KeyR: () => st.cur && M.text.focus(), KeyF: toggleFind, KeyI: showInfo, KeyJ: toLatest };
+  if (map[k]) { e.preventDefault(); map[k](); }
 });
-document.addEventListener("visibilitychange", () => { if (visible() && st.token) { loadSpaces(); if (st.cur) loadMsgs(); } });
+document.addEventListener("visibilitychange", () => { if (visible() && st.token) { loadSpaces(); if (st.cur) loadMsgs(M); } });
+const online = () => $("offline").classList.toggle("hide", navigator.onLine);
+addEventListener("online", () => { online(); if (st.token) loadSpaces(); });
+addEventListener("offline", online);
+// קישור ישיר: #spaces/... פותח את השיחה, ו-#spaces/.../messages/... גם קופץ להודעה
+function fromHash() {
+  const h = decodeURIComponent(location.hash.slice(1)), m = /^(spaces\/[\w-]+)(?:\/messages\/[\w.-]+)?$/.exec(h);
+  if (!m) return;
+  history.replaceState(history.state, "", location.pathname + location.search);
+  const s = spaceOf(m[1]) || { space: m[1], title: "צ'אט", dm: false, last: "" };
+  openSpace(s, h.includes("/messages/") ? { jump: h } : {});
+}
+addEventListener("hashchange", () => { if (st.token) fromHash(); });
 
+M = mkPane("main", $("conv"), $("mmsgs"));
+T = mkPane("th", $("thpane"), $("tmsgs"));
+act = M;
 function start() {
-  show("app"); setBell();
+  show("app"); setBell(); online();
   if (!st.cur) closeConv(true);
+  renderNav(); renderView();
   loadSpaces();
   st.timers.forEach(clearInterval);
   // שיחה פתוחה נבדקת כל כמה שניות; רשימת השיחות פחות
   st.timers = [
-    setInterval(() => { if (visible() && st.cur) loadMsgs(); }, 7000),
-    setInterval(() => { if (visible() || st.notif) loadSpaces(); }, 25000),
+    setInterval(() => { if (visible() && st.cur) { loadMsgs(M); if (T.space) loadMsgs(T); } }, 7000),
+    setInterval(() => { if (visible() || st.notif || prefs.sound) loadSpaces(); }, 25000),
   ];
 }
 if (st.token) start(); else show("login");
