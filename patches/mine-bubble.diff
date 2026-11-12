@@ -1,0 +1,59 @@
+diff --git a/chat/index.html b/chat/index.html
+index 549facd..72f7a11 100644
+--- a/chat/index.html
++++ b/chat/index.html
+@@ -14,13 +14,13 @@
+ :root{
+   --bg:#f6f8fc;--panel:#fff;--ink:#1f1f1f;--mute:#5f6368;--line:#e1e3e1;--hover:rgba(31,31,31,.06);--rowh:#f6f8fc;
+   --sel:#d3e3fd;--selink:#041e49;--acc:#0b57d0;--accink:#fff;--link:#0b57d0;--fab:#c2e7ff;--fabink:#001d35;
+-  --field:#e9eef6;--soft:#f0f4f9;--bad:#b3261e;--mark:#fde293;--tome:#fef7e0;
++  --field:#e9eef6;--soft:#f0f4f9;--bad:#b3261e;--mark:#fde293;--tome:#fef7e0;--mine:#d3e3fd;--mineink:#041e49;
+   --pop:0 2px 6px 2px rgba(60,64,67,.15),0 1px 2px rgba(60,64,67,.3);--fs:14px;color-scheme:light;
+ }
+ :root[data-theme=dark]{
+   --bg:#1b1c1d;--panel:#131314;--ink:#e3e3e3;--mute:#a8abaf;--line:#3c4043;--hover:rgba(227,227,227,.08);--rowh:#1e1f21;
+   --sel:#004a77;--selink:#c2e7ff;--acc:#a8c7fa;--accink:#062e6f;--link:#a8c7fa;--fab:#004a77;--fabink:#c2e7ff;
+-  --field:#28292b;--soft:#232427;--bad:#f2b8b5;--mark:#5c4b00;--tome:#2b2819;
++  --field:#28292b;--soft:#232427;--bad:#f2b8b5;--mark:#5c4b00;--tome:#2b2819;--mine:#004a77;--mineink:#e3f2ff;
+   --pop:0 4px 16px rgba(0,0,0,.7);color-scheme:dark;
+ }
+ *{box-sizing:border-box}
+@@ -186,6 +186,20 @@ mark{background:var(--mark);color:inherit;border-radius:3px}
+ .row:hover .tb,.row.sel .tb{display:flex}
+ .row:first-child .tb{top:2px}
+ @media (hover:none){.row:hover .tb{display:none}.row.sel .tb{display:flex}.row:hover:not(.sel):not(.tome){background:none}}
++/* ההודעות שלי: בצד שמאל, בבועה תכלת מעוגלת, כמו בגוגל צ'אט */
++.row.mine{flex-direction:row-reverse}
++.row.mine>.av,.row.mine>.gut{display:none}
++.row.mine:hover,.row.mine.sel{background:none}
++.row.mine .mb{flex:0 1 auto;max-width:min(78%,600px);background:var(--mine);color:var(--mineink);border-radius:18px 18px 18px 4px;padding:6px 14px 8px}
++.row.mine .hd{justify-content:flex-end}
++.row.mine .hd b{display:none}
++.row.mine .hd time,.row.mine .hd small,.row.mine .stt,.row.mine .mt .ed{color:inherit;opacity:.72}
++.row.mine .q{border-color:currentColor;color:inherit;opacity:.85}
++.row.mine .q b{color:inherit}
++.row.mine .mt a,.row.mine .rep{color:inherit;text-decoration:underline}
++.row.mine .file{border-color:rgba(127,127,127,.4)}
++.row.mine .file svg{color:inherit}
++.row.mine .tb{inset-inline-end:auto;inset-inline-start:20px}
+ .pend .mb{opacity:.6}
+ .fail .mb{opacity:1}
+ .stt{font-size:12px;color:var(--mute)}
+@@ -1007,7 +1021,7 @@ function attEl(a) {
+ }
+ const canThread = (p, m) => p.kind === "main" && m.thread && st.cur && !st.cur.dm;
+ function msgEl(p, m, s, cont, q) {
+-  const row = el("div", "row" + (cont ? " cont" : "") + (m.toMe && !m.mine ? " tome" : ""));
++  const row = el("div", "row" + (cont ? " cont" : "") + (m.mine ? " mine" : "") + (m.toMe && !m.mine ? " tome" : ""));
+   const who = m.mine ? myName() : m.who;
+   if (cont) { const g = el("div", "gut", fmtTime(m.at)); g.title = fullDate(m.at); row.append(g); }
+   else row.append(avatar(who, "s32"));
+@@ -1062,7 +1076,7 @@ async function jumpTo(p, id, tries) {
+   n.el.classList.remove("flash"); void n.el.offsetWidth; n.el.classList.add("flash");
+ }
+ function pendEl(p) {
+-  const row = el("div", "row " + (p.state === "failed" ? "fail" : "pend"));
++  const row = el("div", "row mine " + (p.state === "failed" ? "fail" : "pend"));
+   row.append(avatar(myName(), "s32"));
+   const d = el("div", "mb"), h = el("div", "hd"); h.append(el("b", "", myName() + " (אתה)")); d.append(h);
+   if (p.quote) { const qb = el("div", "q"); if (p.quote.who) qb.append(el("b", "", p.quote.who)); qb.append(p.quote.text || "הודעה מצוטטת"); d.append(qb); }
