@@ -6,161 +6,255 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://ydcfafijktzasrkkxyux.supabase.co; img-src data:; base-uri 'none'; form-action 'none'">
-<meta name="theme-color" content="#f5f4ed" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" id="tc" content="#faf9f5">
 <title>Claude</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23d97757'/%3E%3Cpath d='M50 18v64M18 50h64M27 27l46 46M73 27 27 73' stroke='%23fff' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23c96442'/%3E%3Cpath d='M12 4c.6 4 2.6 6.2 7 7-4.4.8-6.4 3-7 7-.6-4-2.6-6.2-7-7 4.4-.8 6.4-3 7-7z' fill='%23fff'/%3E%3C/svg%3E">
+<script>try{var p=JSON.parse(localStorage.getItem("claude_prefs")||"null")||JSON.parse(localStorage.getItem("chat_prefs")||"{}")||{},t=p.theme;document.documentElement.dataset.theme=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches)?"dark":"light"}catch(e){}</script>
 <style>
 :root{
-  --bg:#faf9f5;--side:#f5f4ed;--panel:#fff;--ink:#1f1e1d;--mute:#73726c;--line:#e6e3da;--hover:#ece9e0;--sel:#e8e5da;
-  --acc:#d97757;--acc2:#c96442;--user:#f0eee6;--code:#f2f0e9;--bad:#b3261e;--ok:#2e8b57;
-  --shadow:0 1px 3px rgba(31,30,29,.06),0 6px 20px rgba(31,30,29,.06);--pop:0 10px 34px rgba(31,30,29,.18);
+  --bg:#faf9f5;--side:#f3f1ea;--panel:#fff;--ink:#141413;--ink2:#3d3d3a;--mute:#73726c;--line:#e6e3d8;--line2:#d9d6ca;
+  --hover:rgba(20,20,19,.05);--sel:rgba(20,20,19,.08);--acc:#c96442;--acc2:#b0532f;--accink:#fff;--soft:#f5e9e2;
+  --user:#f0eee6;--code:#f5f3ec;--bad:#b3261e;--ok:#2e7d4f;--fs:16px;
+  --shadow:0 1px 2px rgba(20,20,19,.04),0 4px 18px rgba(20,20,19,.06);--pop:0 10px 34px rgba(20,20,19,.16);
+  --serif:ui-serif,Georgia,"Frank Ruehl CLM","Noto Serif Hebrew","David","Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI","Noto Sans Hebrew",Arial,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root{
-  --bg:#262624;--side:#1f1e1d;--panel:#30302e;--ink:#f0eee6;--mute:#a6a39a;--line:#3a3936;--hover:#2f2e2b;--sel:#3a3936;
-  --acc:#d97757;--acc2:#e08a6c;--user:#141413;--code:#1a1a18;--bad:#ff8a80;--ok:#6fcf97;
-  --shadow:0 1px 3px rgba(0,0,0,.35);--pop:0 10px 34px rgba(0,0,0,.55);
-}}
+:root[data-theme=dark]{
+  --bg:#262624;--side:#1f1e1d;--panel:#30302e;--ink:#faf9f5;--ink2:#e2e0d7;--mute:#a6a39a;--line:#3b3a37;--line2:#4a4945;
+  --hover:rgba(255,255,255,.05);--sel:rgba(255,255,255,.09);--acc:#d97757;--acc2:#e58c6c;--accink:#fff;--soft:#3a2d27;
+  --user:#141413;--code:#1c1c1a;--bad:#f2b8b5;--ok:#7fd4a0;
+  --shadow:0 1px 3px rgba(0,0,0,.3);--pop:0 10px 34px rgba(0,0,0,.55);color-scheme:dark;
+}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{font-family:system-ui,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.6;display:flex;overflow:hidden;-webkit-tap-highlight-color:transparent}
-button,textarea,input{font:inherit;color:inherit}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:var(--fs);line-height:1.6;display:flex;overflow:hidden;-webkit-tap-highlight-color:transparent}
+button,textarea,input,select{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none;padding:0}
-button:focus-visible,textarea:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .hide{display:none!important}
 svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.ib{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none;color:var(--mute);text-decoration:none;transition:background .15s,color .15s}
+svg.fill{fill:currentColor}
+.ib{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;flex:none;color:var(--mute);text-decoration:none;transition:background .15s,color .15s}
 .ib:hover{background:var(--hover);color:var(--ink)}
-.mark{width:28px;height:28px;flex:none;color:var(--acc)}
-.mark svg{width:100%;height:100%;stroke-width:2.6}
+.spark{color:var(--acc);display:inline-grid;flex:none}
+.spark svg{fill:currentColor;stroke:none;width:100%;height:100%}
 
-/* סרגל השיחות */
-#side{width:288px;flex:none;background:var(--side);border-inline-end:1px solid var(--line);display:flex;flex-direction:column;height:100%;transition:margin .2s,transform .2s}
-body.closed #side{margin-inline-start:-288px}
-#sidetop{display:flex;align-items:center;gap:8px;padding:12px 12px 6px}
-#sidetop .name{flex:1;font-weight:700;font-size:19px;letter-spacing:.2px;font-family:Georgia,"Times New Roman",serif}
-#newbtn{display:flex;align-items:center;gap:10px;margin:6px 10px;padding:9px 12px;border-radius:12px;font-weight:600;color:var(--acc2)}
-#newbtn:hover{background:var(--hover)}
-#newbtn .plus{width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center}
-#newbtn .plus svg{width:16px;height:16px;stroke-width:2.6}
-#search{margin:4px 10px 8px;position:relative}
-#search input{width:100%;padding:8px 34px 8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);outline:0;font-size:14px}
+/* סרגל צד */
+#side{width:280px;flex:none;background:var(--side);border-inline-end:1px solid var(--line);display:flex;flex-direction:column;height:100%;transition:margin .2s,transform .2s}
+body.closed #side{margin-inline-start:-280px}
+#sidetop{display:flex;align-items:center;gap:8px;padding:12px 12px 4px 10px}
+#sidetop .spark{width:22px;height:22px}
+#sidetop .name{flex:1;font-family:var(--serif);font-size:21px;letter-spacing:.2px}
+#modes{display:flex;gap:4px;margin:8px 10px 4px;padding:3px;background:var(--hover);border-radius:11px}
+#modes button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 8px;border-radius:8px;font-size:14px;color:var(--mute);font-weight:500}
+#modes button svg{width:16px;height:16px}
+#modes button[aria-selected=true]{background:var(--panel);color:var(--ink);box-shadow:var(--shadow)}
+.nav{display:flex;align-items:center;gap:10px;margin:1px 8px;padding:7px 10px;border-radius:9px;font-size:14.5px;color:var(--ink2);text-align:start;width:calc(100% - 16px)}
+.nav:hover{background:var(--hover)}
+.nav.on{background:var(--sel)}
+.nav svg{width:18px;height:18px}
+#newbtn{color:var(--acc2);font-weight:600;margin-top:6px}
+#newbtn .plus{width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;margin-inline-start:-2px}
+#newbtn .plus svg{width:14px;height:14px;stroke-width:2.8}
+#search{margin:6px 10px 4px;position:relative}
+#search input{width:100%;padding:7px 32px 7px 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel);outline:0;font-size:14px}
 #search input:focus{border-color:var(--acc)}
-#search svg{position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--mute)}
+#search svg{position:absolute;inset-inline-start:9px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--mute)}
 #convs{flex:1;overflow-y:auto;padding:0 8px 10px}
 .grp{font-size:12px;color:var(--mute);font-weight:600;padding:12px 10px 4px}
-.ci{display:flex;align-items:center;border-radius:10px;position:relative}
+.ci{display:flex;align-items:center;border-radius:9px}
 .ci:hover{background:var(--hover)}
 .ci.on{background:var(--sel)}
-.ci > button.t{flex:1;min-width:0;text-align:start;padding:7px 10px;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ci .pin{color:var(--acc);margin-inline-start:4px}
+.ci>.t{flex:1;min-width:0;display:flex;align-items:center;gap:6px;text-align:start;padding:7px 10px;font-size:14px}
+.ci .tt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci .sub{flex:none;max-width:40%;font-size:11.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr}
+.ci .t svg{width:14px;height:14px;color:var(--acc)}
 .ci .more{opacity:0;width:30px;height:30px}
 .ci:hover .more,.ci.on .more,.ci .more:focus-visible{opacity:1}
-.ci .dot{width:8px;height:8px;border-radius:50%;background:var(--acc);margin-inline-end:8px;flex:none}
-#sidefoot{border-top:1px solid var(--line);padding:8px 10px;display:flex;align-items:center;gap:8px}
-#sidefoot a{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;padding:8px 10px;border-radius:10px;flex:1;font-size:14.5px}
-#sidefoot a:hover{background:var(--hover)}
+.ci .dot{width:7px;height:7px;border-radius:50%;background:var(--acc);margin-inline-end:6px;flex:none}
+#sidefoot{border-top:1px solid var(--line);padding:6px 0;display:flex;flex-direction:column}
+#sidefoot a{text-decoration:none}
 #scrim{display:none}
 
-/* אזור השיחה */
+/* ראשי */
 #main{flex:1;min-width:0;display:flex;flex-direction:column;height:100%}
 #head{display:flex;align-items:center;gap:6px;padding:8px 12px;min-height:54px}
-#htitle{flex:1;min-width:0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 8px;border-radius:8px}
+body:not(.closed) #openSide{display:none}
+#htitle{min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 8px;border-radius:8px}
 #htitle.can:hover{background:var(--hover);cursor:pointer}
+#badges{display:flex;gap:6px;flex:1;min-width:0;overflow:hidden}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;background:var(--panel)}
+button.tag:hover{color:var(--ink);background:var(--hover)}
+.tag svg{width:13px;height:13px}
+.tag.ltr span{direction:ltr;unicode-bidi:isolate}
 #status{font-size:13px;color:var(--mute);display:flex;align-items:center;gap:6px;white-space:nowrap}
 #status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mute)}
 #status.on{color:var(--ok)}
 #status.on::before{background:var(--ok)}
 #scroll{flex:1;overflow-y:auto}
-#msgs{max-width:780px;margin:0 auto;padding:10px 18px 30px;display:flex;flex-direction:column;gap:22px}
-.u{align-self:flex-start;max-width:85%;background:var(--user);padding:10px 16px;border-radius:18px;white-space:pre-wrap;overflow-wrap:anywhere}
+#msgs{max-width:768px;margin:0 auto;padding:12px 20px 28px;display:flex;flex-direction:column;gap:20px}
+.day{align-self:center;font-size:12px;color:var(--mute)}
+.um{align-self:flex-end;max-width:85%;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.um .tags{display:flex;gap:6px;flex-wrap:wrap}
+.u{background:var(--user);padding:10px 16px;border-radius:18px;white-space:pre-wrap;overflow-wrap:anywhere;unicode-bidi:plaintext;text-align:start}
 .u.pend{opacity:.7}
+.u.fail{border:1px solid var(--bad)}
 .u .att{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.uacts{display:flex;align-items:center;gap:2px;opacity:.9}
+.um:not(:hover) .uacts .ib{opacity:0}
+.um:focus-within .uacts .ib,.um.f .uacts .ib{opacity:1}
+.err{color:var(--bad);font-size:12.5px}
 .chip{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px 10px;font-size:13px;max-width:240px}
 .chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .chip svg{width:15px;height:15px;color:var(--acc)}
-.chip button{color:var(--mute);margin-inline-start:2px}
-.meta{font-size:12px;color:var(--mute);margin-top:4px}
-.u + .meta{align-self:flex-start;margin-top:-16px;padding-inline-start:6px}
-.a{display:flex;gap:12px;align-items:flex-start}
-.a .mark{margin-top:2px}
-.a .body{flex:1;min-width:0;overflow-wrap:anywhere}
-.a .body > :first-child{margin-top:0}
-.a .body > :last-child{margin-bottom:0}
-.a .body p{margin:0 0 .7em}
-.a .body h1,.a .body h2,.a .body h3{font-size:1.08em;margin:1em 0 .4em}
-.a .body ul,.a .body ol{margin:.3em 0 .8em;padding-inline-start:1.5em}
-.a .body li{margin:.2em 0}
-.a .body code{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:0 5px;font-family:ui-monospace,Consolas,monospace;font-size:.9em;direction:ltr;unicode-bidi:isolate}
-.a .body pre{background:var(--code);border:1px solid var(--line);border-radius:12px;padding:12px 14px;overflow-x:auto;direction:ltr;text-align:left}
-.a .body pre code{border:0;padding:0;background:none}
-.a .body hr{border:0;border-top:1px solid var(--line);margin:1em 0}
-.a .body blockquote{margin:.5em 0;padding-inline-start:12px;border-inline-start:3px solid var(--line);color:var(--mute)}
-.acts{display:flex;gap:2px;margin-top:6px;align-items:center}
-.acts .ib{width:30px;height:30px;border-radius:8px}
-.acts .ib svg{width:16px;height:16px}
-.acts .meta{margin:0 6px}
-.cf{margin-top:10px;padding:10px 14px;border-radius:12px;border:1px solid var(--acc);background:color-mix(in srgb,var(--acc) 8%,transparent)}
+.chip button{color:var(--mute);display:grid}
+.meta{font-size:12px;color:var(--mute);margin:0 6px}
+.acts{display:flex;gap:2px;margin-top:4px;align-items:center}
+.acts .ib,.uacts .ib{width:30px;height:30px;border-radius:8px}
+.acts .ib svg,.uacts .ib svg{width:16px;height:16px}
+.a{display:flex;gap:14px;align-items:flex-start}
+.a>.spark{width:22px;height:22px;margin-top:3px}
+.a .col{flex:1;min-width:0}
+.a .body{overflow-wrap:anywhere;font-family:var(--serif);font-size:1.03em;line-height:1.7;color:var(--ink)}
+body.sans .a .body{font-family:var(--sans);font-size:1em}
+.body>:first-child{margin-top:0}
+.body>:last-child{margin-bottom:0}
+.body p{margin:0 0 .75em;unicode-bidi:plaintext}
+.body h1,.body h2,.body h3,.body h4{font-weight:600;line-height:1.35;margin:1.1em 0 .45em;unicode-bidi:plaintext}
+.body h1{font-size:1.35em}.body h2{font-size:1.2em}.body h3{font-size:1.08em}.body h4{font-size:1em}
+.body ul,.body ol{margin:.3em 0 .85em;padding-inline-start:1.6em}
+.body li{margin:.25em 0}
+.body li>ul,.body li>ol{margin:.2em 0}
+.body a{color:var(--acc2);text-decoration:underline;text-underline-offset:2px}
+.body code{background:var(--code);border:1px solid var(--line);border-radius:5px;padding:0 4px;font-family:var(--mono);font-size:.86em;direction:ltr;unicode-bidi:isolate}
+.cb{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:.7em 0;background:var(--code);direction:ltr;text-align:left}
+.cbh{display:flex;align-items:center;justify-content:space-between;padding:3px 6px 3px 14px;font:12px var(--sans);color:var(--mute);border-bottom:1px solid var(--line)}
+.cbh button{display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:7px;font-size:12px}
+.cbh button:hover{background:var(--hover);color:var(--ink)}
+.cbh svg{width:14px;height:14px}
+.cb pre{margin:0;padding:12px 14px;overflow-x:auto;font-size:.88em;line-height:1.55}
+.cb pre code{border:0;padding:0;background:none;font-size:1em}
+.body hr{border:0;border-top:1px solid var(--line);margin:1.2em 0}
+.body blockquote{margin:.5em 0 .8em;padding-inline-start:14px;border-inline-start:3px solid var(--line2);color:var(--ink2)}
+.tw{overflow-x:auto;margin:.6em 0 .9em}
+.body table{border-collapse:collapse;font-size:.93em;font-family:var(--sans)}
+.body th,.body td{border:1px solid var(--line);padding:6px 10px;text-align:start;vertical-align:top}
+.body th{background:var(--code);font-weight:600}
+.cf{margin-top:10px;padding:10px 14px;border-radius:12px;border:1px solid var(--acc);background:var(--soft);font-family:var(--sans)}
 .cf b{display:block;margin-bottom:6px}
-.cf .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.btn{padding:7px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-size:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btn{padding:7px 14px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);font-size:14px;display:inline-flex;align-items:center;gap:6px}
 .btn:hover{background:var(--hover)}
-.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:var(--accink)}
 .btn.pri:hover{background:var(--acc2)}
-.wait{display:flex;gap:12px;align-items:center;color:var(--mute);font-size:14.5px}
-.dots{display:inline-flex;gap:4px}
-.dots i{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:b 1.2s infinite ease-in-out}
-.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
-@keyframes b{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
-.day{align-self:center;font-size:12px;color:var(--mute)}
+.btn.bad{color:var(--bad)}
+.btn svg{width:16px;height:16px}
+.edit{width:100%;max-width:600px;background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:10px}
+.edit textarea{width:100%;min-width:260px;border:0;outline:0;background:none;resize:vertical;min-height:80px}
+.edit .row{justify-content:flex-end;margin-top:4px}
+.wait{display:flex;gap:14px;align-items:center;color:var(--mute);font-size:14.5px}
+.wait .spark{width:22px;height:22px;animation:sp 2.4s infinite ease-in-out}
+@keyframes sp{0%,100%{transform:rotate(0) scale(.9);opacity:.6}50%{transform:rotate(90deg) scale(1.05);opacity:1}}
 
-/* מסך פתיחה */
-#hello{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
-#hello h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(26px,5vw,38px);margin:10px 0 24px;display:flex;align-items:center;gap:12px}
-#hello h1 .mark{width:36px;height:36px}
-#sugg{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:680px;margin-top:14px}
-#sugg button{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:8px 14px;font-size:14px;color:var(--mute);display:flex;align-items:center;gap:8px}
-#sugg button:hover{color:var(--ink);background:var(--hover)}
-#sugg svg{width:16px;height:16px;color:var(--acc)}
+/* פתיחה */
+#hello{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px 40px;text-align:center;overflow-y:auto}
+#hello h1{font-family:var(--serif);font-weight:400;font-size:clamp(28px,5vw,40px);margin:6px 0 4px;display:flex;align-items:center;gap:12px;line-height:1.25}
+#hello h1 .spark{width:34px;height:34px}
+#sub{color:var(--mute);font-size:15px;margin:0 0 22px}
+#composeSlot{width:100%;max-width:680px}
+#sugg{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:680px;margin-top:16px}
+#sugg button{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:7px 13px;font-size:14px;color:var(--ink2);display:flex;align-items:center;gap:8px}
+#sugg button:hover{background:var(--hover);color:var(--ink)}
+#sugg svg{width:16px;height:16px;color:var(--mute)}
 
-/* תיבת הכתיבה */
-#composeWrap{padding:0 16px max(14px,env(safe-area-inset-bottom))}
-#hello #composeWrap{width:100%;max-width:700px;padding:0}
-#compose{max-width:780px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:10px 12px 8px;transition:border-color .15s}
-#compose:focus-within{border-color:color-mix(in srgb,var(--acc) 55%,var(--line))}
+/* כתיבה */
+#composeWrap{padding:0 16px max(12px,env(safe-area-inset-bottom))}
+#composeSlot #composeWrap{padding:0}
+#qa{max-width:768px;margin:0 auto 8px;display:flex;gap:8px;flex-wrap:wrap}
+#qa .btn{border-radius:999px;padding:5px 12px;font-size:13.5px}
+#compose{max-width:768px;margin:0 auto;background:var(--panel);border:1px solid var(--line2);border-radius:20px;box-shadow:var(--shadow);padding:12px 12px 8px;transition:border-color .15s;text-align:start}
+#compose:focus-within{border-color:color-mix(in srgb,var(--acc) 45%,var(--line2))}
 #compose.drag{border-color:var(--acc);border-style:dashed}
 #atts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
 #atts:empty{display:none}
-#text{width:100%;resize:none;border:0;outline:0;background:none;max-height:240px;min-height:28px;padding:4px 6px;line-height:1.5}
-#ctools{display:flex;align-items:center;gap:4px;margin-top:4px}
+#text{width:100%;resize:none;border:0;outline:0;background:none;max-height:260px;min-height:28px;padding:2px 6px;line-height:1.5;unicode-bidi:plaintext}
+#text::placeholder{color:var(--mute)}
+#ctools{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
 #ctools .sp{flex:1}
+#attbtn{width:32px;height:32px;border:1px solid var(--line2);border-radius:9px}
 #hint{font-size:12px;color:var(--mute)}
-#sendbtn{width:34px;height:34px;border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center}
+#repoBtn.need{border-color:var(--acc);color:var(--acc2)}
+#sendbtn{width:34px;height:34px;border-radius:9px;background:var(--acc);color:#fff;display:grid;place-items:center}
 #sendbtn:hover{background:var(--acc2)}
 #sendbtn:disabled{opacity:.4;cursor:default}
 #sendbtn svg{stroke-width:2.4}
 #foot{text-align:center;font-size:12px;color:var(--mute);margin-top:6px}
 
+/* פרויקטים */
+#projView{flex:1;overflow-y:auto;padding:10px 20px 40px}
+.pw{max-width:820px;margin:0 auto}
+.pw h1{font-family:var(--serif);font-weight:400;font-size:30px;margin:8px 0 6px}
+.ptop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between}
+.note{color:var(--mute);font-size:14px;margin:4px 0 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.card{text-align:start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-height:118px}
+.card:hover{border-color:var(--line2);box-shadow:var(--shadow)}
+.card b{font-weight:600}
+.card p{margin:0;color:var(--mute);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card small{color:var(--mute);margin-top:auto}
+.instr{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;white-space:pre-wrap;font-size:14.5px;margin:6px 0 20px;overflow-wrap:anywhere}
+.back{color:var(--mute);font-size:14px;display:inline-flex;align-items:center;gap:4px}
+.back:hover{color:var(--ink)}
+.plist{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.plist button{display:flex;align-items:center;gap:10px;text-align:start;padding:12px 6px;border-bottom:1px solid var(--line)}
+.plist button:hover{background:var(--hover)}
+.plist .tt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
 /* תפריט ותיבות */
-#menu{position:fixed;z-index:30;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--pop);padding:5px;min-width:170px}
+#menu{position:fixed;z-index:30;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--pop);padding:5px;min-width:190px;max-height:70vh;overflow-y:auto}
 #menu button{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:8px 10px;border-radius:8px;font-size:14.5px}
 #menu button:hover{background:var(--hover)}
 #menu button.bad{color:var(--bad)}
+#menu button.cur{font-weight:600}
 #menu svg{width:17px;height:17px}
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:10px;font-size:14px;z-index:40;box-shadow:var(--pop)}
-dialog{border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);padding:20px;width:min(420px,92vw);box-shadow:var(--pop)}
-dialog::backdrop{background:rgba(0,0,0,.35)}
-dialog h3{margin:0 0 12px;font-size:18px}
-dialog input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);outline:0}
-dialog input:focus{border-color:var(--acc)}
-dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+#menu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+#toast{position:fixed;top:62px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:10px;font-size:14px;z-index:40;box-shadow:var(--pop);display:flex;gap:14px;align-items:center;max-width:92vw}
+#toast button{color:var(--acc);font-weight:600;filter:brightness(1.25)}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);padding:20px;width:min(460px,94vw);box-shadow:var(--pop);max-height:90vh}
+dialog::backdrop{background:rgba(0,0,0,.4)}
+dialog h3{margin:0 0 6px;font-size:18px;font-weight:600}
+dialog .note{margin:0 0 12px}
+.fld{display:flex;flex-direction:column;gap:5px;margin:12px 0 0;font-size:14px;color:var(--ink2)}
+.fld input[type=text],.fld textarea,.fld select{width:100%;padding:9px 11px;border:1px solid var(--line2);border-radius:9px;background:var(--bg);outline:0;color:var(--ink)}
+.fld textarea{resize:vertical;min-height:120px;line-height:1.5}
+.fld input:focus,.fld textarea:focus,.fld select:focus{border-color:var(--acc)}
+.fld small{color:var(--mute);font-size:12.5px}
+.fld.chk{flex-direction:row;align-items:center;gap:10px}
+.fld.chk input{width:18px;height:18px;accent-color:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;direction:ltr}
+.chips button:hover{background:var(--hover)}
+.keys{margin:14px 0 0;font-size:13.5px;color:var(--mute)}
+.keys div{display:flex;justify-content:space-between;padding:3px 0}
+kbd{font-family:var(--mono);font-size:12px;border:1px solid var(--line2);border-bottom-width:2px;border-radius:5px;padding:0 5px;direction:ltr;display:inline-block}
+dialog .row{justify-content:flex-end;margin-top:18px}
 
 @media (max-width:820px){
-  #side{position:fixed;inset-block:0;inset-inline-start:0;z-index:20;box-shadow:var(--pop)}
-  body.closed #side{margin:0;transform:translateX(100%)}
-  body:not(.closed) #scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:15}
-  #msgs{padding:8px 14px 24px}
-  .u{max-width:92%}
+  #side{position:fixed;inset-block:0;inset-inline-start:0;z-index:20;box-shadow:var(--pop);width:min(300px,86vw)}
+  body.closed #side{margin:0;transform:translateX(100%);visibility:hidden}
+  body:not(.closed) #scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:15}
+  body #openSide{display:grid}
+  #head{padding:6px 8px;min-height:50px}
+  #status{font-size:0;gap:0}
+  #badges .tag{max-width:130px}
+  #msgs{padding:8px 14px 22px}
+  .um{max-width:92%}
+  .a{gap:10px}
+  .a>.spark{width:18px;height:18px}
+  #composeWrap{padding:0 10px max(10px,env(safe-area-inset-bottom))}
+  #projView{padding:8px 14px 30px}
+  .uacts .ib{opacity:1!important}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -168,53 +262,65 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
 <body class="closed">
 <aside id="side" aria-label="שיחות">
   <div id="sidetop">
-    <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/></svg></span>
+    <span class="spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c.8 5 3.4 7.6 9 9-5.6 1.4-8.2 4-9 9-.8-5-3.4-7.6-9-9 5.6-1.4 8.2-4 9-9z"/></svg></span>
     <span class="name">Claude</span>
-    <button class="ib" id="closeSide" title="סגירת הסרגל" aria-label="סגירת הסרגל"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
+    <button class="ib" id="closeSide" title="סגירת הסרגל (Ctrl+.)" aria-label="סגירת הסרגל"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
   </div>
-  <button id="newbtn"><span class="plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>שיחה חדשה</button>
-  <div id="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="חיפוש בשיחות" aria-label="חיפוש בשיחות"></div>
-  <nav id="convs"></nav>
+  <div id="modes" role="tablist" aria-label="סוג השיחה">
+    <button role="tab" data-mode="chat"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>קלוד שיחה</button>
+    <button role="tab" data-mode="code"><svg viewBox="0 0 24 24"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>קלוד קוד</button>
+  </div>
+  <button class="nav" id="newbtn"><span class="plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>שיחה חדשה</button>
+  <button class="nav" id="projNav"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>פרויקטים</button>
+  <div id="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="חיפוש בשיחות (Ctrl+K)" aria-label="חיפוש בשיחות"></div>
+  <nav id="convs" aria-label="רשימת השיחות"></nav>
   <div id="sidefoot">
-    <a href="./"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>חזרה לצ'אטים</a>
+    <button class="nav" id="setBtn"><svg viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg>הגדרות</button>
+    <a class="nav" href="./"><svg viewBox="0 0 24 24"><path d="m14 6 6 6-6 6M20 12H4"/></svg>חזרה לצ'אטים</a>
   </div>
 </aside>
 <div id="scrim"></div>
 <main id="main">
   <header id="head">
-    <button class="ib" id="openSide" title="השיחות" aria-label="פתיחת רשימת השיחות"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
-    <button class="ib" id="newTop" title="שיחה חדשה" aria-label="שיחה חדשה"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+    <button class="ib" id="openSide" title="פתיחת הסרגל (Ctrl+.)" aria-label="פתיחת רשימת השיחות"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
+    <button class="ib" id="newTop" title="שיחה חדשה (Ctrl+Shift+O)" aria-label="שיחה חדשה"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
     <div id="htitle"></div>
+    <div id="badges"></div>
     <div id="status" role="status"></div>
   </header>
   <div id="hello">
-    <h1><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/></svg></span><span id="greet">במה אפשר לעזור?</span></h1>
+    <h1><span class="spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c.8 5 3.4 7.6 9 9-5.6 1.4-8.2 4-9 9-.8-5-3.4-7.6-9-9 5.6-1.4 8.2-4 9-9z"/></svg></span><span id="greet"></span></h1>
+    <p id="sub"></p>
     <div id="composeSlot"></div>
     <div id="sugg"></div>
   </div>
   <div id="scroll" class="hide"><div id="msgs"></div></div>
+  <div id="projView" class="hide"></div>
   <div id="composeWrap">
+    <div id="qa" class="hide"></div>
     <form id="compose">
       <div id="atts"></div>
       <textarea id="text" rows="1" placeholder="כתוב הודעה ל-Claude..." aria-label="הודעה ל-Claude"></textarea>
       <div id="ctools">
-        <button type="button" class="ib" id="attbtn" title="צירוף קובץ טקסט" aria-label="צירוף קובץ"><svg viewBox="0 0 24 24"><path d="m21 11-8.6 8.6a5 5 0 0 1-7-7l8.5-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/></svg></button>
+        <button type="button" class="ib" id="attbtn" title="צירוף קובצי טקסט (תמונות לא נתמכות)" aria-label="צירוף קובץ טקסט"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
         <input type="file" id="file" class="hide" multiple accept=".txt,.md,.csv,.tsv,.json,.js,.mjs,.ts,.jsx,.tsx,.html,.htm,.css,.py,.xml,.yml,.yaml,.ini,.log,.sql,.sh,.java,.c,.cpp,.h,.cs,.php,.rb,.go,.rs,.srt,text/*">
+        <button type="button" class="tag" id="projBtn"></button>
+        <button type="button" class="tag ltr" id="repoBtn"></button>
         <span class="sp"></span>
         <span id="hint"></span>
         <button type="submit" id="sendbtn" title="שליחה" aria-label="שליחה" disabled><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
       </div>
     </form>
-    <div id="foot">Claude עונה כשהוא מחובר. אם לא – ההודעה ממתינה והתשובה תופיע כאן.</div>
+    <div id="foot">Claude עונה כשהוא מחובר. אם לא – ההודעה ממתינה והתשובה תופיע כאן. אפשר לצרף קובצי טקסט בלבד.</div>
   </div>
 </main>
 <div id="menu" class="hide" role="menu"></div>
 <div id="toast" class="hide" role="status"></div>
-<dialog id="dlg"><form method="dialog"><h3 id="dlgT"></h3><input id="dlgI" maxlength="80"><div class="row"><button class="btn" value="no">ביטול</button><button class="btn pri" value="ok" id="dlgOk">שמירה</button></div></form></dialog>
+<dialog id="dlg"></dialog>
 <script>
 "use strict";
-// השיחה עם Claude, בסגנון האתר של Claude: כמה שיחות נפרדות, רשימה בצד, צירוף קובצי טקסט.
-// עובר דרך הגשר ב-Supabase (נטפרי חוסם workers.dev), עם אותה כניסה של אתר הצאט.
+// השיחה עם Claude בסגנון האתר הרשמי: שני מצבים (שיחה / קוד), פרויקטים עם הנחיות, Markdown, הגדרות.
+// הכול עובר דרך הגשר ב-Supabase (claude_send / claude_history) עם האסימון של אתר הצאט. התשובות נכתבות מאוחר יותר.
 const API = "https://ydcfafijktzasrkkxyux.supabase.co/functions/v1/chat-netfree/";
 const $ = (id) => document.getElementById(id);
 const store = {
@@ -225,31 +331,47 @@ let token = "";
 try { token = localStorage.getItem("chat_token") || ""; } catch (e) {}
 if (!token) location.replace("./");
 
-const OLD = "old"; // הודעות מלפני שהיו שיחות נפרדות
-let items = [], live = false, sig = "", sending = false, loaded = false;
-let meta = store.get("claude_convs", {}); // { id: { title, hidden, pinned, made } }
-let cur = store.get("claude_cur", "");
-let atts = []; // { name, text }
+const OLD = "old", OWNER = "SHMUEL-LAMED";
+const REPOS = ["rosh-berosh-2", "1", "SongToNotes", "Email-management-line", "shmuel-lamed.github.io"];
 const MAX_ATT = 12000;
+let items = [], live = false, sig = "", sending = false, loaded = false, failed = [], editing = "", editDraft = null;
+let meta = store.get("claude_convs", {}); if (!meta || typeof meta !== "object" || Array.isArray(meta)) meta = {};
+let projects = store.get("claude_projects", []); if (!Array.isArray(projects)) projects = [];
+let cur = store.get("claude_cur", "") || "";
+let mode = store.get("claude_mode", "chat") === "code" ? "code" : "chat";
+let view = "chat"; // chat | projects | p:<id>
+let atts = [];
+const prefs = Object.assign({ theme: (store.get("chat_prefs", {}) || {}).theme || "auto", fs: "m", enter: true, serif: true }, store.get("claude_prefs", {}) || {});
+const coarse = matchMedia("(pointer: coarse)").matches;
 
 function el(tag, cls, text) { const x = document.createElement(tag); if (cls) x.className = cls; if (text != null) x.textContent = text; return x; }
-function icon(d) { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("viewBox", "0 0 24 24"); s.innerHTML = d; return s; }
+// הסמלים הם מחרוזות קבועות בקוד (לא תוכן מהשרת)
+function icon(d, cls) { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("viewBox", "0 0 24 24"); if (cls) s.setAttribute("class", cls); s.innerHTML = d; return s; }
 const IC = {
   copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
   ok: '<path d="m5 12 5 5 9-10"/>',
   dots: '<circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/>',
   edit: '<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
-  pin: '<path d="M12 17v5M9 3h6l-1 6 4 4H6l4-4z"/>',
+  star: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/>',
   trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
   file: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/>',
   x: '<path d="M18 6 6 18M6 6l12 12"/>',
   retry: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
-  quote: '<path d="M7 7h4v6H5v-2a4 4 0 0 1 2-4zM15 7h4v6h-6v-2a4 4 0 0 1 2-4z"/>',
+  quote: '<path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0-6 6v4"/>',
   idea: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
   pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
   book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V21h16"/>',
   code: '<path d="m8 6-6 6 6 6M16 6l6 6-6 6"/>',
+  bug: '<rect x="7" y="8" width="10" height="12" rx="5"/><path d="M12 8V5M9 5l1.5 2M15 5l-1.5 2M3 13h4M17 13h4M4 19l3-2M20 19l-3-2"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  branch: '<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="7" r="2"/><path d="M6 7v10M18 9c0 4-3 6-6 6H6"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
+  spark: '<path d="M12 3c.8 5 3.4 7.6 9 9-5.6 1.4-8.2 4-9 9-.8-5-3.4-7.6-9-9 5.6-1.4 8.2-4 9-9z"/>',
 };
+function spark() { const s = el("span", "spark"); s.setAttribute("aria-hidden", "true"); s.appendChild(icon(IC.spark)); return s; }
+function ibtn(ic, label, fn) { const b = el("button", "ib"); b.type = "button"; b.title = label; b.setAttribute("aria-label", label); b.appendChild(icon(ic)); b.onclick = fn; return b; }
 
 async function api(op, body) {
   let r;
@@ -265,9 +387,15 @@ async function api(op, body) {
   if (!r.ok || j.error) throw new Error(j.error || "תקלה");
   return j;
 }
-function toast(t) { const x = $("toast"); x.textContent = t; x.classList.remove("hide"); clearTimeout(toast.t); toast.t = setTimeout(() => x.classList.add("hide"), 2200); }
+function toast(t, act, fn) {
+  const x = $("toast"); x.textContent = ""; x.appendChild(el("span", "", t));
+  if (act) { const b = el("button", "", act); b.onclick = () => { x.classList.add("hide"); fn(); }; x.appendChild(b); }
+  x.classList.remove("hide"); clearTimeout(toast.t); toast.t = setTimeout(() => x.classList.add("hide"), act ? 6000 : 2400);
+}
 const saveMeta = () => store.set("claude_convs", meta);
-const newId = () => "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const saveProj = () => store.set("claude_projects", projects);
+const newId = (p) => (p || "c") + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const clean = (s) => String(s || "").replace(/[\[\]·\n\r]/g, " ").replace(/\s+/g, " ").trim().slice(0, 100);
 const fmtTime = (t) => new Date(t).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" });
 function fmtDay(t) {
   const d = new Date(t), n = new Date();
@@ -275,247 +403,553 @@ function fmtDay(t) {
   if (d.toDateString() === new Date(n - 864e5).toDateString()) return "אתמול";
   return d.toLocaleDateString("he-IL", { day: "numeric", month: "long" });
 }
-function greeting() {
-  const h = new Date().getHours();
-  return h < 5 ? "לילה טוב" : h < 12 ? "בוקר טוב" : h < 17 ? "צהריים טובים" : h < 21 ? "ערב טוב" : "לילה טוב";
+function greeting() { const h = new Date().getHours(); return h < 5 ? "לילה טוב" : h < 12 ? "בוקר טוב" : h < 17 ? "צהריים טובים" : h < 21 ? "ערב טוב" : "לילה טוב"; }
+function hash(s) { let h = 5381; for (let i = 0; i < s.length; i++) h = (h * 33 + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36); }
+
+// ---- הגדרות
+function applyPrefs() {
+  let dark = prefs.theme === "dark";
+  if (prefs.theme !== "dark" && prefs.theme !== "light") dark = matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  document.documentElement.style.setProperty("--fs", ({ s: 15, m: 16, l: 18, xl: 20 }[prefs.fs] || 16) + "px");
+  document.body.classList.toggle("sans", !prefs.serif);
+  $("tc").content = dark ? "#262624" : "#faf9f5";
+}
+try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyPrefs); } catch (e) {}
+function openSettings() {
+  const keys = el("div", "keys");
+  for (const [k, t] of [["Ctrl+Shift+O", "שיחה חדשה"], ["Ctrl+K", "חיפוש בשיחות"], ["Ctrl+.", "הצגת / הסתרת הסרגל"], ["Ctrl+Enter", "שליחה תמיד"], ["Esc", "סגירת תפריט"]]) {
+    const r = el("div"); r.append(el("span", "", t), el("kbd", "", k)); keys.appendChild(r);
+  }
+  openForm({
+    title: "הגדרות",
+    fields: [
+      { k: "theme", label: "ערכת צבעים", type: "select", value: prefs.theme, options: [["auto", "לפי המכשיר"], ["light", "בהירה"], ["dark", "כהה"]] },
+      { k: "fs", label: "גודל הכתב", type: "select", value: prefs.fs, options: [["s", "קטן"], ["m", "רגיל"], ["l", "גדול"], ["xl", "גדול מאוד"]] },
+      { k: "enter", label: "Enter שולח (Shift+Enter לשורה חדשה; בטלפון Enter תמיד שורה חדשה)", type: "check", value: prefs.enter },
+      { k: "serif", label: "גופן מעוצב (סריף) בתשובות של Claude", type: "check", value: prefs.serif },
+    ],
+    extra: keys,
+    onOk(v) { Object.assign(prefs, v); store.set("claude_prefs", prefs); applyPrefs(); sig = ""; render(); },
+  });
 }
 
-// ---- רשימת השיחות: מהשרת (לפי conv) ומהשיחות החדשות שנפתחו כאן
+// ---- פענוח ההודעות: כותרת קלוד קוד, הנחיות פרויקט, קבצים מצורפים
+const HEAD_RE = /^\[קלוד קוד(?: · מאגר: ([^\]·\n]+?))?(?: · ענף: ([^\]·\n]+?))?\]\n?/;
+const PROJ_RE = /^\[הנחיות הפרויקט: ([^\]\n]+)\]\n([\s\S]*?)\n\[סוף ההנחיות\]\n*/;
+const ATT_RE = /\n*\[קובץ מצורף: ([^\]\n]+)\]\n```\n[\s\S]*?(\n```|$)/g;
+function parse(t) {
+  let s = String(t), code = null, proj = null, m;
+  if ((m = s.match(HEAD_RE))) { code = { repo: (m[1] || "").trim(), branch: (m[2] || "").trim() }; s = s.slice(m[0].length); }
+  if ((m = s.match(PROJ_RE))) { proj = { name: m[1], instr: m[2] }; s = s.slice(m[0].length); }
+  const files = []; let attPart = "";
+  s = s.replace(ATT_RE, (all, n) => { files.push(n); attPart += all; return ""; }).trim();
+  return { code, proj, text: s, files, attPart };
+}
+const short = (r) => String(r || "").replace(new RegExp("^" + OWNER + "/", "i"), "");
+function repoFull(r) {
+  r = clean(r).replace(/^https?:\/\/github\.com\//i, "").replace(/\.git$/i, "").replace(/^\/+|\/+$/g, "").replace(/\s+/g, "");
+  return !r ? "" : r.includes("/") ? r : OWNER + "/" + r;
+}
+const convItems = (id) => items.filter((m) => (m.conv || OLD) === id);
+function convMode(id) {
+  if (meta[id] && meta[id].mode) return meta[id].mode;
+  const f = items.find((m) => (m.conv || OLD) === id && m.from === "me");
+  return f && HEAD_RE.test(f.text) ? "code" : "chat";
+}
+function getRepo(id) {
+  const x = meta[id] || {};
+  if (x.repo != null) return { repo: x.repo, branch: x.branch || "" };
+  for (let i = items.length - 1; i >= 0; i--) {
+    const m = items[i];
+    if ((m.conv || OLD) === id && m.from === "me") { const c = parse(m.text).code; if (c) return c; }
+  }
+  return { repo: "", branch: "" };
+}
+const projOf = (id) => projects.find((p) => p.id === (meta[id] || {}).project) || null;
+
+// ---- רשימת השיחות
 function convList() {
   const map = new Map();
   for (const m of items) {
     const id = m.conv || OLD;
-    if (!map.has(id)) map.set(id, { id, first: "", last: 0, count: 0, waiting: false });
-    const c = map.get(id);
-    if (m.from === "me" && !c.first) c.first = m.text;
-    c.last = Math.max(c.last, m.at); c.count++;
-    c.waiting = m.from === "me";
+    let c = map.get(id);
+    if (!c) map.set(id, (c = { id, first: null, last: 0, waiting: false, hay: "" }));
+    if (m.from === "me" && !c.first) c.first = parse(m.text);
+    c.last = Math.max(c.last, m.at); c.waiting = m.from === "me";
+    c.hay += "\n" + String(m.text).toLowerCase();
   }
-  for (const [id, x] of Object.entries(meta)) if (!map.has(id) && x.made && id === cur) map.set(id, { id, first: "", last: x.made, count: 0, waiting: false });
-  return [...map.values()].filter((c) => !meta[c.id]?.hidden).map((c) => ({
-    ...c,
-    title: meta[c.id]?.title || (c.id === OLD ? "השיחה הקודמת" : (c.first ? (splitAtt(c.first).text || splitAtt(c.first).files.join(", ") || "שיחה").replace(/\s+/g, " ").slice(0, 48) : "שיחה חדשה")),
-    pinned: !!meta[c.id]?.pinned,
-  })).sort((a, b) => (b.pinned - a.pinned) || (b.last - a.last));
-}
-function renderSide() {
-  const box = $("convs"), q = $("q").value.trim().toLowerCase();
-  box.textContent = "";
-  let list = convList();
-  if (q) list = list.filter((c) => c.title.toLowerCase().includes(q) || items.some((m) => (m.conv || OLD) === c.id && String(m.text).toLowerCase().includes(q)));
-  if (!list.length) { box.appendChild(el("div", "grp", q ? "לא נמצאו שיחות" : "אין עדיין שיחות")); return; }
-  let g = "";
-  for (const c of list) {
-    const ng = c.pinned ? "מוצמדות" : groupOf(c.last);
-    if (ng !== g) { box.appendChild(el("div", "grp", ng)); g = ng; }
-    const row = el("div", "ci" + (c.id === cur ? " on" : ""));
-    const t = el("button", "t", c.title); t.title = c.title;
-    t.onclick = () => { open(c.id); if (innerWidth <= 820) document.body.classList.add("closed"); };
-    if (c.pinned) t.prepend(el("span", "pin", "• "));
-    const more = el("button", "ib more"); more.appendChild(icon(IC.dots)); more.setAttribute("aria-label", "אפשרויות לשיחה");
-    more.onclick = (e) => { e.stopPropagation(); convMenu(c, more); };
-    row.append(t);
-    if (c.waiting && c.id !== cur) row.append(el("span", "dot"));
-    row.append(more);
-    box.appendChild(row);
-  }
+  for (const [id, x] of Object.entries(meta)) if (!map.has(id) && x.made && id === cur) map.set(id, { id, first: null, last: x.made, waiting: false, hay: "" });
+  return [...map.values()].filter((c) => !(meta[c.id] || {}).hidden).map((c) => {
+    const x = meta[c.id] || {};
+    const auto = c.id === OLD ? "השיחה הקודמת" : c.first ? (c.first.text || c.first.files.join(", ") || "שיחה").replace(/\s+/g, " ").slice(0, 60) : "שיחה חדשה";
+    return { ...c, title: x.title || auto, pinned: !!x.pinned, mode: x.mode || (c.first && c.first.code ? "code" : "chat"), project: x.project || "" };
+  }).sort((a, b) => (b.pinned - a.pinned) || (b.last - a.last));
 }
 function groupOf(t) {
   const d = (Date.now() - t) / 864e5, day = fmtDay(t);
   if (day === "היום" || day === "אתמול") return day;
   return d < 7 ? "השבוע" : d < 31 ? "החודש" : "קודם";
 }
+function renderSide() {
+  for (const b of $("modes").children) b.setAttribute("aria-selected", String(b.dataset.mode === mode));
+  $("projNav").classList.toggle("on", view !== "chat");
+  const box = $("convs"), q = $("q").value.trim().toLowerCase();
+  box.textContent = "";
+  let list = convList().filter((c) => c.mode === mode);
+  if (q) list = list.filter((c) => c.title.toLowerCase().includes(q) || c.hay.includes(q));
+  if (!list.length) { box.appendChild(el("div", "grp", q ? "לא נמצאו שיחות" : "אין עדיין שיחות")); return; }
+  let g = "";
+  for (const c of list) {
+    const ng = c.pinned ? "מסומנות בכוכב" : groupOf(c.last);
+    if (ng !== g) { box.appendChild(el("div", "grp", ng)); g = ng; }
+    const row = el("div", "ci" + (c.id === cur && view === "chat" ? " on" : ""));
+    const t = el("button", "t"); t.title = c.title;
+    if (c.pinned) t.appendChild(icon(IC.star, "fill"));
+    t.appendChild(el("span", "tt", c.title));
+    if (mode === "code") { const r = getRepo(c.id).repo; if (r) t.appendChild(el("span", "sub", short(r))); }
+    t.onclick = () => { openConv(c.id); if (innerWidth <= 820) closeSide(); };
+    row.append(t);
+    if (c.waiting && c.id !== cur) { const d = el("span", "dot"); d.title = "ממתין לתשובה"; row.append(d); }
+    const more = ibtn(IC.dots, "אפשרויות לשיחה", (e) => { e.stopPropagation(); convMenu(c, more); });
+    more.classList.add("more");
+    row.append(more);
+    box.appendChild(row);
+  }
+}
 function convMenu(c, anchor) {
   showMenu(anchor, [
-    [c.pinned ? "ביטול הצמדה" : "הצמדה למעלה", IC.pin, () => { meta[c.id] = { ...meta[c.id], pinned: !c.pinned }; saveMeta(); renderSide(); }],
+    [c.pinned ? "הסרת כוכב" : "סימון בכוכב", IC.star, () => { meta[c.id] = { ...meta[c.id], pinned: !c.pinned }; saveMeta(); render(); }],
     ["שינוי שם", IC.edit, () => rename(c.id, c.title)],
-    ["הסתרת השיחה", IC.trash, () => {
-      meta[c.id] = { ...meta[c.id], hidden: true }; saveMeta();
-      if (cur === c.id) startNew(); else renderSide();
-      toast("השיחה הוסתרה מהרשימה");
-    }, "bad"],
+    ["שיוך לפרויקט", IC.folder, () => projMenu(c.id, anchor)],
+    null,
+    ["מחיקה", IC.trash, () => delConv(c.id), "bad"],
   ]);
+}
+function delConv(id) {
+  meta[id] = { ...meta[id], hidden: true }; saveMeta();
+  if (cur === id) startNew(); else render();
+  toast("השיחה נמחקה מהרשימה (במכשיר הזה)", "ביטול", () => { meta[id].hidden = false; saveMeta(); openConv(id); });
 }
 function showMenu(anchor, rows) {
   const m = $("menu"); m.textContent = "";
-  for (const [label, ic, fn, cls] of rows) {
-    const b = el("button", cls || ""); b.setAttribute("role", "menuitem");
-    b.append(icon(ic), document.createTextNode(label));
-    b.onclick = () => { hideMenu(); fn(); };
+  for (const r of rows) {
+    if (!r) { m.appendChild(el("hr")); continue; }
+    const [label, ic, fn, cls] = r;
+    const b = el("button", cls || ""); b.type = "button"; b.setAttribute("role", "menuitem");
+    if (ic) b.append(icon(ic));
+    b.append(document.createTextNode(label));
+    b.onclick = (e) => { e.stopPropagation(); hideMenu(); fn(); };
     m.appendChild(b);
   }
   m.classList.remove("hide");
   const r = anchor.getBoundingClientRect();
-  m.style.top = Math.min(innerHeight - m.offsetHeight - 8, r.bottom + 4) + "px";
-  m.style.left = Math.max(8, Math.min(innerWidth - m.offsetWidth - 8, r.left)) + "px";
+  const below = r.bottom + 4 + m.offsetHeight < innerHeight - 8;
+  m.style.top = Math.max(8, below ? r.bottom + 4 : r.top - 4 - m.offsetHeight) + "px";
+  m.style.left = Math.max(8, Math.min(innerWidth - m.offsetWidth - 8, r.right - m.offsetWidth)) + "px";
   m.querySelector("button")?.focus();
 }
 function hideMenu() { $("menu").classList.add("hide"); }
 document.addEventListener("click", (e) => { if (!$("menu").contains(e.target)) hideMenu(); });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") hideMenu(); });
 
-function rename(id, title) {
-  const d = $("dlg"); $("dlgT").textContent = "שינוי שם לשיחה"; $("dlgI").value = title;
-  d.onclose = () => {
-    if (d.returnValue !== "ok") return;
-    const v = $("dlgI").value.trim();
-    meta[id] = { ...meta[id], title: v || undefined }; saveMeta(); renderSide(); renderHead();
+// ---- טופס כללי בתוך חלון
+function openForm(o) {
+  const d = $("dlg"); d.textContent = "";
+  const f = el("form"); f.method = "dialog";
+  f.appendChild(el("h3", "", o.title));
+  if (o.note) f.appendChild(el("p", "note", o.note));
+  const inputs = {};
+  for (const fd of o.fields) {
+    const lab = el("label", "fld" + (fd.type === "check" ? " chk" : ""));
+    let inp;
+    if (fd.type === "area") { inp = el("textarea"); inp.rows = 7; inp.maxLength = 6000; }
+    else if (fd.type === "select") { inp = el("select"); for (const [v, t] of fd.options) { const op = el("option", "", t); op.value = v; inp.appendChild(op); } }
+    else { inp = el("input"); inp.type = fd.type === "check" ? "checkbox" : "text"; if (fd.type !== "check") inp.maxLength = fd.max || 100; }
+    if (fd.type === "check") inp.checked = !!fd.value; else inp.value = fd.value || "";
+    if (fd.ph) inp.placeholder = fd.ph;
+    if (fd.ltr) inp.dir = "ltr";
+    if (fd.type === "check") lab.append(inp, el("span", "", fd.label)); else lab.append(el("span", "", fd.label), inp);
+    if (fd.list) {
+      const dl = el("datalist"); dl.id = "dl_" + fd.k;
+      for (const v of fd.list) { const op = el("option"); op.value = v; dl.appendChild(op); }
+      lab.appendChild(dl); inp.setAttribute("list", dl.id);
+      const ch = el("div", "chips");
+      for (const v of fd.list) { const b = el("button", "", v); b.type = "button"; b.onclick = (e) => { e.preventDefault(); inp.value = v; inp.focus(); }; ch.appendChild(b); }
+      lab.appendChild(ch);
+    }
+    if (fd.hint) lab.appendChild(el("small", "", fd.hint));
+    f.appendChild(lab); inputs[fd.k] = inp;
+  }
+  if (o.extra) f.appendChild(o.extra);
+  const row = el("div", "row");
+  const no = el("button", "btn", "ביטול"); no.type = "button"; no.onclick = () => d.close("no");
+  const ok = el("button", "btn pri", o.ok || "שמירה"); ok.value = "ok";
+  row.append(no, ok); f.appendChild(row); d.appendChild(f);
+  f.onsubmit = (e) => {
+    const v = {}; for (const k in inputs) v[k] = inputs[k].type === "checkbox" ? inputs[k].checked : inputs[k].value;
+    if (o.valid && !o.valid(v)) { e.preventDefault(); return; }
+    d.onclose = null; setTimeout(() => o.onOk(v));
   };
-  d.showModal(); $("dlgI").select();
+  d.onclose = null; d.returnValue = ""; d.showModal();
+  const first = f.querySelector("input[type=text],textarea"); if (first) { first.focus(); if (first.select) first.select(); }
+}
+function rename(id, title) {
+  openForm({ title: "שינוי שם לשיחה", fields: [{ k: "t", label: "שם", value: title, max: 80 }], onOk(v) { meta[id] = { ...meta[id], title: clean(v.t) || undefined }; saveMeta(); render(); } });
 }
 
-// ---- תצוגת שיחה
-function startNew() {
-  cur = newId(); meta[cur] = { made: Date.now() }; saveMeta(); store.set("claude_cur", cur);
-  sig = ""; loadDraft(); render(); $("text").focus();
+// ---- פרויקטים
+function projForm(p) {
+  openForm({
+    title: p ? "עריכת פרויקט" : "פרויקט חדש",
+    note: "ההנחיות נשלחות ל-Claude פעם אחת, בהודעה הראשונה של כל שיחה בפרויקט (ושוב אם שינית אותן), בתוך סימון ברור.",
+    fields: [
+      { k: "name", label: "שם הפרויקט", value: p ? p.name : "", max: 60, ph: "לדוגמה: דברי תורה לשבת" },
+      { k: "instr", label: "הנחיות קבועות", type: "area", value: p ? p.instr : "", ph: "מה Claude צריך לדעת בכל שיחה בפרויקט הזה" },
+    ],
+    ok: p ? "שמירה" : "יצירה",
+    valid(v) { if (!clean(v.name)) { toast("צריך לתת שם לפרויקט"); return false; } return true; },
+    onOk(v) {
+      if (p) { p.name = clean(v.name); p.instr = v.instr.trim(); }
+      else { p = { id: newId("p"), name: clean(v.name), instr: v.instr.trim(), at: Date.now() }; projects.unshift(p); }
+      saveProj(); if (view !== "chat") view = "p:" + p.id; render();
+    },
+  });
 }
-function open(id) { cur = id; store.set("claude_cur", cur); sig = ""; loadDraft(); render(); }
+function projMenu(id, anchor) {
+  const curP = (meta[id] || {}).project || "";
+  const rows = [["ללא פרויקט", null, () => setProj(id, ""), curP ? "" : "cur"]];
+  for (const p of projects) rows.push([p.name, IC.folder, () => setProj(id, p.id), p.id === curP ? "cur" : ""]);
+  rows.push(null, ["פרויקט חדש…", IC.plus, () => projForm(null)]);
+  showMenu(anchor, rows);
+}
+function setProj(id, pid) { meta[id] = { ...meta[id], project: pid }; saveMeta(); sig = ""; render(); }
+function renderProjects() {
+  const box = $("projView"); box.textContent = "";
+  const w = el("div", "pw"); box.appendChild(w);
+  const p = view.startsWith("p:") ? projects.find((x) => x.id === view.slice(2)) : null;
+  if (!p) {
+    view = "projects";
+    const top = el("div", "ptop"); top.appendChild(el("h1", "", "פרויקטים"));
+    const nb = el("button", "btn pri"); nb.type = "button"; nb.append(icon(IC.plus), document.createTextNode("פרויקט חדש")); nb.onclick = () => projForm(null);
+    top.appendChild(nb); w.appendChild(top);
+    w.appendChild(el("p", "note", "פרויקט שומר הנחיות קבועות לכמה שיחות. נשמר במכשיר הזה."));
+    if (!projects.length) { w.appendChild(el("p", "note", "אין עדיין פרויקטים.")); return; }
+    const g = el("div", "grid");
+    const all = convList();
+    for (const x of projects) {
+      const c = el("button", "card"); c.type = "button";
+      c.append(el("b", "", x.name), el("p", "", x.instr || "אין הנחיות"), el("small", "", all.filter((k) => k.project === x.id).length + " שיחות"));
+      c.onclick = () => { view = "p:" + x.id; render(); };
+      g.appendChild(c);
+    }
+    w.appendChild(g); return;
+  }
+  const back = el("button", "back", "→ כל הפרויקטים"); back.type = "button"; back.onclick = () => { view = "projects"; render(); };
+  w.appendChild(back);
+  const top = el("div", "ptop"); top.appendChild(el("h1", "", p.name));
+  const r = el("div", "row");
+  const nb = el("button", "btn pri"); nb.type = "button"; nb.append(icon(IC.plus), document.createTextNode("שיחה חדשה בפרויקט")); nb.onclick = () => startNew(p.id);
+  const eb = el("button", "btn"); eb.type = "button"; eb.append(icon(IC.edit), document.createTextNode("עריכה")); eb.onclick = () => projForm(p);
+  const db = el("button", "btn bad"); db.type = "button"; db.append(icon(IC.trash), document.createTextNode("מחיקה"));
+  db.onclick = () => {
+    if (!confirm("למחוק את הפרויקט \"" + p.name + "\"? השיחות עצמן יישארו.")) return;
+    projects = projects.filter((x) => x !== p); saveProj();
+    for (const k in meta) if (meta[k].project === p.id) meta[k].project = "";
+    saveMeta(); view = "projects"; render();
+  };
+  r.append(nb, eb, db); top.appendChild(r); w.appendChild(top);
+  w.appendChild(el("div", "instr", p.instr || "אין הנחיות. אפשר להוסיף בעריכה."));
+  const list = convList().filter((c) => c.project === p.id);
+  w.appendChild(el("p", "note", list.length ? "שיחות בפרויקט" : "אין עדיין שיחות בפרויקט."));
+  const pl = el("div", "plist");
+  for (const c of list) {
+    const b = el("button"); b.type = "button";
+    b.append(icon(c.mode === "code" ? IC.code : IC.chat), el("span", "tt", c.title), el("span", "meta", fmtDay(c.last)));
+    b.onclick = () => openConv(c.id);
+    pl.appendChild(b);
+  }
+  if (list.length) w.appendChild(pl);
+}
+
+// ---- תצוגה
+function setMode(m) {
+  if (m === mode && view === "chat") return;
+  mode = m; view = "chat"; store.set("claude_mode", mode);
+  if (view === "chat" && !convItems(cur).length && meta[cur] && meta[cur].made) {
+    meta[cur].mode = mode; if (mode === "code" && meta[cur].repo == null) Object.assign(meta[cur], lastRepo()); saveMeta(); sig = ""; render();
+  } else startNew();
+}
+function lastRepo() { const r = store.get("claude_lastrepo", null); return r && typeof r === "object" ? { repo: r.repo || "", branch: r.branch || "" } : { repo: "", branch: "" }; }
+function startNew(pid) {
+  cur = newId(); view = "chat";
+  meta[cur] = { made: Date.now(), mode, project: typeof pid === "string" ? pid : "" };
+  if (mode === "code") Object.assign(meta[cur], lastRepo());
+  saveMeta(); store.set("claude_cur", cur);
+  sig = ""; editing = ""; loadDraft(); render(); $("text").focus();
+}
+function openConv(id) {
+  cur = id; view = "chat"; mode = convMode(id); store.set("claude_cur", cur); store.set("claude_mode", mode);
+  sig = ""; editing = ""; loadDraft(); render();
+}
 function loadDraft() { $("text").value = store.get("claude_draft_" + cur, "") || ""; atts = []; renderAtts(); grow(); updSend(); }
+function tagEl(ic, text, ltr, fn) {
+  const t = el(fn ? "button" : "span", "tag" + (ltr ? " ltr" : "")); if (fn) { t.type = "button"; t.onclick = fn; }
+  t.append(icon(ic), el("span", "", text)); return t;
+}
 function renderHead() {
+  const b = $("badges"); b.textContent = "";
+  const s = $("status"); s.className = live ? "on" : ""; s.textContent = live ? "Claude מחובר" : "Claude לא מחובר כרגע";
+  if (view !== "chat") { $("htitle").textContent = ""; $("htitle").className = ""; return; }
   const c = convList().find((x) => x.id === cur);
-  const has = items.some((m) => (m.conv || OLD) === cur);
+  const has = convItems(cur).length > 0;
   $("htitle").textContent = has && c ? c.title : "";
   $("htitle").className = has ? "can" : "";
-  const s = $("status");
-  s.className = live ? "on" : ""; s.textContent = live ? "Claude מחובר" : "Claude לא מחובר כרגע";
+  const p = projOf(cur);
+  if (p) b.appendChild(tagEl(IC.folder, p.name, false, () => { view = "p:" + p.id; render(); }));
+  if (convMode(cur) === "code" && has) { const r = getRepo(cur); b.appendChild(tagEl(IC.branch, r.repo ? short(r.repo) + (r.branch ? " · " + r.branch : "") : "ללא מאגר", true, repoForm)); }
 }
 $("htitle").onclick = () => { if ($("htitle").className === "can") rename(cur, $("htitle").textContent); };
+function renderTools() {
+  const code = convMode(cur) === "code";
+  const p = projOf(cur), pb = $("projBtn");
+  pb.textContent = ""; pb.append(icon(IC.folder), el("span", "", p ? p.name : "פרויקט"));
+  pb.title = "שיוך השיחה לפרויקט";
+  const rb = $("repoBtn"); rb.classList.toggle("hide", !code);
+  if (code) {
+    const r = getRepo(cur); rb.textContent = "";
+    rb.append(icon(IC.branch), el("span", "", r.repo ? short(r.repo) + (r.branch ? " · " + r.branch : "") : "בחירת מאגר"));
+    rb.classList.toggle("need", !r.repo); rb.title = "המאגר והענף של השיחה";
+  }
+  $("text").placeholder = code ? "מה לעשות במאגר?" : "כתוב הודעה ל-Claude...";
+  const qa = $("qa"), show = code && convItems(cur).length > 0;
+  qa.classList.toggle("hide", !show);
+  if (show && !qa.childElementCount) {
+    const a = el("button", "btn pri"); a.type = "button"; a.append(icon(IC.ok), document.createTextNode("אישור ופרסום"));
+    a.onclick = () => { if (confirm("לשלוח אישור לפרסום?")) send("(מאושר)", { plain: true }); };
+    const n = el("button", "btn"); n.type = "button"; n.append(icon(IC.x), document.createTextNode("ביטול"));
+    n.onclick = () => send("(לא מאושר, לבטל)", { plain: true });
+    const ch = el("button", "btn"); ch.type = "button"; ch.append(icon(IC.edit), document.createTextNode("בקשת שינוי"));
+    ch.onclick = () => { const t = $("text"); t.value = "(בקשת שינוי) "; t.focus(); grow(); updSend(); };
+    qa.append(a, n, ch);
+  }
+}
+function repoForm() {
+  const r = getRepo(cur);
+  openForm({
+    title: "מאגר לשיחת קלוד קוד",
+    note: "כל הודעה בשיחה תתחיל בכותרת קצרה עם המאגר והענף, כדי שהסוכן ידע על מה לעבוד.",
+    fields: [
+      { k: "repo", label: "מאגר (בחשבון " + OWNER + ")", value: short(r.repo), list: REPOS, ph: "rosh-berosh-2", ltr: true },
+      { k: "branch", label: "ענף (לא חובה)", value: r.branch, ph: "main", ltr: true },
+    ],
+    onOk(v) {
+      const x = (meta[cur] = meta[cur] || {});
+      x.repo = repoFull(v.repo); x.branch = clean(v.branch).replace(/\s+/g, "");
+      saveMeta(); store.set("claude_lastrepo", { repo: x.repo, branch: x.branch }); sig = ""; render();
+    },
+  });
+}
+$("repoBtn").onclick = repoForm;
+$("projBtn").onclick = (e) => { e.stopPropagation(); projMenu(cur, $("projBtn")); };
 
-const SUGG = [
-  [IC.pen, "עזרה בניסוח", "תעזור לי לנסח "],
-  [IC.code, "שינוי באתר", "אני רוצה לשנות באתר "],
-  [IC.book, "סידור דברי תורה", "תעזור לי לסדר ולנסח את מה שכתבתי: "],
-  [IC.idea, "רעיונות", "תן לי רעיונות ל"],
-];
+const SUGG = {
+  chat: [[IC.pen, "עזרה בניסוח", "תעזור לי לנסח "], [IC.book, "סידור דברי תורה", "תעזור לי לסדר ולנסח את מה שכתבתי: "], [IC.idea, "רעיונות", "תן לי רעיונות ל"], [IC.code, "שינוי באתר", "אני רוצה לשנות באתר "]],
+  code: [[IC.bug, "תיקון תקלה", "יש תקלה: "], [IC.plus, "תכונה חדשה", "אני רוצה להוסיף "], [IC.eye, "סקירת הקוד", "תסקור את הקוד ותגיד מה כדאי לשפר"], [IC.book, "הסבר על המאגר", "תסביר לי בקצרה מה יש במאגר הזה"]],
+};
 function renderHello() {
   $("greet").textContent = greeting() + ", שמואל";
+  const code = convMode(cur) === "code", p = projOf(cur);
+  $("sub").textContent = code ? "קלוד קוד · עבודה על מאגרים ב-GitHub" + (p ? " · " + p.name : "") : p ? "פרויקט: " + p.name : "קלוד שיחה";
   const s = $("sugg"); s.textContent = "";
-  for (const [ic, label, text] of SUGG) {
+  for (const [ic, label, text] of SUGG[code ? "code" : "chat"]) {
     const b = el("button"); b.type = "button"; b.append(icon(ic), document.createTextNode(label));
     b.onclick = () => { const t = $("text"); t.value = text; t.focus(); grow(); updSend(); };
     s.appendChild(b);
   }
 }
 function render() {
-  const mine = items.filter((m) => (m.conv || OLD) === cur);
-  const empty = !mine.length;
+  renderSide(); renderHead();
+  const pv = view !== "chat";
+  $("projView").classList.toggle("hide", !pv);
+  $("composeWrap").classList.toggle("hide", pv);
+  if (pv) { $("hello").classList.add("hide"); $("scroll").classList.add("hide"); renderProjects(); return; }
+  const mine = convItems(cur), fl = failed.filter((f) => f.conv === cur);
+  const empty = !mine.length && !fl.length;
   $("hello").classList.toggle("hide", !empty);
   $("scroll").classList.toggle("hide", empty);
-  // תיבת הכתיבה באמצע במסך הפתיחה, ולמטה בתוך שיחה
   const wrap = $("composeWrap");
   if (empty && wrap.parentNode !== $("composeSlot")) $("composeSlot").appendChild(wrap);
   if (!empty && wrap.parentNode !== $("main")) $("main").appendChild(wrap);
   $("foot").classList.toggle("hide", empty);
-  renderHead(); renderSide();
+  renderTools();
   if (empty) { renderHello(); return; }
-  const s = JSON.stringify(mine.map((m) => [m.id, m.status, m.text.length])) + live + fmtDay(Date.now());
+  const s = JSON.stringify(mine.map((m) => [m.id, m.status, m.text.length, m.confirm || ""])) + JSON.stringify(fl.map((f) => f.id)) + live + editing + fmtDay(Date.now());
   if (s === sig) return;
   sig = s;
   const sc = $("scroll"), atEnd = sc.scrollHeight - sc.scrollTop - sc.clientHeight < 120;
   const box = $("msgs"); box.textContent = "";
   let lastDay = "";
-  for (const m of mine) {
+  const all = mine.concat(fl.map((f) => ({ ...f, from: "me", status: "fail" })));
+  for (const m of all) {
     const day = fmtDay(m.at);
     if (day !== lastDay) { box.appendChild(el("div", "day", day)); lastDay = day; }
-    if (m.from === "me") {
-      const u = el("div", "u" + (m.status === "new" ? " pend" : ""));
-      const { text, files } = splitAtt(m.text);
-      if (files.length) { const a = el("div", "att"); files.forEach((f) => a.appendChild(fileChip(f))); u.appendChild(a); }
-      u.appendChild(document.createTextNode(text));
-      box.appendChild(u);
-      box.appendChild(el("div", "meta", fmtTime(m.at) + (m.status === "new" ? " · ממתין ל-Claude" : "")));
-    } else {
-      const a = el("div", "a");
-      const mk = el("span", "mark"); mk.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/></svg>';
-      const body = el("div", "body"); body.appendChild(md(m.text));
-      const wrapB = el("div"); wrapB.style.flex = "1"; wrapB.style.minWidth = "0"; wrapB.appendChild(body);
-      if (m.confirm) {
-        const cf = el("div", "cf"); cf.appendChild(el("b", "", "ממתין לאישור שלך"));
-        cf.appendChild(document.createTextNode(m.confirm));
-        const row = el("div", "row");
-        const yes = el("button", "btn pri", "מאשר"), no = el("button", "btn", "לבטל"), chg = el("button", "btn", "בקשת שינוי");
-        yes.onclick = () => send("(מאושר)"); no.onclick = () => send("(לא מאושר, לבטל)");
-        chg.onclick = () => { $("text").value = "(בקשת שינוי) "; $("text").focus(); updSend(); };
-        row.append(yes, no, chg); cf.appendChild(row); wrapB.appendChild(cf);
-      }
-      const acts = el("div", "acts");
-      const cp = el("button", "ib"); cp.title = "העתקה"; cp.setAttribute("aria-label", "העתקת התשובה"); cp.appendChild(icon(IC.copy));
-      cp.onclick = () => copy(m.text, cp);
-      const qt = el("button", "ib"); qt.title = "ציטוט בתשובה"; qt.setAttribute("aria-label", "ציטוט"); qt.appendChild(icon(IC.quote));
-      qt.onclick = () => { const t = $("text"); t.value = "> " + m.text.split("\n").slice(0, 3).join("\n> ") + "\n\n" + t.value; t.focus(); grow(); updSend(); };
-      acts.append(cp, qt, el("span", "meta", fmtTime(m.at)));
-      wrapB.appendChild(acts);
-      a.append(mk, wrapB);
-      box.appendChild(a);
-    }
+    box.appendChild(m.from === "me" ? userMsg(m) : botMsg(m));
   }
-  const lastMine = mine[mine.length - 1];
-  if (lastMine.from === "me") {
-    const w = el("div", "wait");
-    if (live) { const d = el("span", "dots"); d.innerHTML = "<i></i><i></i><i></i>"; w.append(d, document.createTextNode("Claude כותב תשובה...")); }
-    else w.textContent = "Claude לא מחובר כרגע. ההודעה שמורה, והתשובה תופיע כאן כשהוא יתחבר.";
+  const last = mine[mine.length - 1];
+  if (last && last.from === "me" && !fl.length) {
+    const w = el("div", "wait"); w.appendChild(spark());
+    w.appendChild(document.createTextNode(live ? "Claude כותב תשובה..." : "Claude לא מחובר כרגע. ההודעה שמורה, והתשובה תופיע כאן כשהוא יתחבר."));
     box.appendChild(w);
   }
   if (atEnd || !loaded) sc.scrollTop = sc.scrollHeight;
+}
+function userMsg(m) {
+  const P = parse(m.text), wrap = el("div", "um" + (m.status === "fail" ? " f" : ""));
+  const tags = el("div", "tags");
+  if (P.proj) tags.appendChild(tagEl(IC.folder, "הנחיות: " + P.proj.name, false));
+  if (tags.childElementCount) wrap.appendChild(tags);
+  if (editing === m.id) {
+    const ed = el("div", "edit"), ta = el("textarea"); ta.value = editDraft != null ? editDraft : P.text; ta.oninput = () => { editDraft = ta.value; };
+    const row = el("div", "row");
+    const no = el("button", "btn", "ביטול"); no.type = "button"; no.onclick = () => { editing = ""; sig = ""; render(); };
+    const ok = el("button", "btn pri", "שליחה מחדש"); ok.type = "button";
+    ok.onclick = () => { const v = ta.value.trim(); if (!v && !P.attPart) return; editing = ""; send((v || "מצורף קובץ") + P.attPart); };
+    ta.onkeydown = (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) ok.click(); if (e.key === "Escape") no.click(); };
+    row.append(no, ok); ed.append(ta, row); wrap.appendChild(ed);
+    setTimeout(() => { ta.focus(); ta.style.height = Math.min(320, ta.scrollHeight + 4) + "px"; });
+    return wrap;
+  }
+  const u = el("div", "u" + (m.status === "new" ? " pend" : m.status === "fail" ? " fail" : ""));
+  if (P.files.length) { const a = el("div", "att"); P.files.forEach((f) => a.appendChild(fileChip(f))); u.appendChild(a); }
+  u.appendChild(document.createTextNode(P.text));
+  wrap.appendChild(u);
+  const acts = el("div", "uacts");
+  if (m.status === "fail") {
+    acts.append(el("span", "err", "לא נשלח" + (m.err ? " – " + m.err : "")),
+      ibtn(IC.retry, "ניסיון חוזר", () => { failed = failed.filter((f) => f.id !== m.id); send(m.text, { plain: true, key: m.key }); }),
+      ibtn(IC.edit, "עריכה", () => { failed = failed.filter((f) => f.id !== m.id); const t = $("text"); t.value = P.text; grow(); updSend(); t.focus(); sig = ""; render(); }),
+      ibtn(IC.trash, "הסרה", () => { failed = failed.filter((f) => f.id !== m.id); sig = ""; render(); }));
+  } else {
+    acts.append(ibtn(IC.copy, "העתקה", (e) => copy(P.text, e.currentTarget)));
+    if (m.status !== "new" || !String(m.id).startsWith("tmp")) acts.append(ibtn(IC.edit, "עריכה ושליחה מחדש", () => { editing = m.id; editDraft = null; sig = ""; render(); }));
+    acts.append(el("span", "meta", fmtTime(m.at) + (m.status === "new" ? " · ממתין ל-Claude" : "")));
+  }
+  wrap.appendChild(acts);
+  return wrap;
+}
+function botMsg(m) {
+  const a = el("div", "a"); a.appendChild(spark());
+  const col = el("div", "col"), body = el("div", "body"); body.appendChild(md(m.text)); col.appendChild(body);
+  if (m.confirm) {
+    const cf = el("div", "cf"); cf.appendChild(el("b", "", "ממתין לאישור שלך"));
+    cf.appendChild(document.createTextNode(m.confirm));
+    const row = el("div", "row");
+    const yes = el("button", "btn pri", "מאשר"), no = el("button", "btn", "לבטל"), chg = el("button", "btn", "בקשת שינוי");
+    yes.onclick = () => send("(מאושר)", { plain: true }); no.onclick = () => send("(לא מאושר, לבטל)", { plain: true });
+    chg.onclick = () => { $("text").value = "(בקשת שינוי) "; $("text").focus(); grow(); updSend(); };
+    row.append(yes, no, chg); cf.appendChild(row); col.appendChild(cf);
+  }
+  const acts = el("div", "acts");
+  acts.append(ibtn(IC.copy, "העתקת התשובה", (e) => copy(m.text, e.currentTarget)),
+    ibtn(IC.quote, "ציטוט בתשובה", () => { const t = $("text"); t.value = "> " + m.text.split("\n").slice(0, 3).join("\n> ") + "\n\n" + t.value; t.focus(); grow(); updSend(); }),
+    el("span", "meta", fmtTime(m.at)));
+  col.appendChild(acts); a.appendChild(col);
+  return a;
 }
 async function copy(text, btn) {
   try { await navigator.clipboard.writeText(text); } catch (e) {
     const t = el("textarea"); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (x) {} t.remove();
   }
-  if (btn) { btn.textContent = ""; btn.appendChild(icon(IC.ok)); setTimeout(() => { btn.textContent = ""; btn.appendChild(icon(IC.copy)); }, 1500); }
+  if (btn) { const sv = btn.querySelector("svg"); if (sv) { sv.replaceWith(icon(IC.ok)); setTimeout(() => { const s2 = btn.querySelector("svg"); if (s2) s2.replaceWith(icon(IC.copy)); }, 1500); } }
   toast("הועתק");
 }
 
-// Markdown קל לתשובות: כותרות, רשימות, הדגשה, קוד, ציטוט, קו מפריד. בונה DOM בלי innerHTML מהתוכן
+// ---- Markdown קל לתשובות. בונה DOM בלבד (createElement / textContent), בלי innerHTML מהתוכן
 function md(src) {
   const frag = document.createDocumentFragment();
-  const lines = String(src).replace(/\r/g, "").split("\n");
-  let i = 0, list = null, para = null;
-  const flush = () => { list = null; para = null; };
-  while (i < lines.length) {
-    const l = lines[i];
-    if (/^```/.test(l)) {
-      const buf = []; i++;
-      while (i < lines.length && !/^```/.test(lines[i])) buf.push(lines[i++]);
-      i++; flush();
-      const pre = el("pre"), code = el("code", "", buf.join("\n")); pre.appendChild(code); frag.appendChild(pre); continue;
+  const L = String(src).replace(/\r/g, "").split("\n");
+  let i = 0, list = null, para = null, quote = null;
+  const flush = () => { list = para = quote = null; };
+  const cells = (s) => s.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((x) => x.trim());
+  while (i < L.length) {
+    const l = L[i]; let m;
+    if ((m = l.match(/^\s*(```|~~~)\s*([\w+#.-]*)/))) {
+      const fence = m[1], buf = []; i++;
+      while (i < L.length && !L[i].trim().startsWith(fence)) buf.push(L[i++]);
+      i++; flush(); frag.appendChild(codeBlock(buf.join("\n"), m[2])); continue;
     }
-    let mm;
     if (!l.trim()) { flush(); i++; continue; }
-    if ((mm = l.match(/^(#{1,3})\s+(.*)$/))) { flush(); const h = el("h" + mm[1].length); inline(h, mm[2]); frag.appendChild(h); i++; continue; }
-    if (/^(-{3,}|\*{3,}|_{3,})\s*$/.test(l)) { flush(); frag.appendChild(el("hr")); i++; continue; }
-    if ((mm = l.match(/^>\s?(.*)$/))) { flush(); const q = el("blockquote"); inline(q, mm[1]); frag.appendChild(q); i++; continue; }
-    if ((mm = l.match(/^\s*([-*•]|\d+[.)])\s+(.*)$/))) {
-      const ord = /\d/.test(mm[1]);
-      if (!list || list.tagName !== (ord ? "OL" : "UL")) { para = null; list = el(ord ? "ol" : "ul"); frag.appendChild(list); }
-      const li = el("li"); inline(li, mm[2]); list.appendChild(li); i++; continue;
+    if ((m = l.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/))) { flush(); const h = el("h" + Math.min(m[1].length, 4)); inline(h, m[2]); frag.appendChild(h); i++; continue; }
+    if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(l)) { flush(); frag.appendChild(el("hr")); i++; continue; }
+    if (l.includes("|") && i + 1 < L.length && /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/.test(L[i + 1])) {
+      flush();
+      const tw = el("div", "tw"), tb = el("table"), th = el("thead"), tr = el("tr");
+      for (const c of cells(l)) { const x = el("th"); inline(x, c); tr.appendChild(x); }
+      th.appendChild(tr); tb.appendChild(th);
+      const bd = el("tbody"); i += 2;
+      while (i < L.length && L[i].includes("|") && L[i].trim()) {
+        const r = el("tr"); for (const c of cells(L[i])) { const x = el("td"); inline(x, c); r.appendChild(x); }
+        bd.appendChild(r); i++;
+      }
+      tb.appendChild(bd); tw.appendChild(tb); frag.appendChild(tw); continue;
     }
-    list = null;
+    if ((m = l.match(/^\s*>\s?(.*)$/))) {
+      list = para = null;
+      if (!quote) { quote = el("blockquote"); frag.appendChild(quote); } else quote.appendChild(el("br"));
+      inline(quote, m[1]); i++; continue;
+    }
+    if ((m = l.match(/^(\s*)([-*+•]|\d{1,3}[.)])\s+(.*)$/))) {
+      const ord = /\d/.test(m[2]), tag = ord ? "OL" : "UL";
+      para = quote = null;
+      const li = el("li"); inline(li, m[3]);
+      if (m[1].length >= 2 && list && list.lastElementChild) {
+        const host = list.lastElementChild; let sub = host.lastElementChild;
+        if (!sub || sub.tagName !== tag) { sub = el(tag.toLowerCase()); host.appendChild(sub); }
+        sub.appendChild(li);
+      } else {
+        if (!list || list.tagName !== tag) { list = el(tag.toLowerCase()); if (ord && parseInt(m[2], 10) > 1) list.start = parseInt(m[2], 10); frag.appendChild(list); }
+        list.appendChild(li);
+      }
+      i++; continue;
+    }
+    if (list && /^\s{2,}\S/.test(l)) { const li = list.lastElementChild; if (li) { li.appendChild(el("br")); inline(li, l.trim()); } i++; continue; }
+    list = quote = null;
     if (!para) { para = el("p"); frag.appendChild(para); } else para.appendChild(el("br"));
     inline(para, l); i++;
   }
   return frag;
 }
+function codeBlock(code, lang) {
+  const w = el("div", "cb"), h = el("div", "cbh"); h.appendChild(el("span", "", lang || "code"));
+  const b = el("button"); b.type = "button"; b.append(icon(IC.copy), el("span", "", "העתקה"));
+  b.onclick = () => { copy(code, null); b.lastChild.textContent = "הועתק"; setTimeout(() => { b.lastChild.textContent = "העתקה"; }, 1500); };
+  h.appendChild(b);
+  const pre = el("pre"); pre.appendChild(el("code", "", code));
+  w.append(h, pre); return w;
+}
+const IRE = /`([^`]+)`|\*\*(.+?)\*\*|__(.+?)__|~~(.+?)~~|\[([^\]]+)\]\(\s*(https?:\/\/[^\s)]+)\s*\)|(https?:\/\/[^\s<>"']*[^\s<>"'.,;:!?)\]])|\*([^*\s](?:[^*]*[^*\s])?)\*/g;
 function inline(node, s) {
-  const re = /(\*\*([^*]+)\*\*|`([^`]+)`|\*([^*\s][^*]*)\*)/g;
+  const re = new RegExp(IRE.source, "g");
   let last = 0, m;
   while ((m = re.exec(s))) {
     if (m.index > last) node.appendChild(document.createTextNode(s.slice(last, m.index)));
-    if (m[2] != null) node.appendChild(el("strong", "", m[2]));
-    else if (m[3] != null) node.appendChild(el("code", "", m[3]));
-    else node.appendChild(el("em", "", m[4]));
+    if (m[1] != null) node.appendChild(el("code", "", m[1]));
+    else if (m[2] != null || m[3] != null) { const b = el("strong"); inline(b, m[2] != null ? m[2] : m[3]); node.appendChild(b); }
+    else if (m[4] != null) { const b = el("del"); inline(b, m[4]); node.appendChild(b); }
+    else if (m[5] != null) node.appendChild(link(m[6], m[5]));
+    else if (m[7] != null) node.appendChild(link(m[7], m[7]));
+    else { const b = el("em"); inline(b, m[8]); node.appendChild(b); }
     last = re.lastIndex;
   }
   if (last < s.length) node.appendChild(document.createTextNode(s.slice(last)));
 }
-
-// ---- קבצים מצורפים (קובצי טקסט: התוכן נשלח יחד עם ההודעה)
-const ATT_RE = /\n*\[קובץ מצורף: ([^\]\n]+)\]\n```\n[\s\S]*?(\n```|$)/g;
-function splitAtt(t) {
-  const files = [];
-  const text = String(t).replace(ATT_RE, (_, n) => { files.push(n); return ""; }).trim();
-  return { text, files };
+function link(href, text) {
+  const a = el("a", "", text);
+  try { const u = new URL(href); if (u.protocol === "https:" || u.protocol === "http:") { a.href = u.href; a.target = "_blank"; a.rel = "noopener noreferrer"; } } catch (e) {}
+  return a;
 }
+
+// ---- קבצים מצורפים (קובצי טקסט בלבד: התוכן נשלח בתוך ההודעה)
 function fileChip(name, onRemove) {
   const c = el("span", "chip"); c.appendChild(icon(IC.file)); c.appendChild(el("span", "", name));
   if (onRemove) { const x = el("button"); x.type = "button"; x.setAttribute("aria-label", "הסרת " + name); x.appendChild(icon(IC.x)); x.onclick = onRemove; c.appendChild(x); }
@@ -529,6 +963,7 @@ function renderAtts() {
 }
 async function addFiles(list) {
   for (const f of list) {
+    if (/^(image|video|audio)\//.test(f.type)) { toast("אפשר לצרף רק קובצי טקסט – תמונות לא נתמכות כאן"); continue; }
     if (f.size > 400000) { toast("הקובץ " + f.name + " גדול מדי"); continue; }
     let text = "";
     try { text = await f.text(); } catch (e) { toast("לא הצלחתי לקרוא את " + f.name); continue; }
@@ -549,32 +984,66 @@ const cmp = $("compose");
 cmp.addEventListener("dragover", (e) => { e.preventDefault(); cmp.classList.add("drag"); });
 cmp.addEventListener("dragleave", () => cmp.classList.remove("drag"));
 cmp.addEventListener("drop", (e) => { e.preventDefault(); cmp.classList.remove("drag"); addFiles([...e.dataTransfer.files]); });
-$("text").addEventListener("paste", (e) => { const f = [...(e.clipboardData?.files || [])]; if (f.length) { e.preventDefault(); addFiles(f); } });
+$("text").addEventListener("paste", (e) => { const f = [...((e.clipboardData && e.clipboardData.files) || [])]; if (f.length) { e.preventDefault(); addFiles(f); } });
 
 // ---- שליחה
-function grow() { const t = $("text"); t.style.height = "auto"; t.style.height = Math.min(240, t.scrollHeight) + "px"; }
+function grow() { const t = $("text"); t.style.height = "auto"; t.style.height = Math.min(260, t.scrollHeight) + "px"; }
 function updSend() { $("sendbtn").disabled = sending || (!$("text").value.trim() && !atts.length); }
 $("text").addEventListener("input", () => { grow(); updSend(); store.set("claude_draft_" + cur, $("text").value); });
-$("text").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing && innerWidth > 820) { e.preventDefault(); cmp.requestSubmit(); } });
-cmp.onsubmit = (e) => { e.preventDefault(); send(); };
-async function send(fixed) {
-  const t = $("text");
-  let text = fixed || t.value.trim();
-  if (!fixed && atts.length) text = (text || "מצורף קובץ") + atts.map((a) => "\n\n[קובץ מצורף: " + a.name + "]\n```\n" + a.text + "\n```").join("");
-  if (!text || sending) return;
+$("text").addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" || e.shiftKey || e.isComposing) return;
+  if (e.ctrlKey || e.metaKey || (prefs.enter && !coarse)) { e.preventDefault(); cmp.requestSubmit(); }
+});
+cmp.onsubmit = (e) => {
+  e.preventDefault();
+  if (sending) return;
+  const t = $("text"); let body = t.value.trim();
+  if (atts.length) body = (body || "מצורף קובץ") + atts.map((a) => "\n\n[קובץ מצורף: " + a.name + "]\n```\n" + a.text + "\n```").join("");
+  if (!body) return;
+  t.value = ""; atts = []; renderAtts(); grow(); store.set("claude_draft_" + cur, "");
+  send(body);
+};
+// ההנחיות של הפרויקט נשלחות פעם אחת בכל שיחה (ושוב אם השתנו), בתוך סימון ברור
+function instrFor(id) {
+  const p = projOf(id); if (!p || !String(p.instr || "").trim()) return null;
+  const key = p.id + ":" + hash(p.instr);
+  return (meta[id] || {}).isent === key ? null : { p, key };
+}
+function outgoing(id, body) {
+  let t = body, key = "";
+  const ins = instrFor(id);
+  if (ins) { t = "[הנחיות הפרויקט: " + clean(ins.p.name) + "]\n" + ins.p.instr.trim() + "\n[סוף ההנחיות]\n\n" + t; key = ins.key; }
+  if (convMode(id) === "code") {
+    const r = getRepo(id);
+    t = "[קלוד קוד" + (r.repo ? " · מאגר: " + r.repo : "") + (r.branch ? " · ענף: " + r.branch : "") + "]\n" + t;
+  }
+  return { text: t, key };
+}
+async function send(body, o) {
+  o = o || {};
+  if (sending) { toast("רגע, הודעה קודמת עדיין נשלחת"); return; }
+  const cid = cur, conv = cid === OLD ? "" : cid;
+  let text = body, key = o.key || "";
+  if (!o.plain) ({ text, key } = outgoing(cid, body));
+  if (!String(text).trim()) return;
   sending = true; updSend();
-  const conv = cur === OLD ? "" : cur;
   const tmp = { id: "tmp" + Date.now(), from: "me", conv, text, at: Date.now(), status: "new" };
-  items.push(tmp); render();
+  items.push(tmp); sig = ""; render();
+  const sc = $("scroll"); sc.scrollTop = sc.scrollHeight;
   try {
     await api("claude_send", { text, conv });
-    if (!fixed) { t.value = ""; atts = []; renderAtts(); grow(); store.set("claude_draft_" + cur, ""); }
-    if (meta[cur]?.made) { delete meta[cur].made; saveMeta(); }
+    const x = (meta[cid] = meta[cid] || {});
+    if (key) x.isent = key;
+    if (!x.mode) x.mode = convMode(cid);
+    delete x.made; saveMeta();
+    sending = false;
     await load();
     // שרת ישן בלי שיחות נפרדות: כל ההודעות בשיחה אחת
-    if (items.length && !items.some((m) => "conv" in m) && cur !== OLD) open(OLD);
+    if (items.length && !items.some((m) => "conv" in m) && cur !== OLD) openConv(OLD);
   } catch (err) {
-    items = items.filter((m) => m !== tmp); render(); toast(err.message);
+    items = items.filter((m) => m !== tmp);
+    failed.push({ id: "f" + Date.now(), conv: cid, text, key, at: tmp.at, err: err.message });
+    sig = ""; render(); toast(err.message);
   } finally { sending = false; updSend(); }
 }
 
@@ -582,30 +1051,40 @@ async function send(fixed) {
 async function load() {
   let j;
   try { j = await api("claude_history"); } catch (e) { $("status").textContent = e.message; return; }
-  items = (j.items || []).map((m) => ({ ...m, at: typeof m.at === "number" ? m.at : new Date(m.at).getTime() }));
+  items = (j.items || []).map((m) => ({ ...m, text: String(m.text == null ? "" : m.text), at: typeof m.at === "number" ? m.at : new Date(m.at).getTime() }));
   live = !!j.live;
   if (!loaded) {
-    // בפעם הראשונה: חוזרים לשיחה האחרונה אם קיימת, אחרת שיחה חדשה
     const list = convList();
-    if (!cur || (!list.some((c) => c.id === cur) && !meta[cur]?.made)) {
-      if (list.length && Date.now() - list[0].last < 6 * 3600e3) cur = list[0].id; else { cur = newId(); meta[cur] = { made: Date.now() }; saveMeta(); }
+    if (!cur || (!list.some((c) => c.id === cur) && !(meta[cur] && meta[cur].made))) {
+      if (list.length && Date.now() - list[0].last < 6 * 3600e3) cur = list[0].id;
+      else { cur = newId(); meta[cur] = { made: Date.now(), mode }; if (mode === "code") Object.assign(meta[cur], lastRepo()); saveMeta(); }
       store.set("claude_cur", cur);
     }
+    mode = convMode(cur);
     loadDraft();
   }
   render();
   loaded = true;
 }
-$("newbtn").onclick = () => { startNew(); if (innerWidth <= 820) document.body.classList.add("closed"); };
-$("newTop").onclick = startNew;
-$("openSide").onclick = () => { document.body.classList.toggle("closed"); store.set("claude_side", !document.body.classList.contains("closed")); };
-$("closeSide").onclick = () => { document.body.classList.add("closed"); store.set("claude_side", false); };
-$("scrim").onclick = () => document.body.classList.add("closed");
+function closeSide() { document.body.classList.add("closed"); if (innerWidth > 820) store.set("claude_side", false); }
+function toggleSide() { document.body.classList.toggle("closed"); if (innerWidth > 820) store.set("claude_side", !document.body.classList.contains("closed")); }
+for (const b of $("modes").children) b.onclick = () => { setMode(b.dataset.mode); if (innerWidth <= 820) closeSide(); };
+$("newbtn").onclick = () => { startNew(); if (innerWidth <= 820) closeSide(); };
+$("newTop").onclick = () => startNew();
+$("projNav").onclick = () => { view = "projects"; render(); if (innerWidth <= 820) closeSide(); };
+$("setBtn").onclick = () => { if (innerWidth <= 820) closeSide(); openSettings(); };
+$("openSide").onclick = toggleSide;
+$("closeSide").onclick = closeSide;
+$("scrim").onclick = closeSide;
 $("q").addEventListener("input", renderSide);
 document.addEventListener("keydown", (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "o" || e.key === "O")) { e.preventDefault(); startNew(); }
-  if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) { e.preventDefault(); document.body.classList.remove("closed"); $("q").focus(); }
+  if (e.key === "Escape") hideMenu();
+  if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
+  if (e.shiftKey && e.code === "KeyO") { e.preventDefault(); startNew(); }
+  else if (!e.shiftKey && e.code === "KeyK") { e.preventDefault(); document.body.classList.remove("closed"); $("q").focus(); $("q").select(); }
+  else if (!e.shiftKey && e.code === "Period") { e.preventDefault(); toggleSide(); }
 });
+applyPrefs();
 if (innerWidth > 820 && store.get("claude_side", true)) document.body.classList.remove("closed");
 renderHello();
 if (token) { load(); setInterval(() => { if (!document.hidden && !sending) load(); }, 6000); }
