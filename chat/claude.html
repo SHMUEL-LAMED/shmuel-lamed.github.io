@@ -6,91 +6,89 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://ydcfafijktzasrkkxyux.supabase.co; img-src data:; base-uri 'none'; form-action 'none'">
-<meta name="theme-color" id="tc" content="#faf9f5">
+<meta name="theme-color" id="tc" content="#ffffff">
 <title>Claude</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23d97757' d='M11.50 11.80 L10.75 2.28 Q10.75 1.15 12.00 1.09 Q13.25 1.15 13.25 2.28 L12.50 11.80 ZM11.67 11.57 L15.40 4.21 Q15.91 3.36 16.88 3.88 Q17.79 4.49 17.28 5.34 L12.53 12.09 ZM11.90 11.47 L19.78 5.60 Q20.78 4.98 21.52 6.05 Q22.15 7.19 21.16 7.81 L12.43 12.32 ZM12.20 11.50 L20.80 10.85 Q21.83 10.85 21.89 12.00 Q21.83 13.15 20.80 13.15 L12.20 12.50 ZM12.43 11.67 L21.15 16.04 Q22.12 16.62 21.53 17.72 Q20.83 18.76 19.86 18.18 L11.91 12.53 ZM12.53 11.91 L17.18 18.49 Q17.69 19.34 16.78 19.95 Q15.81 20.47 15.30 19.62 L11.67 12.43 ZM12.50 12.20 L13.30 21.79 Q13.30 22.96 12.00 23.02 Q10.70 22.96 10.70 21.79 L11.50 12.20 ZM12.33 12.43 L8.50 19.96 Q7.99 20.81 7.02 20.29 Q6.10 19.68 6.61 18.83 L11.47 11.91 ZM12.09 12.53 L4.05 18.23 Q3.09 18.81 2.39 17.77 Q1.80 16.67 2.76 16.09 L11.57 11.67 ZM11.80 12.50 L3.14 13.20 Q2.06 13.20 2.00 12.00 Q2.06 10.80 3.14 10.80 L11.80 11.50 ZM11.57 12.33 L3.02 8.06 Q2.06 7.48 2.65 6.38 Q3.34 5.34 4.31 5.92 L12.09 11.47 ZM11.47 12.09 L6.77 5.43 Q6.26 4.58 7.17 3.96 Q8.14 3.44 8.65 4.29 L12.33 11.57 ZM12 12m-1.9 0a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0Z'/%3E%3C/svg%3E">
 <script>try{var p=JSON.parse(localStorage.getItem("claude_prefs")||"null")||JSON.parse(localStorage.getItem("chat_prefs")||"{}")||{},t=p.theme;document.documentElement.dataset.theme=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches)?"dark":"light"}catch(e){}</script>
 <style>
 :root{
-  --bg:#faf9f5;--side:#f5f4ed;--panel:#fff;--ink:#141413;--ink2:#3d3d3a;--mute:#73726c;--line:#e6e3d8;--line2:#d9d6ca;
-  --hover:rgba(20,20,19,.05);--sel:rgba(20,20,19,.08);--acc:#c96442;--acc2:#b0532f;--accink:#fff;--soft:#f5e9e2;
-  --user:#f0eee6;--code:#f5f3ec;--bad:#b3261e;--ok:#2e7d4f;--fs:16px;
-  --shadow:0 1px 2px rgba(20,20,19,.04),0 4px 18px rgba(20,20,19,.06);--pop:0 10px 34px rgba(20,20,19,.16);
+  --bg:#fff;--side:#fafafa;--panel:#fff;--ink:rgba(0,0,0,.9);--ink2:#383838;--mute:#797979;--line:rgba(0,0,0,.1);--line2:rgba(0,0,0,.12);
+  --hover:rgba(0,0,0,.075);--sel:rgba(0,0,0,.1);--acc:#c6613f;--acc2:#b05535;--accink:#fff;--soft:#f8ece7;--clay:#d97757;
+  --user:#efefef;--code:#f9f9f9;--bad:#d7353b;--ok:#10a122;--link:#1757ac;--pri:#191919;--priink:#fff;--solid:#191919;--fs:15px;
+  --shadow:0 4px 20px rgba(0,0,0,.075),0 0 0 1px rgba(0,0,0,.12);
+  --pop:0 0 0 1px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.08);
+  --ez:cubic-bezier(.4,0,.2,1);--ez2:cubic-bezier(.165,.84,.44,1);
   --serif:ui-serif,Georgia,"Frank Ruehl CLM","Noto Serif Hebrew","David","Times New Roman",serif;
   --sans:system-ui,-apple-system,"Segoe UI","Noto Sans Hebrew",Arial,sans-serif;
   --mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;color-scheme:light;
 }
 :root[data-theme=dark]{
-  --bg:#262624;--side:#1f1e1d;--panel:#30302e;--ink:#faf9f5;--ink2:#e2e0d7;--mute:#a6a39a;--line:#3b3a37;--line2:#4a4945;
-  --hover:rgba(255,255,255,.05);--sel:rgba(255,255,255,.09);--acc:#d97757;--acc2:#e58c6c;--accink:#fff;--soft:#3a2d27;
-  --user:#141413;--code:#1c1c1a;--bad:#f2b8b5;--ok:#7fd4a0;
-  --shadow:0 1px 3px rgba(0,0,0,.3);--pop:0 10px 34px rgba(0,0,0,.55);color-scheme:dark;
+  --bg:#191919;--side:#1f1f1f;--panel:#303030;--ink:rgba(255,255,255,.93);--ink2:#c2c2c2;--mute:#959595;--line:rgba(255,255,255,.1);--line2:rgba(255,255,255,.08);
+  --hover:rgba(255,255,255,.075);--sel:rgba(255,255,255,.15);--soft:#3a2a23;
+  --user:rgba(255,255,255,.075);--code:#1f1f1f;--bad:#ef4347;--ok:#0aac1f;--link:#6aabf1;--pri:#ededed;--priink:#191919;--solid:#ededed;
+  --shadow:0 4px 20px rgba(0,0,0,.035),inset 0 0 0 1px rgba(255,255,255,.08);
+  --pop:inset 0 0 0 1px rgba(255,255,255,.04),0 8px 24px rgba(0,0,0,.32),0 2px 6px rgba(0,0,0,.2);color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:var(--fs);line-height:1.6;display:flex;overflow:hidden;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:var(--fs);line-height:1.4;display:flex;overflow:hidden;-webkit-tap-highlight-color:transparent}
 button,textarea,input,select{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none;padding:0}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .hide{display:none!important}
-svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 svg.fill{fill:currentColor}
-.ib{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;flex:none;color:var(--mute);text-decoration:none;transition:background .15s,color .15s}
+.ib{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;flex:none;color:var(--mute);text-decoration:none;transition:background .06s var(--ez),color .06s var(--ez)}
 .ib:hover{background:var(--hover);color:var(--ink)}
-.spark{color:var(--acc);display:inline-grid;flex:none}
+.spark{color:var(--clay);display:inline-grid;flex:none}
 .spark svg{fill:currentColor;stroke:none;width:100%;height:100%}
 
-/* סרגל צד: פתוח – רשימה מלאה. סגור (במחשב) – פס סמלים צר */
-#side{width:288px;flex:none;background:var(--side);border-inline-end:1px solid var(--line);display:flex;flex-direction:column;height:100%;transition:width .2s,transform .2s;overflow:hidden}
-#sidetop{display:flex;align-items:center;gap:8px;padding:10px 8px 6px 8px;min-height:52px}
-#sidetop .name{flex:1;font-family:var(--serif);font-size:22px;letter-spacing:.1px;padding-inline-start:8px;white-space:nowrap}
-.nav{display:flex;align-items:center;gap:12px;margin:1px 8px;padding:6px 8px;min-height:34px;border-radius:8px;font-size:14.5px;color:var(--ink);text-align:start;width:calc(100% - 16px);white-space:nowrap;text-decoration:none}
+/* סרגל צד לפי המדידה: 288 פיקסלים, שורות של 32, כותרות קבוצה של 12. כשהוא סגור – נעלם, ונשאר רק כפתור הפתיחה */
+#side{width:288px;flex:none;background:var(--side);border-inline-end:.8px solid var(--line);display:flex;flex-direction:column;height:100%;font-size:14px;overflow:hidden}
+#sidetop{display:flex;align-items:center;gap:6px;padding:6px 10px;min-height:44px}
+#sidetop .ib{width:32px;height:32px}
+#sidetop .name{flex:1;font-family:var(--serif);font-size:20px;white-space:nowrap}
+#modes{display:flex;gap:2px;margin:0 8px 6px;padding:2px;background:var(--hover);border-radius:9px}
+#modes button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:28px;border-radius:7px;font-size:14px;color:var(--mute);white-space:nowrap}
+#modes button svg{width:16px;height:16px}
+#modes button[aria-selected=true]{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line),0 1px 2px rgba(0,0,0,.06)}
+.nav{display:flex;align-items:center;gap:4px;margin:0 8px;padding:0 2px;height:32px;border-radius:8px;font-size:14px;color:var(--ink);text-align:start;width:calc(100% - 16px);white-space:nowrap;text-decoration:none;flex:none}
 .nav:hover{background:var(--hover)}
 .nav.on{background:var(--sel)}
-.nav svg{width:18px;height:18px;color:var(--ink2)}
-.nav>.ic{width:24px;height:24px;display:grid;place-items:center;flex:none}
-#newbtn{color:var(--acc2);font-weight:500}
-#newbtn .ic{border-radius:50%;background:var(--acc);color:#fff;transition:transform .15s}
-#newbtn:hover .ic{transform:scale(1.06) rotate(-3deg)}
-#newbtn .ic svg{width:14px;height:14px;stroke-width:2.6;color:#fff}
-#convs{flex:1;overflow-y:auto;padding:0 8px 10px;min-height:0}
-.grp{font-size:12px;color:var(--mute);padding:14px 8px 5px;position:sticky;top:0;background:linear-gradient(var(--side) 70%,transparent);z-index:1}
-.ci{display:flex;align-items:center;border-radius:8px}
+.nav svg{width:16px;height:16px}
+.nav>.ic{width:28px;height:28px;display:grid;place-items:center;flex:none}
+#convs{flex:1;overflow-y:auto;padding:4px 8px 6px;min-height:0}
+.grp{font-size:12px;font-weight:500;line-height:20px;color:var(--mute);padding:8px 6px 2px}
+.ci{display:flex;align-items:center;border-radius:8px;height:32px}
 .ci:hover{background:var(--hover)}
 .ci.on{background:var(--sel)}
-.ci>.t{flex:1;min-width:0;display:flex;align-items:center;gap:6px;text-align:start;padding:6px 8px;font-size:14px;min-height:32px}
+.ci>.t{flex:1;min-width:0;display:flex;align-items:center;gap:6px;text-align:start;padding:0 6px;font-size:14px;height:32px}
 .ci .tt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ci .sub{flex:none;max-width:40%;font-size:11.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr}
 .ci .more{opacity:0;width:28px;height:28px;margin-inline-end:2px}
 .ci:hover .more,.ci.on .more,.ci .more:focus-visible{opacity:1}
 .ci .dot{width:7px;height:7px;border-radius:50%;background:var(--acc);margin-inline-end:6px;flex:none}
-#sidefoot{border-top:1px solid var(--line);padding:8px}
-#me{display:flex;align-items:center;gap:10px;width:100%;padding:6px;border-radius:9px;text-align:start}
+#viewAll{display:block;width:100%;text-align:start;height:32px;padding:0 6px;border-radius:8px;font-size:14px;color:var(--mute)}
+#viewAll:hover{background:var(--hover);color:var(--ink)}
+#sidefoot{padding:6px 8px 8px;display:flex}
+#me{display:inline-flex;align-items:center;gap:6px;height:28px;max-width:100%;padding:0 12px 0 2px;border-radius:8px;font-size:14px}
 #me:hover{background:var(--hover)}
-.av{width:32px;height:32px;border-radius:50%;background:var(--ink2);color:var(--bg);display:grid;place-items:center;font-size:14px;font-weight:600;flex:none}
-#me .who{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
-#me .who b{font-weight:500;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#me .who small{font-size:12px;color:var(--mute);white-space:nowrap}
-#me>svg{width:16px;height:16px;color:var(--mute)}
+.av{width:22px;height:22px;border-radius:50%;background:var(--solid);color:var(--bg);display:grid;place-items:center;font-size:12px;font-weight:600;flex:none}
+#me b{font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#meSub{width:7px;height:7px;border-radius:50%;background:var(--mute);flex:none;font-size:0}
+#meSub.on{background:var(--ok)}
 #scrim{display:none}
-@media (min-width:821px){
-  body.closed #side{width:52px}
-  body.closed #side .lb,body.closed #sidetop .name,body.closed #me .who,body.closed #me>svg{display:none}
-  body.closed #convs{visibility:hidden}
-  body.closed #sidetop{justify-content:center;padding-inline:0}
-  body.closed .nav{width:36px;margin:2px auto;padding:6px;justify-content:center;gap:0}
-  body.closed #sidefoot{padding:8px 0;border-top:0}
-  body.closed #me{width:auto;margin:0 auto;padding:4px}
-}
+@media (min-width:821px){body.closed #side{display:none}}
 
 /* ראשי */
 #main{flex:1;min-width:0;display:flex;flex-direction:column;height:100%}
-#head{display:flex;align-items:center;gap:6px;padding:8px 12px;min-height:52px}
+#head{display:flex;align-items:center;gap:4px;padding:6px 10px;min-height:45px;font-size:14px}
+#head>.ib{width:32px;height:32px}
+body.closed #openSide{display:grid}
 #openSide,#newTop{display:none}
-#htitle{min-width:0;max-width:60%;display:flex;align-items:center;gap:4px;font-size:15px;padding:5px 10px;border-radius:8px;color:var(--ink)}
-#htitle span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#htitle svg{width:14px;height:14px;color:var(--mute)}
+#htitle{min-width:0;max-width:55%;height:28px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #htitle:hover{background:var(--hover)}
+#hname{min-width:120px;width:min(360px,55%);height:28px;padding:0 8px;border-radius:8px;border:0;outline:0;background:var(--bg);box-shadow:0 0 0 1px var(--line2),0 0 0 3px var(--hover);font-size:14px}
 #badges{display:flex;gap:6px;flex:1;min-width:0;overflow:hidden}
 .tag{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;background:var(--panel)}
 button.tag:hover{color:var(--ink);background:var(--hover)}
@@ -102,10 +100,10 @@ button.tag:hover{color:var(--ink);background:var(--hover)}
 #status.on{color:var(--ok)}
 #status.on::before{background:var(--ok)}
 #scroll{flex:1;overflow-y:auto}
-#msgs{max-width:768px;margin:0 auto;padding:12px 20px 36px;display:flex;flex-direction:column;gap:14px}
+#msgs{max-width:768px;margin:0 auto;padding:4px 16px 28px;display:flex;flex-direction:column;gap:16px}
 .um{align-self:flex-end;max-width:85%;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 .um .tags{display:flex;gap:6px;flex-wrap:wrap}
-.u{background:var(--user);padding:10px 16px;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;unicode-bidi:plaintext;text-align:start}
+.u{background:var(--user);padding:8px 14px;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;unicode-bidi:plaintext;text-align:start}
 .u.pend{opacity:.7}
 .u.fail{border:1px solid var(--bad)}
 .u .att{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
@@ -118,35 +116,35 @@ button.tag:hover{color:var(--ink);background:var(--hover)}
 .chip svg{width:15px;height:15px;color:var(--acc)}
 .chip button{color:var(--mute);display:grid}
 .meta{font-size:12px;color:var(--mute);margin:0 6px}
-.acts{display:flex;gap:2px;margin-top:4px;align-items:center}
-.acts .ib,.uacts .ib{width:30px;height:30px;border-radius:8px}
+.acts{display:flex;gap:2px;margin-top:6px;align-items:center;height:24px}
+.acts .ib,.uacts .ib{width:24px;height:24px;border-radius:6px}
 .acts .ib svg,.uacts .ib svg{width:16px;height:16px}
-.a{padding:0 4px}
+.a{padding:0}
 .a .col{min-width:0}
 .a:not(.last) .acts{opacity:0;transition:opacity .15s}
 .a:hover .acts,.a:focus-within .acts{opacity:1}
 .mark{display:flex;align-items:center;gap:12px;padding:6px 4px 0;color:var(--mute);font-size:14.5px}
-.mark .spark{width:30px;height:30px}
+.mark .spark{width:26px;height:26px}
 .mark.wait .spark{animation:sp 2.4s infinite ease-in-out}
-.a .body{overflow-wrap:anywhere;font-family:var(--serif);font-size:1.03em;line-height:1.7;color:var(--ink)}
-body.sans .a .body{font-family:var(--sans);font-size:1em}
+.a .body{overflow-wrap:anywhere;line-height:1.4;color:var(--ink)}
+body:not(.sans) .a .body{font-family:var(--serif);font-size:1.06em;line-height:1.6}
 .body>:first-child{margin-top:0}
 .body>:last-child{margin-bottom:0}
-.body p{margin:0 0 .75em;unicode-bidi:plaintext}
+.body p{margin:0 0 .75em;padding-inline:4px;unicode-bidi:plaintext}
 .body h1,.body h2,.body h3,.body h4{font-weight:600;line-height:1.35;margin:1.1em 0 .45em;unicode-bidi:plaintext}
 .body h1{font-size:1.35em}.body h2{font-size:1.2em}.body h3{font-size:1.08em}.body h4{font-size:1em}
-.body ul,.body ol{margin:.3em 0 .85em;padding-inline-start:1.6em}
-.body li{margin:.25em 0}
+.body ul,.body ol{margin:.75em 0;padding-inline-start:30px}
+.body li{margin:.2em 0;padding-inline-start:4px}
 .body li>ul,.body li>ol{margin:.2em 0}
-.body a{color:var(--acc2);text-decoration:underline;text-underline-offset:2px}
-.body code{background:var(--code);border:1px solid var(--line);border-radius:5px;padding:0 4px;font-family:var(--mono);font-size:.86em;direction:ltr;unicode-bidi:isolate}
+.body a{color:var(--link);text-decoration:underline;text-underline-offset:2px;border-radius:2px;transition:color .06s var(--ez2)}
+.body code{background:var(--hover);border-radius:4px;padding:1px 4px;font-family:var(--mono);font-size:.9em;direction:ltr;unicode-bidi:isolate}
 .cb{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:.7em 0;background:var(--code);direction:ltr;text-align:left}
 .cbh{display:flex;align-items:center;justify-content:space-between;padding:3px 6px 3px 14px;font:12px var(--sans);color:var(--mute);border-bottom:1px solid var(--line)}
 .cbh button{display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:7px;font-size:12px}
 .cbh button:hover{background:var(--hover);color:var(--ink)}
 .cbh svg{width:14px;height:14px}
-.cb pre{margin:0;padding:12px 14px;overflow-x:auto;font-size:.88em;line-height:1.55}
-.cb pre code{border:0;padding:0;background:none;font-size:1em}
+.cb pre{margin:0;padding:14px;overflow-x:auto;font-size:14px;line-height:22.75px}
+.cb pre code{padding:0;background:none;font-size:1em}
 .body hr{border:0;border-top:1px solid var(--line);margin:1.2em 0}
 .body blockquote{margin:.5em 0 .8em;padding-inline-start:14px;border-inline-start:3px solid var(--line2);color:var(--ink2)}
 .tw{overflow-x:auto;margin:.6em 0 .9em}
@@ -156,10 +154,10 @@ body.sans .a .body{font-family:var(--sans);font-size:1em}
 .cf{margin-top:10px;padding:10px 14px;border-radius:12px;border:1px solid var(--acc);background:var(--soft);font-family:var(--sans)}
 .cf b{display:block;margin-bottom:6px}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.btn{padding:7px 14px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.btn{height:28px;padding:0 10px;border-radius:8px;border:0;box-shadow:0 0 0 1px var(--line2);background:var(--panel);font-size:14px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:box-shadow .06s var(--ez)}
 .btn:hover{background:var(--hover)}
-.btn.pri{background:var(--acc);border-color:var(--acc);color:var(--accink)}
-.btn.pri:hover{background:var(--acc2)}
+.btn.pri{background:var(--pri);box-shadow:none;color:var(--priink)}
+.btn.pri:hover{opacity:.88;background:var(--pri)}
 .btn.bad{color:var(--bad)}
 .btn svg{width:16px;height:16px}
 .edit{width:100%;max-width:600px;background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:10px}
@@ -169,89 +167,87 @@ body.sans .a .body{font-family:var(--sans);font-size:1em}
 
 /* פתיחה */
 #hello{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px 40px;text-align:center;overflow-y:auto}
-#hello h1{font-family:var(--serif);font-weight:400;font-size:clamp(28px,5vw,40px);color:var(--ink2);margin:6px 0 4px;display:flex;align-items:center;gap:12px;line-height:1.25}
-#hello h1 .spark{width:34px;height:34px}
+#hello h1{font-family:var(--serif);font-weight:400;font-size:32px;color:var(--ink);margin:6px 0 4px;display:flex;align-items:center;gap:12px;line-height:38.4px}
+#hello h1 .spark{width:30px;height:30px}
 #sub{color:var(--mute);font-size:14px;margin:0 0 26px;min-height:1px}
-#composeSlot{width:100%;max-width:672px}
-#sugg{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:672px;margin-top:16px}
-#sugg button{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:5px 11px;font-size:14px;color:var(--ink2);display:flex;align-items:center;gap:8px}
+#composeSlot{width:100%;max-width:656px}
+#composeSlot #text{min-height:50px}
+#sugg{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:656px;margin-top:16px}
+#sugg button{box-shadow:0 0 0 1px var(--line);background:var(--bg);border-radius:8px;height:28px;padding:0 10px;font-size:14px;color:var(--ink2);display:flex;align-items:center;gap:8px}
 #sugg button:hover{background:var(--hover);color:var(--ink)}
 #sugg svg{width:16px;height:16px;color:var(--mute)}
 
 /* כתיבה */
 #composeWrap{padding:0 16px max(12px,env(safe-area-inset-bottom))}
 #composeSlot #composeWrap{padding:0}
-#qa{max-width:768px;margin:0 auto 8px;display:flex;gap:8px;flex-wrap:wrap}
-#qa .btn{border-radius:999px;padding:5px 12px;font-size:13.5px}
-#compose{max-width:768px;margin:0 auto;background:var(--panel);border:1px solid var(--line2);border-radius:20px;box-shadow:var(--shadow);padding:12px 12px 8px;transition:border-color .15s;text-align:start}
-#compose:focus-within{border-color:color-mix(in srgb,var(--acc) 45%,var(--line2))}
-#compose.drag{border-color:var(--acc);border-style:dashed}
+#qa{max-width:736px;margin:0 auto 8px;display:flex;gap:8px;flex-wrap:wrap}
+#qa .btn{border-radius:8px}
+#compose{max-width:736px;margin:0 auto;background:var(--panel);border-radius:14px;box-shadow:var(--shadow);padding:8px;text-align:start;transition:background-color .2s var(--ez),box-shadow .2s var(--ez),opacity .2s var(--ez)}
+#compose.drag{box-shadow:0 0 0 2px var(--acc)}
 #atts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
 #atts:empty{display:none}
-#text{width:100%;resize:none;border:0;outline:0;background:none;max-height:260px;min-height:28px;padding:2px 6px;line-height:1.5;unicode-bidi:plaintext}
+#text{display:block;width:100%;resize:none;border:0;outline:0;background:none;max-height:260px;min-height:21px;padding:3.5px 8px;font-size:15px;line-height:21px;unicode-bidi:plaintext}
 #text::placeholder{color:var(--mute)}
-#ctools{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
+#ctools{display:flex;align-items:center;gap:4px;margin-top:8px;flex-wrap:wrap;font-size:14px}
 #ctools .sp{flex:1}
-#attbtn{width:32px;height:32px;border:1px solid var(--line2);border-radius:8px}
+#attbtn{width:28px;height:28px;border-radius:8px}
 #hint{font-size:12px;color:var(--mute)}
-#toolsBtn{width:32px;height:32px;border-radius:8px}
-#modeBtn{display:flex;align-items:center;gap:4px;padding:5px 8px;border-radius:8px;font-size:14px;color:var(--ink2);white-space:nowrap}
-#modeBtn:hover{background:var(--hover)}
-#modeBtn svg{width:14px;height:14px;color:var(--mute)}
-#repoBtn.need{border-color:var(--acc);color:var(--acc2)}
-#sendbtn{width:32px;height:32px;border-radius:8px;background:var(--acc);color:#fff;display:grid;place-items:center}
+#ctools .tag{height:28px;padding:0 10px;border:0;border-radius:8px;background:none;font-size:14px;color:var(--ink2);max-width:200px}
+#ctools .tag:hover{background:var(--hover);color:var(--ink)}
+#ctools .tag svg{width:15px;height:15px}
+#ctools #repoBtn.need{color:var(--acc)}
+#sendbtn{width:28px;height:28px;border-radius:8px;background:var(--acc);color:#fff;display:grid;place-items:center}
 #sendbtn:hover{background:var(--acc2)}
 #sendbtn:disabled{opacity:.4;cursor:default}
-#sendbtn svg{stroke-width:2.4}
-#foot{text-align:center;font-size:12px;color:var(--mute);margin-top:8px}
+#sendbtn svg{stroke-width:2.2;width:16px;height:16px}
 
 /* פרויקטים */
 #projView{flex:1;overflow-y:auto;padding:10px 20px 40px}
 .pw{max-width:820px;margin:0 auto}
-.pw h1{font-family:var(--serif);font-weight:400;font-size:30px;margin:8px 0 6px}
+.pw h1{font-family:var(--serif);font-weight:500;font-size:24px;line-height:32px;margin:8px 0 6px}
 .ptop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between}
 .note{color:var(--mute);font-size:14px;margin:4px 0 18px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
-.card{text-align:start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-height:118px}
-.card:hover{border-color:var(--line2);box-shadow:var(--shadow)}
+.card{text-align:start;background:var(--panel);border:0;box-shadow:0 0 0 1px var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-height:118px}
+.card:hover{box-shadow:var(--shadow)}
 .card b{font-weight:600}
 .card p{margin:0;color:var(--mute);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .card small{color:var(--mute);margin-top:auto}
 .instr{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;white-space:pre-wrap;font-size:14.5px;margin:6px 0 20px;overflow-wrap:anywhere}
 .back{color:var(--mute);font-size:14px;display:inline-flex;align-items:center;gap:4px}
 .back:hover{color:var(--ink)}
-.plist{display:flex;flex-direction:column;border-top:1px solid var(--line)}
-.plist button{display:flex;align-items:center;gap:10px;text-align:start;padding:12px 6px;border-bottom:1px solid var(--line)}
+.plist{display:flex;flex-direction:column;font-size:14px;line-height:20px}
+.plist button{display:flex;align-items:center;gap:10px;text-align:start;padding:8px 12px;min-height:52.8px;border-radius:8px}
 .plist button:hover{background:var(--hover)}
 .plist .tt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .plist .two{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .plist .two small{color:var(--mute);font-size:12.5px}
 .sbox{position:relative;margin:14px 0 6px}
-.sbox input{width:100%;padding:11px 42px 11px 14px;border:1px solid var(--line2);border-radius:12px;background:var(--panel);outline:0;font-size:15px}
-.sbox input:focus{border-color:var(--acc)}
+.sbox input{width:100%;padding:8px 40px 8px 12px;border:0;box-shadow:0 0 0 1px var(--line2);border-radius:10px;background:var(--panel);outline:0;font-size:15px}
+.sbox input:focus{box-shadow:0 0 0 1px var(--line2),0 0 0 3px var(--hover)}
 .sbox svg{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--mute)}
 
 /* תפריט ותיבות */
-#menu{position:fixed;z-index:30;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--pop);padding:5px;min-width:190px;max-height:70vh;overflow-y:auto}
-#menu button{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:8px 10px;border-radius:8px;font-size:14.5px}
+#menu{position:fixed;z-index:30;background:var(--panel);border-radius:14px;box-shadow:var(--pop);padding:6px;min-width:150px;max-height:70vh;overflow-y:auto}
+#menu button{display:flex;align-items:center;gap:8px;width:100%;text-align:start;height:28px;padding:4px 10px;border-radius:8px;font-size:14px;line-height:20px;white-space:nowrap}
 #menu button:hover{background:var(--hover)}
 #menu button.bad{color:var(--bad)}
 #menu button.cur{font-weight:600}
-#menu svg{width:17px;height:17px}
+#menu svg{width:16px;height:16px}
 #menu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
 #toast{position:fixed;top:62px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:10px;font-size:14px;z-index:40;box-shadow:var(--pop);display:flex;gap:14px;align-items:center;max-width:92vw}
 #toast button{color:var(--acc);font-weight:600;filter:brightness(1.25)}
-dialog{border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);padding:20px;width:min(460px,94vw);box-shadow:var(--pop);max-height:90vh}
+dialog{border:0;border-radius:14px;background:var(--panel);color:var(--ink);padding:20px;width:min(460px,94vw);box-shadow:var(--pop);max-height:90vh}
 dialog::backdrop{background:rgba(0,0,0,.4)}
 dialog h3{margin:0 0 6px;font-size:18px;font-weight:600}
 dialog .note{margin:0 0 12px}
 .fld{display:flex;flex-direction:column;gap:5px;margin:12px 0 0;font-size:14px;color:var(--ink2)}
 .fld input[type=text],.fld textarea,.fld select{width:100%;padding:9px 11px;border:1px solid var(--line2);border-radius:9px;background:var(--bg);outline:0;color:var(--ink)}
 .fld textarea{resize:vertical;min-height:120px;line-height:1.5}
-.fld input:focus,.fld textarea:focus,.fld select:focus{border-color:var(--acc)}
+.fld input:focus,.fld textarea:focus,.fld select:focus{border-color:var(--mute)}
 .fld small{color:var(--mute);font-size:12.5px}
 .fld.chk{flex-direction:row;align-items:center;gap:10px}
-.fld.chk input{width:18px;height:18px;accent-color:var(--acc)}
+.fld.chk input{width:18px;height:18px;accent-color:var(--solid)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chips button{font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;direction:ltr}
 .chips button:hover{background:var(--hover)}
@@ -267,13 +263,14 @@ body.lside #head,body.lside #ctools{flex-direction:row-reverse}
 body.lside .um{align-self:flex-start;align-items:flex-start}
 
 @media (max-width:820px){
-  #side{position:fixed;inset-block:0;inset-inline-start:0;z-index:20;box-shadow:var(--pop);width:min(300px,86vw)}
+  #side{position:fixed;inset-block:0;inset-inline-start:0;z-index:20;width:100%;border:0!important;transition:transform .3s var(--ez2),visibility .3s}
   body.closed #side{margin:0;transform:translateX(100%);visibility:hidden}
   body.lside #side{inset-inline-start:auto;inset-inline-end:0}
   body.lside.closed #side{transform:translateX(-100%)}
   body:not(.closed) #scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:15}
-  #head{padding:6px 8px;min-height:50px}
+  #head{padding:6px 8px}
   #openSide,#newTop{display:grid}
+  .nav,.ci,.ci>.t{height:36px}
   #newTop{order:9}
   #status{flex:1;justify-content:flex-end}
   body.lside #status{justify-content:flex-start}
@@ -295,25 +292,28 @@ body.lside .um{align-self:flex-start;align-items:flex-start}
 <aside id="side" aria-label="שיחות">
   <div id="sidetop">
     <span class="name">Claude</span>
-    <button class="ib" id="closeSide" title="פתיחה / סגירה של הסרגל (Ctrl+.)" aria-label="פתיחה או סגירה של הסרגל"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
+    <button class="ib" id="closeSide" title="הסתרת הסרגל (Ctrl+.)" aria-label="הסתרת הסרגל"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
   </div>
-  <button class="nav" id="newbtn" title="שיחה חדשה (Ctrl+Shift+O)"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="lb">שיחה חדשה</span></button>
+  <div id="modes" role="tablist" aria-label="מצב העבודה">
+    <button role="tab" data-mode="chat">Claude</button>
+    <button role="tab" data-mode="code"><svg viewBox="0 0 24 24"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>Code</button>
+  </div>
+  <button class="nav" id="newbtn" title="שיחה חדשה (Ctrl+Shift+O)"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="lb">חדש</span></button>
   <button class="nav" id="searchNav" title="חיפוש בשיחות (Ctrl+K)"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><span class="lb">חיפוש</span></button>
-  <button class="nav" id="chatsNav" title="שיחות"><span class="ic"><svg viewBox="0 0 24 24"><path d="M17 9V7a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v5a3 3 0 0 0 3 3v3l3.5-3"/><path d="M11 12a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-1v2.5L15.5 18H13a2 2 0 0 1-2-2z"/></svg></span><span class="lb">שיחות</span></button>
   <button class="nav" id="projNav" title="פרויקטים"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="lb">פרויקטים</span></button>
-  <button class="nav" id="codeNav" title="שיחת קלוד קוד חדשה"><span class="ic"><svg viewBox="0 0 24 24"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg></span><span class="lb">קוד</span></button>
   <a class="nav" href="gpt.html"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-8 8h7l-1-4"/></svg></span><span class="lb">העמוד של ChatGPT</span></a>
   <nav id="convs" aria-label="רשימת השיחות"></nav>
   <div id="sidefoot">
-    <button id="me" title="שמואל" aria-label="תפריט החשבון"><span class="av" aria-hidden="true">ש</span><span class="who"><b>שמואל</b><small id="meSub"></small></span><svg viewBox="0 0 24 24"><path d="m8 10 4-4 4 4M8 14l4 4 4-4"/></svg></button>
+    <button id="me" title="שמואל" aria-label="תפריט החשבון"><span class="av" aria-hidden="true">ש</span><b>שמואל</b><span id="meSub"></span></button>
   </div>
 </aside>
 <div id="scrim"></div>
 <main id="main">
   <header id="head">
-    <button class="ib" id="openSide" title="פתיחת הסרגל (Ctrl+.)" aria-label="פתיחת רשימת השיחות"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <button class="ib" id="openSide" title="הצגת הסרגל (Ctrl+.)" aria-label="הצגת הסרגל"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
     <button class="ib" id="newTop" title="שיחה חדשה (Ctrl+Shift+O)" aria-label="שיחה חדשה"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
-    <button id="htitle" class="hide" type="button" title="אפשרויות לשיחה"></button>
+    <button id="htitle" class="hide" type="button" title="שינוי שם לשיחה"></button>
+    <button class="ib hide" id="hmore" type="button" title="אפשרויות נוספות" aria-label="אפשרויות נוספות"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg></button>
     <div id="badges"></div>
     <div id="status" role="status"></div>
   </header>
@@ -329,20 +329,17 @@ body.lside .um{align-self:flex-start;align-items:flex-start}
     <div id="qa" class="hide"></div>
     <form id="compose">
       <div id="atts"></div>
-      <textarea id="text" rows="1" placeholder="במה אפשר לעזור היום?" aria-label="הודעה ל-Claude"></textarea>
+      <textarea id="text" rows="1" placeholder="במה אפשר לעזור היום?" aria-label="כתוב את ההודעה שלך ל-Claude"></textarea>
       <div id="ctools">
         <button type="button" class="ib" id="attbtn" title="צירוף קובצי טקסט (תמונות לא נתמכות)" aria-label="צירוף קובץ טקסט"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
         <input type="file" id="file" class="hide" multiple accept=".txt,.md,.csv,.tsv,.json,.js,.mjs,.ts,.jsx,.tsx,.html,.htm,.css,.py,.xml,.yml,.yaml,.ini,.log,.sql,.sh,.java,.c,.cpp,.h,.cs,.php,.rb,.go,.rs,.srt,text/*">
-        <button type="button" class="ib" id="toolsBtn" title="פרויקט ומאגר" aria-label="פרויקט ומאגר"><svg viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></button>
+        <span class="sp"></span>
         <button type="button" class="tag" id="projBtn"></button>
         <button type="button" class="tag ltr" id="repoBtn"></button>
-        <span class="sp"></span>
         <span id="hint"></span>
-        <button type="button" id="modeBtn" title="סוג השיחה"></button>
         <button type="submit" id="sendbtn" title="שליחה" aria-label="שליחה" disabled><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
       </div>
     </form>
-    <div id="foot">Claude עלול לטעות. כדאי לבדוק את התשובות.</div>
   </div>
 </main>
 <div id="menu" class="hide" role="menu"></div>
@@ -373,7 +370,7 @@ let mode = store.get("claude_mode", "chat") === "code" ? "code" : "chat";
 let view = "chat"; // chat | chats | projects | p:<id>
 let chatQ = "", chatsSig = "";
 let atts = [];
-const prefs = Object.assign({ side: "left", theme: (store.get("chat_prefs", {}) || {}).theme || "auto", fs: "m", enter: true, serif: true }, store.get("claude_prefs", {}) || {});
+const prefs = Object.assign({ side: "left", theme: (store.get("chat_prefs", {}) || {}).theme || "auto", fs: "m", enter: true, serif: false }, store.get("claude_prefs", {}) || {});
 const coarse = matchMedia("(pointer: coarse)").matches;
 
 function el(tag, cls, text) { const x = document.createElement(tag); if (cls) x.className = cls; if (text != null) x.textContent = text; return x; }
@@ -389,6 +386,7 @@ const IC = {
   out: '<path d="M9 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h3M15 8l-4 4 4 4M11 12h10"/>',
   dots: '<circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/>',
   edit: '<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  pin: '<path d="M9 4h6l-1 5 3 3v2H7v-2l3-3z"/><path d="M12 14v6"/>',
   star: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/>',
   trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
   file: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/>',
@@ -456,10 +454,10 @@ function applyPrefs() {
   let dark = prefs.theme === "dark";
   if (prefs.theme !== "dark" && prefs.theme !== "light") dark = matchMedia("(prefers-color-scheme: dark)").matches;
   document.documentElement.dataset.theme = dark ? "dark" : "light";
-  document.documentElement.style.setProperty("--fs", ({ s: 15, m: 16, l: 18, xl: 20 }[prefs.fs] || 16) + "px");
+  document.documentElement.style.setProperty("--fs", ({ s: 14, m: 15, l: 17, xl: 19 }[prefs.fs] || 15) + "px");
   document.body.classList.toggle("sans", !prefs.serif);
   document.body.classList.toggle("lside", prefs.side !== "right");
-  $("tc").content = dark ? "#262624" : "#faf9f5";
+  $("tc").content = dark ? "#191919" : "#ffffff";
 }
 try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyPrefs); } catch (e) {}
 function openSettings() {
@@ -474,7 +472,7 @@ function openSettings() {
       { k: "side", label: "מיקום הסרגל", type: "select", value: prefs.side, options: [["left", "משמאל (כמו באתר הרשמי)"], ["right", "מימין"]] },
       { k: "fs", label: "גודל הכתב", type: "select", value: prefs.fs, options: [["s", "קטן"], ["m", "רגיל"], ["l", "גדול"], ["xl", "גדול מאוד"]] },
       { k: "enter", label: "Enter שולח (Shift+Enter לשורה חדשה; בטלפון Enter תמיד שורה חדשה)", type: "check", value: prefs.enter },
-      { k: "serif", label: "גופן מעוצב (סריף) בתשובות של Claude", type: "check", value: prefs.serif },
+      { k: "serif", label: "גופן סריף בתשובות של Claude (ברירת המחדל: כמו הממשק)", type: "check", value: prefs.serif },
     ],
     extra: keys,
     onOk(v) { Object.assign(prefs, v); store.set("claude_prefs", prefs); applyPrefs(); sig = ""; render(); },
@@ -534,38 +532,42 @@ function convList() {
   }).sort((a, b) => (b.pinned - a.pinned) || (b.last - a.last));
 }
 function renderSide() {
+  for (const b of $("modes").children) b.setAttribute("aria-selected", String(b.dataset.mode === mode));
   $("projNav").classList.toggle("on", view === "projects" || view.startsWith("p:"));
-  $("chatsNav").classList.toggle("on", view === "chats");
-  $("meSub").textContent = live ? "Claude מחובר" : "Claude לא מחובר כרגע";
+  $("searchNav").classList.toggle("on", view === "chats");
+  $("newbtn").classList.toggle("on", view === "chat" && !convItems(cur).length);
+  const ms = $("meSub"); ms.className = live ? "on" : ""; ms.title = live ? "Claude מחובר" : "Claude לא מחובר כרגע"; $("me").title = "שמואל · " + ms.title;
   const box = $("convs");
   box.textContent = "";
-  const list = convList();
+  const list = convList().filter((c) => c.mode === mode && c.hay);
   if (!list.length) { box.appendChild(el("div", "grp", "אין עדיין שיחות")); return; }
   let g = "";
   for (const c of list) {
-    const ng = c.pinned ? "מסומנות בכוכב" : "אחרונות";
+    const ng = c.pinned ? "מוצמדות" : "אחרונות";
     if (ng !== g) { box.appendChild(el("div", "grp", ng)); g = ng; }
     const row = el("div", "ci" + (c.id === cur && view === "chat" ? " on" : ""));
     const t = el("button", "t"); t.title = c.title;
     t.appendChild(el("span", "tt", c.title));
-    if (c.mode === "code") t.appendChild(el("span", "sub", short(getRepo(c.id).repo) || "קוד"));
+    if (c.mode === "code") { const r = short(getRepo(c.id).repo); if (r) t.appendChild(el("span", "sub", r)); }
     t.onclick = () => { openConv(c.id); if (innerWidth <= 820) closeSide(); };
     row.append(t);
     if (c.waiting && c.id !== cur) { const d = el("span", "dot"); d.title = "ממתין לתשובה"; row.append(d); }
-    const more = ibtn(IC.dots, "אפשרויות לשיחה", (e) => { e.stopPropagation(); convMenu(c, more); });
+    const more = ibtn(IC.dots, "אפשרויות נוספות", (e) => { e.stopPropagation(); convMenu(c, more); });
     more.classList.add("more");
     row.append(more);
     box.appendChild(row);
   }
+  const va = el("button", "", "הצגת הכול"); va.id = "viewAll"; va.type = "button"; va.onclick = () => openChats(false);
+  box.appendChild(va);
 }
 // דף "שיחות": כל השיחות (בשני המצבים) עם חיפוש בכותרות ובתוכן
 function renderChats(focus) {
   const box = $("projView"); box.textContent = "";
   const w = el("div", "pw"); box.appendChild(w);
-  const top = el("div", "ptop"); top.appendChild(el("h1", "", "שיחות"));
+  const top = el("div", "ptop"); top.appendChild(el("h1", "", "אחרונות"));
   const nb = el("button", "btn pri"); nb.type = "button"; nb.append(icon(IC.plus), document.createTextNode("שיחה חדשה")); nb.onclick = () => startNew();
   top.appendChild(nb); w.appendChild(top);
-  const sb = el("div", "sbox"), inp = el("input"); inp.type = "search"; inp.id = "q"; inp.placeholder = "חיפוש בשיחות..."; inp.setAttribute("aria-label", "חיפוש בשיחות"); inp.value = chatQ;
+  const sb = el("div", "sbox"), inp = el("input"); inp.type = "search"; inp.id = "q"; inp.placeholder = "חיפוש בפעילות שלך"; inp.setAttribute("aria-label", "חיפוש בשיחות"); inp.value = chatQ;
   sb.append(icon(IC.search), inp); w.appendChild(sb);
   const count = el("p", "note"), pl = el("div", "plist"); w.append(count, pl);
   const fill = () => {
@@ -577,7 +579,7 @@ function renderChats(focus) {
     for (const c of list) {
       const b = el("button"); b.type = "button";
       const two = el("span", "two"); two.append(el("span", "tt", c.title), el("small", "", "ההודעה האחרונה " + ago(c.last) + (c.mode === "code" ? " · קלוד קוד" : "")));
-      b.append(icon(c.pinned ? IC.star : c.mode === "code" ? IC.code : IC.chat), two);
+      b.append(icon(c.pinned ? IC.pin : c.mode === "code" ? IC.code : IC.chat), two);
       b.onclick = () => openConv(c.id);
       pl.appendChild(b);
     }
@@ -594,7 +596,7 @@ function openChats(focus) {
 }
 function convMenu(c, anchor) {
   showMenu(anchor, [
-    [c.pinned ? "הסרת כוכב" : "סימון בכוכב", IC.star, () => { meta[c.id] = { ...meta[c.id], pinned: !c.pinned }; saveMeta(); render(); }],
+    [c.pinned ? "ביטול הצמדה" : "הצמדה", IC.pin, () => { meta[c.id] = { ...meta[c.id], pinned: !c.pinned }; saveMeta(); render(); }],
     ["שינוי שם", IC.edit, () => rename(c.id, c.title)],
     ["שיוך לפרויקט", IC.folder, () => projMenu(c.id, anchor)],
     null,
@@ -668,8 +670,24 @@ function openForm(o) {
   d.onclose = null; d.returnValue = ""; d.showModal();
   const first = f.querySelector("input[type=text],textarea"); if (first) { first.focus(); if (first.select) first.select(); }
 }
-function rename(id, title) {
-  openForm({ title: "שינוי שם לשיחה", fields: [{ k: "t", label: "שם", value: title, max: 80 }], onOk(v) { meta[id] = { ...meta[id], title: clean(v.t) || undefined }; saveMeta(); render(); } });
+// שינוי שם בתוך כותרת השיחה (שדה במקום הכותרת), כמו באתר הרשמי – בלי חלון
+let renaming = false;
+function rename(id) {
+  if (id !== cur || view !== "chat") openConv(id);
+  const c = convList().find((x) => x.id === id), ht = $("htitle");
+  if (!c || !convItems(id).length) return;
+  renaming = true;
+  const inp = el("input"); inp.id = "hname"; inp.type = "text"; inp.maxLength = 80; inp.value = c.title; inp.setAttribute("aria-label", "שם השיחה");
+  ht.classList.add("hide"); $("hmore").classList.add("hide"); ht.after(inp);
+  let done = false;
+  const end = (save) => {
+    if (done) return; done = true; renaming = false;
+    if (save) { meta[id] = { ...meta[id], title: clean(inp.value) || undefined }; saveMeta(); }
+    inp.remove(); render();
+  };
+  inp.onkeydown = (e) => { if (e.key === "Enter") end(true); else if (e.key === "Escape") end(false); };
+  inp.onblur = () => end(true);
+  inp.focus(); inp.select();
 }
 
 // ---- פרויקטים
@@ -748,7 +766,7 @@ function renderProjects() {
 
 // ---- תצוגה
 function setMode(m) {
-  if (m === convMode(cur) && view === "chat") return;
+  if (m === mode && view === "chat") return;
   mode = m; view = "chat"; store.set("claude_mode", mode);
   if (view === "chat" && !convItems(cur).length && meta[cur] && meta[cur].made) {
     meta[cur].mode = mode; if (mode === "code" && meta[cur].repo == null) Object.assign(meta[cur], lastRepo()); saveMeta(); sig = ""; render();
@@ -774,12 +792,14 @@ function tagEl(ic, text, ltr, fn) {
 function renderHead() {
   const b = $("badges"); b.textContent = "";
   const s = $("status"); s.className = live ? "on" : ""; s.textContent = live ? "Claude מחובר" : "Claude לא מחובר כרגע"; s.title = s.textContent;
-  const ht = $("htitle"); ht.textContent = "";
+  const ht = $("htitle"), hm = $("hmore");
   const c = view === "chat" ? convList().find((x) => x.id === cur) : null;
   const has = !!c && convItems(cur).length > 0;
-  ht.classList.toggle("hide", !has);
+  if (!renaming) {
+    ht.textContent = has ? c.title : ""; ht.classList.toggle("hide", !has); hm.classList.toggle("hide", !has);
+    if (has) { ht.onclick = () => rename(c.id); hm.onclick = (e) => { e.stopPropagation(); convMenu(c, hm); }; }
+  }
   if (view !== "chat") return;
-  if (has) { ht.append(el("span", "", c.title), icon(IC.down)); ht.onclick = (e) => { e.stopPropagation(); convMenu(c, ht); }; }
   const p = projOf(cur);
   if (p) b.appendChild(tagEl(IC.folder, p.name, false, () => { view = "p:" + p.id; render(); }));
   if (convMode(cur) === "code" && has) { const r = getRepo(cur); b.appendChild(tagEl(IC.branch, r.repo ? short(r.repo) + (r.branch ? " · " + r.branch : "") : "ללא מאגר", true, repoForm)); }
@@ -787,9 +807,8 @@ function renderHead() {
 function renderTools() {
   const code = convMode(cur) === "code";
   const p = projOf(cur), pb = $("projBtn");
-  pb.textContent = ""; pb.append(icon(IC.folder), el("span", "", p ? p.name : ""));
-  pb.title = "שיוך השיחה לפרויקט"; pb.classList.toggle("hide", !p);
-  const mb = $("modeBtn"); mb.textContent = ""; mb.append(el("span", "", code ? "קלוד קוד" : "קלוד שיחה"), icon(IC.down));
+  pb.textContent = ""; pb.append(icon(IC.folder), el("span", "", p ? p.name : "פרויקט"));
+  pb.title = "שיוך השיחה לפרויקט";
   const rb = $("repoBtn"); rb.classList.toggle("hide", !code);
   if (code) {
     const r = getRepo(cur); rb.textContent = "";
@@ -827,29 +846,14 @@ function repoForm() {
   });
 }
 $("repoBtn").onclick = repoForm;
-$("toolsBtn").onclick = (e) => {
-  e.stopPropagation();
-  const rows = [["שיוך לפרויקט", IC.folder, () => projMenu(cur, $("toolsBtn"))]];
-  if (convMode(cur) === "code") rows.push(["מאגר וענף", IC.branch, repoForm]);
-  rows.push(null, ["כל הפרויקטים", IC.book, () => { view = "projects"; render(); }]);
-  showMenu($("toolsBtn"), rows);
-};
-$("modeBtn").onclick = (e) => {
-  e.stopPropagation();
-  const code = convMode(cur) === "code";
-  showMenu($("modeBtn"), [
-    ["קלוד שיחה", IC.chat, () => setMode("chat"), code ? "" : "cur"],
-    ["קלוד קוד · עבודה על מאגרים", IC.code, () => setMode("code"), code ? "cur" : ""],
-  ]);
-};
-$("projBtn").onclick = (e) => { e.stopPropagation(); projMenu(cur, $("projBtn")); };
 
 const SUGG = {
   chat: [[IC.pen, "עזרה בניסוח", "תעזור לי לנסח "], [IC.book, "סידור דברי תורה", "תעזור לי לסדר ולנסח את מה שכתבתי: "], [IC.idea, "רעיונות", "תן לי רעיונות ל"], [IC.code, "שינוי באתר", "אני רוצה לשנות באתר "]],
   code: [[IC.bug, "תיקון תקלה", "יש תקלה: "], [IC.plus, "תכונה חדשה", "אני רוצה להוסיף "], [IC.eye, "סקירת הקוד", "תסקור את הקוד ותגיד מה כדאי לשפר"], [IC.book, "הסבר על המאגר", "תסביר לי בקצרה מה יש במאגר הזה"]],
 };
 function renderHello() {
-  $("greet").textContent = greeting() + ", שמואל";
+  const G = [greeting() + ", שמואל", "על מה נחשוב היום?", "במה נתחיל?", "מה על הפרק?"];
+  $("greet").textContent = G[parseInt(hash(cur), 36) % G.length];
   const code = convMode(cur) === "code", p = projOf(cur);
   $("sub").textContent = code ? "קלוד קוד · עבודה על מאגרים ב-GitHub" + (p ? " · " + p.name : "") : p ? "פרויקט: " + p.name : "";
   const s = $("sugg"); s.textContent = "";
@@ -879,7 +883,6 @@ function render() {
   const wrap = $("composeWrap");
   if (empty && wrap.parentNode !== $("composeSlot")) $("composeSlot").appendChild(wrap);
   if (!empty && wrap.parentNode !== $("main")) $("main").appendChild(wrap);
-  $("foot").classList.toggle("hide", empty);
   chatsSig = "";
   renderTools();
   if (empty) { renderHello(); return; }
@@ -1149,7 +1152,7 @@ async function send(body, o) {
 // ---- טעינה
 async function load() {
   let j;
-  try { j = await api("claude_history"); } catch (e) { const st = $("status"); st.textContent = e.message; st.className = "err"; $("meSub").textContent = e.message; return; }
+  try { j = await api("claude_history"); } catch (e) { const st = $("status"); st.textContent = e.message; st.className = "err"; $("me").title = e.message; return; }
   items = (j.items || []).map((m) => ({ ...m, text: String(m.text == null ? "" : m.text), at: typeof m.at === "number" ? m.at : new Date(m.at).getTime() }));
   live = !!j.live;
   if (!loaded) {
@@ -1167,11 +1170,10 @@ async function load() {
 }
 function closeSide() { document.body.classList.add("closed"); if (innerWidth > 820) store.set("claude_side", false); }
 function toggleSide() { document.body.classList.toggle("closed"); if (innerWidth > 820) store.set("claude_side", !document.body.classList.contains("closed")); }
-$("codeNav").onclick = () => { mode = "code"; store.set("claude_mode", mode); startNew(); if (innerWidth <= 820) closeSide(); };
-$("newbtn").onclick = () => { mode = "chat"; store.set("claude_mode", mode); startNew(); if (innerWidth <= 820) closeSide(); };
+for (const b of $("modes").children) b.onclick = () => { setMode(b.dataset.mode); if (innerWidth <= 820) closeSide(); };
+$("newbtn").onclick = () => { startNew(); if (innerWidth <= 820) closeSide(); };
 $("newTop").onclick = () => startNew();
 $("projNav").onclick = () => { view = "projects"; render(); if (innerWidth <= 820) closeSide(); };
-$("chatsNav").onclick = () => openChats(false);
 $("searchNav").onclick = () => openChats(true);
 $("me").onclick = (e) => {
   e.stopPropagation();
