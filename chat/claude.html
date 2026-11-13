@@ -161,7 +161,7 @@ button.tag:hover{color:var(--ink);background:var(--hover)}
 #hsep{width:1px;height:20px;background:var(--line);margin:0 4px}
 /* חלונית הפרטים של השיחה: סביבה, חיבור, קבצים וקוד מהתשובות */
 #panel{width:320px;flex:none;height:100%;overflow-y:auto;border-inline-start:.8px solid var(--line);background:var(--bg);padding:8px 16px 24px;font-size:15px;display:none}
-body.panel.inchat:not(.pv) #panel{display:block}
+body.panel.started:not(.pv) #panel{display:block}
 #panel h4{margin:0;padding:18px 4px 8px;font-size:14px;font-weight:400;color:var(--ink2)}
 #panel section+section{border-top:.8px solid var(--line);margin-top:12px}
 #panel .pr{display:flex;align-items:center;gap:10px;width:100%;min-height:36px;padding:0 4px;border-radius:8px;text-align:start;color:var(--ink)}
@@ -170,6 +170,9 @@ body.panel.inchat:not(.pv) #panel{display:block}
 #panel .pr span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #panel .pr .ltr{direction:ltr;text-align:left}
 html[dir=ltr] #panel .pr span{text-align:left}
+#panel .pr .addr{flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center}
+#panel .pr .addr:hover{background:var(--sel)}
+#panel .pr .addr svg{color:var(--ink)}
 #panel .pr small{color:var(--ink2);font-size:13px;flex:none}
 #panel .pr .dot{width:8px;height:8px;border-radius:50%;background:var(--mute);margin:0 5px;flex:none}
 #panel .pr .dot.on{background:var(--okfill)}
@@ -236,6 +239,33 @@ body.inchat #dictBtn{order:1}
 #menu button .k{margin-inline-start:auto;padding-inline-start:16px;color:var(--mute);font-size:12px;direction:ltr}
 #menu button.cur::after{content:"✓";margin-inline-start:auto;padding-inline-start:12px}
 .nav.soon{color:var(--ink)}
+/* מסך "סשן חדש" במצב Code: כרטיס במרכז, ותיבת הכתיבה צמודה לתחתית */
+#hnew{font-size:17px;color:var(--ink2);padding:0 10px;white-space:nowrap}
+#codeCard{width:min(400px,100%);display:flex;flex-direction:column;gap:12px;align-items:stretch;position:relative;margin-top:26px}
+#codeCard .critter{position:absolute;top:-30px;inset-inline-end:10px;width:44px;height:30px;color:var(--clay)}
+#codeCard .critter svg{width:100%;height:100%;stroke:none;fill:currentColor}
+.cc{background:var(--panel);border-radius:14px;box-shadow:0 0 0 1px var(--line);overflow:hidden;font-size:16px;text-align:start}
+.cc .cr{display:flex;align-items:center;gap:10px;width:100%;min-height:50px;padding:0 16px;text-align:start;color:var(--ink)}
+.cc .cr+.cr{border-top:.8px solid var(--line)}
+.cc button.cr:hover{background:var(--hover)}
+.cc .cr svg{width:18px;height:18px;flex:none}
+.cc .cr>span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc .cr small{color:var(--ink2);font-size:14px;flex:none}
+.cc .cr .ok{color:var(--ink)}
+.cc .cr .warn{color:#895902}
+:root[data-theme=dark] .cc .cr .warn{color:#e49c06}
+body.codenew #hello h1,body.codenew #sub,body.codenew #composeSlot{display:none}
+body:not(.codenew) #codeCard,body:not(.codenew) #hnew{display:none}
+.ci .dot.need{background:#fbb315}
+/* חלון בחירה עם חיפוש (מאגר, ענף) */
+#menu .ms{display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;margin-bottom:6px;border-radius:9px;background:var(--field);box-shadow:0 0 0 1px var(--line2)}
+#menu .ms:focus-within{box-shadow:0 0 0 1px #257de0,0 0 6px 1px rgba(23,87,172,.35)}
+#menu .ms svg{width:15px;height:15px;color:var(--ink2);flex:none}
+#menu .ms input{flex:1;min-width:0;border:0;outline:0;background:none;font-size:15px;height:100%}
+#menu .mf{padding:8px 10px 4px;font-size:13px;line-height:18px;color:var(--ink2);border-top:.8px solid var(--line);margin-top:6px;white-space:normal;max-width:340px}
+#menu.pick{min-width:300px}
+#menu.pick button{height:34px;font-size:15px}
+#menu.pick button[hidden]{display:none}
 #jump{position:absolute;inset-inline:0;margin:0 auto;bottom:76px;width:36px;height:36px;padding:4px;border-radius:50%;background:color-mix(in srgb,var(--jumpbg) 80%,transparent);border:.8px solid var(--hair);box-shadow:var(--md);display:grid;place-items:center;z-index:5;transition:opacity .2s var(--ez)}
 #jump svg{width:18px;height:18px}
 #main{position:relative}
@@ -452,6 +482,7 @@ html[dir=rtl] #text:placeholder-shown{direction:rtl}
   <header id="head">
     <button class="ib" id="openSide" title="הצגת הסרגל (Ctrl+.)" aria-label="הצגת הסרגל"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
     <button class="ib" id="newTop" title="שיחה חדשה (Ctrl+Shift+O)" aria-label="שיחה חדשה"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+    <span id="hnew">סשן חדש</span>
     <button id="htitle" class="hide" type="button" title="שינוי שם לשיחה"></button>
     <button class="ib hide" id="hmore" type="button" title="אפשרויות נוספות" aria-label="אפשרויות נוספות"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
     <div id="badges"></div>
@@ -465,6 +496,14 @@ html[dir=rtl] #text:placeholder-shown{direction:rtl}
   <div id="hello">
     <h1><span class="spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11.50 11.80 L10.75 2.28 Q10.75 1.15 12.00 1.09 Q13.25 1.15 13.25 2.28 L12.50 11.80 ZM11.67 11.57 L15.40 4.21 Q15.91 3.36 16.88 3.88 Q17.79 4.49 17.28 5.34 L12.53 12.09 ZM11.90 11.47 L19.78 5.60 Q20.78 4.98 21.52 6.05 Q22.15 7.19 21.16 7.81 L12.43 12.32 ZM12.20 11.50 L20.80 10.85 Q21.83 10.85 21.89 12.00 Q21.83 13.15 20.80 13.15 L12.20 12.50 ZM12.43 11.67 L21.15 16.04 Q22.12 16.62 21.53 17.72 Q20.83 18.76 19.86 18.18 L11.91 12.53 ZM12.53 11.91 L17.18 18.49 Q17.69 19.34 16.78 19.95 Q15.81 20.47 15.30 19.62 L11.67 12.43 ZM12.50 12.20 L13.30 21.79 Q13.30 22.96 12.00 23.02 Q10.70 22.96 10.70 21.79 L11.50 12.20 ZM12.33 12.43 L8.50 19.96 Q7.99 20.81 7.02 20.29 Q6.10 19.68 6.61 18.83 L11.47 11.91 ZM12.09 12.53 L4.05 18.23 Q3.09 18.81 2.39 17.77 Q1.80 16.67 2.76 16.09 L11.57 11.67 ZM11.80 12.50 L3.14 13.20 Q2.06 13.20 2.00 12.00 Q2.06 10.80 3.14 10.80 L11.80 11.50 ZM11.57 12.33 L3.02 8.06 Q2.06 7.48 2.65 6.38 Q3.34 5.34 4.31 5.92 L12.09 11.47 ZM11.47 12.09 L6.77 5.43 Q6.26 4.58 7.17 3.96 Q8.14 3.44 8.65 4.29 L12.33 11.57 ZM12 12m-1.9 0a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0Z"/></svg></span><span id="greet"></span></h1>
     <p id="sub"></p>
+    <div id="codeCard">
+      <span class="critter" aria-hidden="true"><svg viewBox="0 0 22 15"><path d="M5 0h12v2h2v2h3v3h-3v4h-2v4h-2v-3h-2v3h-2v-3H9v3H7v-4H5V7H2V4h3V2h0zM0 4h2v3H0zM20 4h2v3h-2z"/><path fill="var(--bg)" d="M7 4h2v2H7zM13 4h2v2h-2z"/></svg></span>
+      <div class="cc">
+        <div class="cr" id="ccConn"></div>
+        <button class="cr" id="ccRepo" type="button" aria-haspopup="menu"></button>
+      </div>
+      <div class="cc hide" id="ccWait"></div>
+    </div>
     <div id="composeSlot"></div>
     <div id="sugg"></div>
   </div>
@@ -487,9 +526,10 @@ html[dir=rtl] #text:placeholder-shown{direction:rtl}
       </div>
     </form>
     <div id="below">
+      <button type="button" class="tag ltr" id="repoBtn" aria-haspopup="menu"></button>
+      <button type="button" class="tag ltr" id="branchBtn" aria-haspopup="menu"></button>
       <button type="button" class="tag" id="projBtn"></button>
       <span class="sp"></span>
-      <button type="button" class="tag ltr" id="repoBtn"></button>
     </div>
   </div>
 </main>
@@ -502,7 +542,7 @@ html[dir=rtl] #text:placeholder-shown{direction:rtl}
 // השיחה עם Claude בסגנון האתר הרשמי: שני מצבים (שיחה / קוד), דף שיחות עם חיפוש, פרויקטים עם הנחיות, Markdown, הגדרות.
 // הכול עובר דרך הגשר ב-Supabase (claude_send / claude_history) עם האסימון של אתר הצאט. התשובות נכתבות מאוחר יותר.
 const API = "https://ydcfafijktzasrkkxyux.supabase.co/functions/v1/chat-netfree/";
-const VER = "2026-11-13.4";
+const VER = "2026-11-13.5";
 const $ = (id) => document.getElementById(id);
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -685,7 +725,7 @@ function convList() {
     let c = map.get(id);
     if (!c) map.set(id, (c = { id, first: null, last: 0, waiting: false, hay: "" }));
     if (m.from === "me" && !c.first) c.first = parse(m.text);
-    c.last = Math.max(c.last, m.at); c.waiting = m.from === "me";
+    c.last = Math.max(c.last, m.at); c.waiting = m.from === "me"; c.needs = m.from !== "me" && !!m.confirm;
     c.hay += "\n" + String(m.text).toLowerCase();
   }
   for (const [id, x] of Object.entries(meta)) if (!map.has(id) && x.made && id === cur) map.set(id, { id, first: null, last: x.made, waiting: false, hay: "" });
@@ -706,7 +746,7 @@ function renderSide() {
   const list = convList().filter((c) => c.mode === mode && c.hay && !c.archived);
   // הרשימה נבנית מחדש רק כשמשהו השתנה, כדי שהמיקוד והתפריט הפתוח לא ייעלמו ברענון התקופתי
   const anyConv = list.length || convList().some((c) => c.hay);
-  const ss = JSON.stringify([mode, view, cur, shut, anyConv, list.map((c) => [c.id, c.title, c.pinned, c.waiting, c.mode === "code" ? getRepo(c.id).repo : ""])]);
+  const ss = JSON.stringify([mode, view, cur, shut, anyConv, list.map((c) => [c.id, c.title, c.pinned, c.waiting, c.needs, c.mode === "code" ? getRepo(c.id).repo : ""])]);
   if (ss === renderSide.sig && box.firstChild) return;
   renderSide.sig = ss; box.textContent = "";
   if (!list.length) { const e0 = el("div", "grp"); e0.appendChild(el("span", "", anyConv ? "אין כאן שיחות פעילות" : "אין עדיין שיחות")); box.appendChild(e0); if (!anyConv) return; }
@@ -724,10 +764,11 @@ function renderSide() {
     const t = el("button", "t"); t.title = c.title;
     if (c.mode === "code") t.appendChild(icon(IC.code));
     const tt = el("span", "tt", c.title); tt.dir = "auto"; t.appendChild(tt);
-    if (c.mode === "code") { const r = short(getRepo(c.id).repo); if (r) t.appendChild(el("span", "sub", r)); }
+    if (c.mode === "code") { const r = String(getRepo(c.id).repo || "").split(",").map((x) => short(x.trim())).filter(Boolean).join(", "); if (r) t.appendChild(el("span", "sub", r)); }
     t.onclick = () => { openConv(c.id); if (innerWidth <= 820) closeSide(); };
     row.append(t);
-    if (c.waiting && c.id !== cur) { const d = el("span", "dot"); d.title = "ממתין לתשובה"; row.append(d); }
+    if (c.needs) { const d = el("span", "dot need"); d.title = "ממתין לאישור שלך"; row.append(d); }
+    else if (c.waiting && c.id !== cur) { const d = el("span", "dot"); d.title = "ממתין לתשובה"; row.append(d); }
     const more = ibtn(IC.dots, "אפשרויות נוספות", (e) => { e.stopPropagation(); convMenu(c, more); });
     more.classList.add("more");
     row.append(more);
@@ -796,7 +837,7 @@ function delConv(id, title) {
   toast("השיחה נמחקה מהרשימה (במכשיר הזה)", "ביטול", () => { meta[id].hidden = false; saveMeta(); openConv(id); });
 }
 let menuAnchor = null, menuRect = null;
-function showMenu(anchor, rows) {
+function showMenu(anchor, rows, before) {
   const m = $("menu");
   if (!m.classList.contains("hide") && menuAnchor === anchor) { hideMenu(true); return; }
   m.textContent = ""; menuAnchor = anchor;
@@ -815,12 +856,14 @@ function showMenu(anchor, rows) {
   const acct = anchor.id === "me";
   m.classList.toggle("acct", acct);
   if (acct) m.prepend(el("div", "mh", "שמואל · " + (live ? "Claude מחובר" : "Claude לא מחובר כרגע")));
+  m.classList.toggle("pick", !!before);
+  let first = null; if (before) first = before(m);
   m.classList.remove("hide");
   const r = anchor.isConnected ? (menuRect = anchor.getBoundingClientRect()) : menuRect || anchor.getBoundingClientRect();
   const below = r.bottom + 4 + m.offsetHeight < innerHeight - 8;
   m.style.top = Math.max(8, below ? r.bottom + 4 : r.top - 4 - m.offsetHeight) + "px";
   m.style.left = (acct ? Math.max(8, Math.min(innerWidth - m.offsetWidth - 8, $("side").getBoundingClientRect().left + 8)) : Math.max(8, Math.min(innerWidth - m.offsetWidth - 8, document.documentElement.dir === "ltr" ? r.left : r.right - m.offsetWidth))) + "px";
-  m.querySelector("button")?.focus();
+  (first || m.querySelector("button"))?.focus();
 }
 function hideMenu(back) { const m = $("menu"); if (m.classList.contains("hide")) return; m.classList.add("hide"); if (back && menuAnchor && menuAnchor.isConnected) menuAnchor.focus(); }
 $("menu").addEventListener("keydown", (e) => {
@@ -1037,7 +1080,7 @@ function renderHead() {
   if (view !== "chat") return;
   const p = projOf(cur);
   if (p) b.appendChild(tagEl(IC.folder, p.name, false, () => { view = "p:" + p.id; render(); }));
-  if (convMode(cur) === "code" && has) { const r = getRepo(cur); b.appendChild(tagEl(IC.branch, r.repo ? short(r.repo) + (r.branch ? " · " + r.branch : "") : "ללא מאגר", true, repoForm)); }
+  if (convMode(cur) === "code" && has) { const r = getRepo(cur); b.appendChild(tagEl(IC.branch, r.repo ? repoList(cur).map(short).join(", ") + (r.branch ? " · " + r.branch : "") : "ללא מאגר", true, (e) => { e.stopPropagation(); repoMenu(e.currentTarget, 0); })); }
 }
 function renderTools() {
   const code = convMode(cur) === "code";
@@ -1045,13 +1088,15 @@ function renderTools() {
   pb.textContent = ""; const pbs = el("span", "", p ? p.name : "פרויקט"); pbs.dir = "auto"; pb.append(icon(IC.folder), pbs);
   pb.title = "שיוך השיחה לפרויקט";
   const rb = $("repoBtn"); rb.classList.toggle("hide", !code); document.body.classList.toggle("codemode", code);
+  const bb0 = $("branchBtn"); bb0.classList.toggle("hide", !code || !getRepo(cur).repo);
   if (code) {
-    const r = getRepo(cur); rb.textContent = "";
-    rb.append(icon(IC.branch), el("span", "", r.repo ? short(r.repo) + (r.branch ? " · " + r.branch : "") : "בחירת מאגר"));
-    rb.classList.toggle("need", !r.repo); rb.title = "המאגר והענף של השיחה";
+    const r = getRepo(cur), names = repoList(cur).map(short); rb.textContent = "";
+    rb.append(icon(IC.repo), el("span", "", names.length ? names.join(", ") : "Repo"), icon(IC.down));
+    rb.classList.toggle("need", !r.repo); rb.title = "המאגר של השיחה";
+    bb0.textContent = ""; bb0.append(icon(IC.branch), el("span", "", r.branch || "main"), icon(IC.down)); bb0.title = r.branch ? "הענף של השיחה" : "ענף ברירת המחדל";
   }
   const started = convItems(cur).length > 0;
-  $("text").placeholder = "\u202B" + (started ? "תשובה ל-Claude..." : code ? "מה לעשות במאגר?" : "במה אפשר לעזור היום?") + "\u202C";
+  $("text").placeholder = "\u202B" + (started ? "תשובה ל-Claude..." : code ? "תאר משימה או שאל שאלה" : "במה אפשר לעזור היום?") + "\u202C";
   const mb = $("modeBtn"); mb.textContent = ""; mb.append(el("span", "", code ? "Code" : "Claude"), icon(IC.down));
   const qa = $("qa"), show = code && started;
   qa.classList.toggle("hide", !show);
@@ -1065,23 +1110,52 @@ function renderTools() {
     qa.append(a, n, ch);
   }
 }
-function repoForm() {
-  const r = getRepo(cur);
-  openForm({
-    title: "מאגר לשיחת קלוד קוד",
-    note: "כל הודעה בשיחה תתחיל בכותרת קצרה עם המאגר והענף, כדי שהסוכן ידע על מה לעבוד.",
-    fields: [
-      { k: "repo", label: "מאגר (בחשבון " + OWNER + ")", value: short(r.repo), list: REPOS, ph: "rosh-berosh-2", ltr: true },
-      { k: "branch", label: "ענף (לא חובה)", value: r.branch, ph: "main", ltr: true },
-    ],
-    onOk(v) {
-      const x = (meta[cur] = meta[cur] || {});
-      x.repo = repoFull(v.repo); x.branch = clean(v.branch).replace(/\s+/g, "");
-      saveMeta(); store.set("claude_lastrepo", { repo: x.repo, branch: x.branch }); sig = ""; render();
-    },
+// המאגרים של השיחה נשמרים כמחרוזת אחת מופרדת בפסיקים, וכך גם נשלחים בכותרת ההודעה
+const repoList = (id) => String(getRepo(id).repo || "").split(",").map((x) => x.trim()).filter(Boolean);
+function setRepos(id, list, branch) {
+  const x = (meta[id] = meta[id] || {});
+  x.repo = [...new Set(list.filter(Boolean))].join(", "); if (branch != null) x.branch = branch; if (!x.repo) x.branch = "";
+  saveMeta(); store.set("claude_lastrepo", { repo: x.repo, branch: x.branch || "" }); sig = ""; render();
+}
+// בחירת מאגר: רשימה עם חיפוש. index = איזה מאגר להחליף; -1 = להוסיף מאגר נוסף
+function repoMenu(anchor, index) {
+  const list = repoList(cur), at = index == null ? 0 : index, curR = at >= 0 ? list[at] || "" : "";
+  const pick = (full) => {
+    const next = list.slice();
+    if (at < 0) { if (full) next.push(full); } else if (full) next[at] = full; else next.splice(at, 1);
+    setRepos(cur, next);
+  };
+  const all = REPOS.map((r) => OWNER + "/" + r).filter((r) => r === curR || !list.includes(r));
+  const rows = all.map((r) => [r, IC.repo, () => pick(r), r === curR ? "cur" : ""]);
+  if (at >= 0) rows.push(null, [list.length > 1 ? "הסרת המאגר הזה" : "אין מאגר", null, () => pick(""), curR ? "" : "cur"]);
+  showMenu(anchor, rows, (m) => {
+    const box = el("div", "ms"), inp = el("input"); inp.type = "search"; inp.dir = "ltr"; inp.placeholder = "\u202Bחיפוש מאגרים…\u202C"; inp.setAttribute("aria-label", "חיפוש מאגרים");
+    box.append(icon(IC.search), inp); m.prepend(box);
+    const note = el("div", "mf", "מאגר שלא ברשימה? כתוב את שמו (או owner/name) ולחץ Enter."); note.dir = "rtl"; m.appendChild(note);
+    inp.oninput = () => { const q = inp.value.trim().toLowerCase(); for (const b of m.querySelectorAll("button")) { const t = b.textContent.toLowerCase(); b.hidden = !!q && t.includes("/") && !t.includes(q); } };
+    inp.onkeydown = (e) => {
+      if (e.key !== "Enter") return; e.preventDefault(); e.stopPropagation();
+      const vis = [...m.querySelectorAll("button")].filter((b) => !b.hidden && b.textContent.includes("/"));
+      const typed = repoFull(inp.value);
+      hideMenu(true); if (vis.length === 1) pick(vis[0].firstChild ? vis[0].querySelector("span").textContent : typed); else if (typed) pick(typed);
+    };
+    return inp;
   });
 }
-$("repoBtn").onclick = repoForm;
+function branchMenu(anchor) {
+  const r = getRepo(cur), setB = (b) => setRepos(cur, repoList(cur), clean(b).replace(/\s+/g, ""));
+  const rows = [["ענף ברירת המחדל", IC.branch, () => setB(""), r.branch ? "" : "cur"]];
+  if (r.branch) rows.push([r.branch, IC.branch, () => setB(r.branch), "cur"]);
+  showMenu(anchor, rows, (m) => {
+    const box = el("div", "ms"), inp = el("input"); inp.type = "text"; inp.dir = "ltr"; inp.maxLength = 80; inp.placeholder = "\u202Bשם ענף אחר…\u202C"; inp.setAttribute("aria-label", "שם הענף");
+    box.append(icon(IC.branch), inp); m.prepend(box);
+    inp.onkeydown = (e) => { if (e.key !== "Enter") return; e.preventDefault(); e.stopPropagation(); const v = inp.value.trim(); hideMenu(true); if (v) setB(v); };
+    return inp;
+  });
+}
+$("repoBtn").onclick = (e) => { e.stopPropagation(); repoMenu($("repoBtn"), 0); };
+$("branchBtn").onclick = (e) => { e.stopPropagation(); branchMenu($("branchBtn")); };
+$("ccRepo").onclick = (e) => { e.stopPropagation(); repoMenu($("ccRepo"), 0); };
 
 const SUGG = {
   chat: [[IC.pen, "עזרה בניסוח", "תעזור לי לנסח "], [IC.book, "סידור דברי תורה", "תעזור לי לסדר ולנסח את מה שכתבתי: "], [IC.idea, "רעיונות", "תן לי רעיונות ל"], [IC.code, "שינוי באתר", "אני רוצה לשנות באתר "]],
@@ -1092,6 +1166,19 @@ function renderHello() {
   $("greet").textContent = G[parseInt(hash(cur), 36) % G.length];
   const code = convMode(cur) === "code", p = projOf(cur);
   $("sub").textContent = code ? "קלוד קוד · עבודה על מאגרים ב-GitHub" + (p ? " · " + p.name : "") : p ? "פרויקט: " + p.name : "";
+  if (code) {
+    // הכרטיס במרכז: מצב החיבור, בחירת מאגר, ושיחות שמחכות לאישור שלך
+    const cn = $("ccConn"); cn.textContent = ""; cn.append(icon(IC.cloud), el("span", "", live ? "Claude מחובר" : "Claude לא מחובר כרגע"));
+    if (live) cn.appendChild(icon(IC.ok, "ok")); else cn.appendChild(el("small", "", "ההודעה תמתין"));
+    const names = repoList(cur).map(short), cr = $("ccRepo"); cr.textContent = "";
+    const crs = el("span", "", names.length ? names.join(", ") : "בחר מאגר"); if (names.length) { crs.dir = "ltr"; crs.style.textAlign = "start"; }
+    cr.append(icon(IC.repo), crs, icon(IC.down));
+    const wait = convList().filter((c) => c.needs && !c.archived).slice(0, 3), cw = $("ccWait"); cw.textContent = ""; cw.classList.toggle("hide", !wait.length);
+    for (const c of wait) {
+      const b = el("button", "cr"); b.type = "button"; const tt = el("span", "", c.title); tt.dir = "auto";
+      const w = el("small", "warn", "צריך אישור"); b.append(tt, w); b.onclick = () => openConv(c.id); cw.appendChild(b);
+    }
+  }
   const s = $("sugg"); s.textContent = "";
   for (const [ic, label, text] of SUGG[code ? "code" : "chat"]) {
     const b = el("button"); b.type = "button"; b.append(icon(ic), document.createTextNode(label));
@@ -1107,7 +1194,7 @@ function render() {
   $("composeWrap").classList.toggle("hide", pv);
   if (pv) {
     stopDict();
-    $("hello").classList.add("hide"); $("scroll").classList.add("hide"); $("jump").classList.add("hide"); $("hright").classList.add("hide");
+    $("hello").classList.add("hide"); $("scroll").classList.add("hide"); $("jump").classList.add("hide"); $("hright").classList.add("hide"); document.body.classList.remove("codenew", "started");
     if (view !== "chats") { chatsSig = ""; if (projSig() !== renderProjects.sig || !$("projView").firstChild) renderProjects(); return; }
     // דף השיחות נבנה מחדש רק כשמשהו השתנה, כדי לא להקפיץ את הגלילה ואת שדה החיפוש
     const cs = JSON.stringify(convList().map((c) => [c.id, c.title, c.last, c.pinned, c.archived])) + chatTab;
@@ -1116,13 +1203,16 @@ function render() {
   }
   const mine = convItems(cur), fl = failed.filter((f) => f.conv === cur);
   const empty = !mine.length && !fl.length;
+  const codeNew = empty && convMode(cur) === "code";
   $("hello").classList.toggle("hide", !empty);
-  document.body.classList.toggle("inchat", !empty);
+  document.body.classList.toggle("inchat", !empty || codeNew);
+  document.body.classList.toggle("started", !empty);
+  document.body.classList.toggle("codenew", codeNew);
   if (empty) { $("jump").classList.add("hide"); $("hright").classList.add("hide"); }
   $("scroll").classList.toggle("hide", empty);
   const wrap = $("composeWrap"), hadFocus = document.activeElement === $("text");
-  if (empty && wrap.parentNode !== $("composeSlot")) $("composeSlot").appendChild(wrap);
-  if (!empty && wrap.parentNode !== $("main")) $("main").appendChild(wrap);
+  if (empty && !codeNew && wrap.parentNode !== $("composeSlot")) $("composeSlot").appendChild(wrap);
+  if ((!empty || codeNew) && wrap.parentNode !== $("main")) $("main").appendChild(wrap);
   if (hadFocus && document.activeElement !== $("text")) $("text").focus();
   chatsSig = "";
   renderTools();
@@ -1339,7 +1429,7 @@ async function addFiles(list) {
 $("attbtn").onclick = (e) => {
   e.stopPropagation();
   const rows = [["העלאת קובצי טקסט", IC.file, () => $("file").click(), "", "Ctrl+U"], ["שיוך לפרויקט", IC.folder, () => projMenu(cur, $("attbtn"))]];
-  if (convMode(cur) === "code") rows.push(["מאגר וענף", IC.branch, repoForm]);
+  if (convMode(cur) === "code") rows.push(["בחירת מאגר", IC.repo, () => repoMenu($("attbtn"), 0)]);
   showMenu($("attbtn"), rows);
 };
 $("modeBtn").onclick = (e) => {
@@ -1506,8 +1596,14 @@ function renderPanel() {
   env.appendChild(row(IC.cloud, code ? "Code · עבודה על מאגרים" : "Claude · שיחה"));
   if (code) {
     const r = getRepo(cur);
-    env.appendChild(row(IC.repo, r.repo || "בחירת מאגר", repoForm, { ltr: !!r.repo }));
-    env.appendChild(row(IC.branch, r.branch || "ענף ברירת המחדל", repoForm, { ltr: !!r.branch }));
+    const rl = repoList(cur);
+    if (!rl.length) env.appendChild(row(IC.repo, "בחירת מאגר", (e) => { e.stopPropagation(); repoMenu(e.currentTarget, 0); }));
+    rl.forEach((full, i) => {
+      const rr = row(IC.repo, full, (e) => { e.stopPropagation(); repoMenu(e.currentTarget, i); }, { ltr: true });
+      if (i === 0) { const add = el("span", "", ""); add.className = "addr"; add.title = "הוספת מאגר נוסף"; add.setAttribute("role", "button"); add.tabIndex = 0; add.appendChild(icon(IC.plus)); const go = (e) => { e.stopPropagation(); e.preventDefault(); repoMenu(add, -1); }; add.onclick = go; add.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") go(e); }; rr.appendChild(add); }
+      env.appendChild(rr);
+    });
+    if (r.repo) env.appendChild(row(IC.branch, r.branch || "main", (e) => { e.stopPropagation(); branchMenu(e.currentTarget); }, { ltr: true, small: r.branch ? "" : "ברירת מחדל" }));
   }
   env.appendChild(row(IC.folder, p ? p.name : "ללא פרויקט", (e) => { e.stopPropagation(); projMenu(cur, e.currentTarget); }));
   const con = sec("חיבור");
