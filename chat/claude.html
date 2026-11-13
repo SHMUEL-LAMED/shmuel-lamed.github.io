@@ -145,6 +145,36 @@ button.tag:hover{color:var(--ink);background:var(--hover)}
 .mark{display:flex;align-items:center;gap:12px;padding:6px 4px 0;color:var(--mute);font-size:14.5px}
 .mark .spark{width:26px;height:26px}
 .mark.wait .spark{animation:sp 2.4s infinite ease-in-out}
+.think{display:flex;align-items:center;gap:8px;padding:6px 4px 0;color:var(--ink2);font-size:15px;line-height:21px}
+.think .dots{display:inline-flex;gap:4px;width:22px;justify-content:center}
+.think .dots i{width:4px;height:4px;border-radius:50%;background:var(--clay);animation:dot 1.2s infinite ease-in-out}
+.think .dots i:nth-child(2){animation-delay:.2s}
+.think .dots i:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+.think .t{font-variant-numeric:tabular-nums;direction:ltr}
+#hright{display:flex;align-items:center;gap:4px;margin-inline-start:auto;padding-inline-start:8px}
+#hright .ib{width:32px;height:32px;color:var(--ink)}
+#hright .ib.on{background:var(--sel)}
+#shareBtn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border-radius:8px;font-size:15px;color:var(--ink);white-space:nowrap}
+#shareBtn:hover{background:var(--hover)}
+#shareBtn svg{width:17px;height:17px}
+#hsep{width:1px;height:20px;background:var(--line);margin:0 4px}
+/* חלונית הפרטים של השיחה: סביבה, חיבור, קבצים וקוד מהתשובות */
+#panel{width:320px;flex:none;height:100%;overflow-y:auto;border-inline-start:.8px solid var(--line);background:var(--bg);padding:8px 16px 24px;font-size:15px;display:none}
+body.panel.inchat:not(.pv) #panel{display:block}
+#panel h4{margin:0;padding:18px 4px 8px;font-size:14px;font-weight:400;color:var(--ink2)}
+#panel section+section{border-top:.8px solid var(--line);margin-top:12px}
+#panel .pr{display:flex;align-items:center;gap:10px;width:100%;min-height:36px;padding:0 4px;border-radius:8px;text-align:start;color:var(--ink)}
+#panel button.pr:hover{background:var(--hover)}
+#panel .pr svg{width:18px;height:18px;color:var(--ink2);flex:none}
+#panel .pr span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#panel .pr .ltr{direction:ltr;text-align:left}
+html[dir=ltr] #panel .pr span{text-align:left}
+#panel .pr small{color:var(--ink2);font-size:13px;flex:none}
+#panel .pr .dot{width:8px;height:8px;border-radius:50%;background:var(--mute);margin:0 5px;flex:none}
+#panel .pr .dot.on{background:var(--okfill)}
+#panel .more{color:var(--ink2);font-size:14px;padding:6px 4px}
+#panelX{display:none}
 .a .body{overflow-wrap:anywhere;line-height:1.4;color:var(--ink)}
 body:not(.sans) .a .body{font-family:var(--serif);font-size:1.06em;line-height:1.6}
 .body>:first-child{margin-top:0}
@@ -348,6 +378,10 @@ html[dir=ltr] :is(.mark span,.meta,.nav .lb,.grp span,#meTxt,#greet,#toast>span)
   #openSide{margin-inline-end:4px}
   #openSide,#newTop{display:grid}
   .nav,.ci,.ci>.t{height:44px}
+  #panel{position:fixed;inset:0;z-index:22;width:100%;border:0}
+  #panelX{display:grid;margin-inline-start:auto}
+  #shareBtn span{display:none}
+  #hsep{display:none}
   #sidetop{height:56px}
   #newbtn{margin-top:4px}
   #hello{justify-content:flex-start;padding:112px 0 max(8px,env(safe-area-inset-bottom))}
@@ -413,6 +447,11 @@ html[dir=ltr] :is(.mark span,.meta,.nav .lb,.grp span,#meTxt,#greet,#toast>span)
     <button class="ib hide" id="hmore" type="button" title="אפשרויות נוספות" aria-label="אפשרויות נוספות"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
     <div id="badges"></div>
     <div id="status" role="status"></div>
+    <div id="hright" class="hide">
+      <button class="ib" id="panelBtn" type="button" title="פרטי השיחה" aria-label="פרטי השיחה" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg></button>
+      <span id="hsep"></span>
+      <button id="shareBtn" type="button" title="שיתוף השיחה" aria-haspopup="menu"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg><span>שיתוף</span></button>
+    </div>
   </header>
   <div id="hello">
     <h1><span class="spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11.50 11.80 L10.75 2.28 Q10.75 1.15 12.00 1.09 Q13.25 1.15 13.25 2.28 L12.50 11.80 ZM11.67 11.57 L15.40 4.21 Q15.91 3.36 16.88 3.88 Q17.79 4.49 17.28 5.34 L12.53 12.09 ZM11.90 11.47 L19.78 5.60 Q20.78 4.98 21.52 6.05 Q22.15 7.19 21.16 7.81 L12.43 12.32 ZM12.20 11.50 L20.80 10.85 Q21.83 10.85 21.89 12.00 Q21.83 13.15 20.80 13.15 L12.20 12.50 ZM12.43 11.67 L21.15 16.04 Q22.12 16.62 21.53 17.72 Q20.83 18.76 19.86 18.18 L11.91 12.53 ZM12.53 11.91 L17.18 18.49 Q17.69 19.34 16.78 19.95 Q15.81 20.47 15.30 19.62 L11.67 12.43 ZM12.50 12.20 L13.30 21.79 Q13.30 22.96 12.00 23.02 Q10.70 22.96 10.70 21.79 L11.50 12.20 ZM12.33 12.43 L8.50 19.96 Q7.99 20.81 7.02 20.29 Q6.10 19.68 6.61 18.83 L11.47 11.91 ZM12.09 12.53 L4.05 18.23 Q3.09 18.81 2.39 17.77 Q1.80 16.67 2.76 16.09 L11.57 11.67 ZM11.80 12.50 L3.14 13.20 Q2.06 13.20 2.00 12.00 Q2.06 10.80 3.14 10.80 L11.80 11.50 ZM11.57 12.33 L3.02 8.06 Q2.06 7.48 2.65 6.38 Q3.34 5.34 4.31 5.92 L12.09 11.47 ZM11.47 12.09 L6.77 5.43 Q6.26 4.58 7.17 3.96 Q8.14 3.44 8.65 4.29 L12.33 11.57 ZM12 12m-1.9 0a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0Z"/></svg></span><span id="greet"></span></h1>
@@ -445,6 +484,7 @@ html[dir=ltr] :is(.mark span,.meta,.nav .lb,.grp span,#meTxt,#greet,#toast>span)
     </div>
   </div>
 </main>
+<aside id="panel" aria-label="פרטי השיחה"></aside>
 <div id="menu" class="hide" role="menu"></div>
 <div id="toast" class="hide" role="status"></div>
 <dialog id="dlg"></dialog>
@@ -494,6 +534,9 @@ const IC = {
   edit: '<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
   up: '<path d="M7 10v10H4V10zM7 10l4-7a2 2 0 0 1 2 2v4h5a2 2 0 0 1 2 2.300l-1.200 6A2 2 0 0 1 16.800 19H7"/>',
   down2: '<path d="M17 14V4h3v10zM17 14l-4 7a2 2 0 0 1-2-2v-4H6a2 2 0 0 1-2-2.300l1.200-6A2 2 0 0 1 7.200 5H17"/>',
+  cloud: '<path d="M7 18a4 4 0 0 1-.5-8 5.500 5.500 0 0 1 10.700-1.300A4.500 4.500 0 0 1 17 18z"/>',
+  repo: '<path d="M5 4h13a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2zM5 17a2 2 0 0 1 2-2h12"/>',
+  dl: '<path d="M12 4v11M8 11l4 4 4-4M5 19h14"/>',
   box: '<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/>',
   sort: '<path d="M4 7h12M4 12h9M4 17h6M18 8v10m0 0-3-3m3 3 3-3"/>',
   pin: '<path d="M9 4h6l-1 5 3 3v2H7v-2l3-3z"/><path d="M12 14v6"/>',
@@ -1037,7 +1080,7 @@ function render() {
   $("projView").classList.toggle("hide", !pv);
   $("composeWrap").classList.toggle("hide", pv);
   if (pv) {
-    $("hello").classList.add("hide"); $("scroll").classList.add("hide"); $("jump").classList.add("hide");
+    $("hello").classList.add("hide"); $("scroll").classList.add("hide"); $("jump").classList.add("hide"); $("hright").classList.add("hide");
     if (view !== "chats") { chatsSig = ""; renderProjects(); return; }
     // דף השיחות נבנה מחדש רק כשמשהו השתנה, כדי לא להקפיץ את הגלילה ואת שדה החיפוש
     const cs = JSON.stringify(convList().map((c) => [c.id, c.title, c.last, c.pinned, c.archived])) + chatTab;
@@ -1048,7 +1091,7 @@ function render() {
   const empty = !mine.length && !fl.length;
   $("hello").classList.toggle("hide", !empty);
   document.body.classList.toggle("inchat", !empty);
-  if (empty) $("jump").classList.add("hide");
+  if (empty) { $("jump").classList.add("hide"); $("hright").classList.add("hide"); }
   $("scroll").classList.toggle("hide", empty);
   const wrap = $("composeWrap");
   if (empty && wrap.parentNode !== $("composeSlot")) $("composeSlot").appendChild(wrap);
@@ -1057,8 +1100,10 @@ function render() {
   renderTools();
   if (empty) { renderHello(); return; }
   const s = JSON.stringify(mine.map((m) => [m.id, m.status, m.text.length, m.confirm || ""])) + JSON.stringify(fl.map((f) => f.id)) + live + editing + fmtDay(Date.now());
+  $("hright").classList.remove("hide");
   if (s === sig) return;
   sig = s;
+  renderPanel();
   const sc = $("scroll"), atEnd = sc.scrollHeight - sc.scrollTop - sc.clientHeight < 120;
   const box = $("msgs"); box.textContent = "";
   const all = mine.concat(fl.map((f) => ({ ...f, from: "me", status: "fail" })));
@@ -1067,9 +1112,14 @@ function render() {
   // הסמל של Claude בסוף השיחה, כמו באתר הרשמי: נע בזמן המתנה לתשובה
   if (last && !fl.length) {
     const waiting = last.from === "me";
-    const w = el("div", "mark" + (waiting ? " wait" : "")); w.appendChild(spark());
-    if (waiting) w.appendChild(el("span", "", live ? "Claude כותב תשובה..." : "Claude לא מחובר כרגע. ההודעה שמורה, והתשובה תופיע כאן כשהוא יתחבר."));
-    box.appendChild(w);
+    if (waiting) {
+      // כמו באתר הרשמי: שלוש נקודות נעות, הזמן שעבר, ומה קורה כרגע
+      const w = el("div", "think"); w.setAttribute("role", "status");
+      const d = el("span", "dots"); d.append(el("i"), el("i"), el("i"));
+      const t = el("span", "t"); t.id = "thinkT"; t.dataset.at = String(last.at);
+      const lab = el("span", "", live ? "· חשיבה" : "· ממתין – Claude לא מחובר כרגע. ההודעה שמורה, והתשובה תופיע כאן כשיתחבר");
+      w.append(d, t, lab); box.appendChild(w); tickThink();
+    } else { const w = el("div", "mark"); w.appendChild(spark()); box.appendChild(w); }
   }
   if (atEnd || !loaded) sc.scrollTop = sc.scrollHeight;
 }
@@ -1367,6 +1417,89 @@ async function load() {
   loaded = true;
 }
 // כפתור "מעבר לסוף השיחה": מופיע כשגוללים למעלה
+function fmtDur(ms) {
+  const s = Math.max(0, Math.round(ms / 1000));
+  if (s < 60) return s + "s";
+  const m = Math.floor(s / 60);
+  if (m < 60) return m + "m " + String(s % 60).padStart(2, "0") + "s";
+  return Math.floor(m / 60) + "h " + String(m % 60).padStart(2, "0") + "m";
+}
+function tickThink() { const t = $("thinkT"); if (t) t.textContent = fmtDur(Date.now() - (+t.dataset.at || Date.now())); }
+setInterval(tickThink, 1000);
+
+// ---- חלונית פרטי השיחה ושיתוף
+let panelOn = store.get("claude_panel", innerWidth >= 1200);
+function setPanel(on) {
+  panelOn = !!on; if (innerWidth > 820) store.set("claude_panel", panelOn);
+  document.body.classList.toggle("panel", panelOn);
+  $("panelBtn").classList.toggle("on", panelOn); $("panelBtn").setAttribute("aria-pressed", String(panelOn));
+  if (panelOn) renderPanel(); updJump();
+}
+function codeBlocks(id) {
+  const out = [];
+  for (const m of convItems(id)) {
+    if (m.from === "me") continue;
+    const re = /(?:^|\n)\s*(```|~~~)\s*([\w+#.-]*)\n([\s\S]*?)\n\s*\1/g; let x;
+    while ((x = re.exec(m.text))) out.push({ lang: x[2] || "code", code: x[3] });
+  }
+  return out;
+}
+function renderPanel() {
+  const P = $("panel"); if (!panelOn) return; P.textContent = "";
+  const sec = (title) => { const s = el("section"); s.appendChild(el("h4", "", title)); P.appendChild(s); return s; };
+  const row = (ic, text, fn, extra) => {
+    const r = el(fn ? "button" : "div", "pr"); if (fn) { r.type = "button"; r.onclick = fn; }
+    if (ic) r.appendChild(icon(ic)); const sp = el("span", extra && extra.ltr ? "ltr" : "", text); if (!(extra && extra.ltr)) sp.dir = "auto"; r.appendChild(sp);
+    if (extra && extra.small) r.appendChild(el("small", "", extra.small));
+    return r;
+  };
+  const x = ibtn(IC.x, "סגירת החלונית", () => setPanel(false)); x.id = "panelX";
+  const code = convMode(cur) === "code", mine = convItems(cur), p = projOf(cur);
+  const env = sec("סביבה"); env.firstChild.style.display = "flex"; env.firstChild.appendChild(x);
+  env.appendChild(row(IC.cloud, code ? "Code · עבודה על מאגרים" : "Claude · שיחה"));
+  if (code) {
+    const r = getRepo(cur);
+    env.appendChild(row(IC.repo, r.repo || "בחירת מאגר", repoForm, { ltr: !!r.repo }));
+    env.appendChild(row(IC.branch, r.branch || "ענף ברירת המחדל", repoForm, { ltr: !!r.branch }));
+  }
+  env.appendChild(row(IC.folder, p ? p.name : "ללא פרויקט", (e) => { e.stopPropagation(); projMenu(cur, e.currentTarget); }));
+  const con = sec("חיבור");
+  const cr = el("div", "pr"); const dot = el("i", "dot" + (live ? " on" : "")); cr.append(dot, el("span", "", live ? "Claude מחובר" : "Claude לא מחובר כרגע")); con.appendChild(cr);
+  const mineN = mine.filter((m) => m.from === "me").length, ansN = mine.length - mineN;
+  con.appendChild(row(IC.chat, "הודעות בשיחה", null, { small: mineN + " שלך · " + ansN + " תשובות" }));
+  const files = []; for (const m of mine) if (m.from === "me") for (const f of parse(m.text).files) if (!files.includes(f)) files.push(f);
+  if (files.length) { const fs = sec("קבצים ששלחת"); for (const f of files.slice(0, 12)) fs.appendChild(row(IC.file, f)); if (files.length > 12) fs.appendChild(el("div", "more", "ועוד " + (files.length - 12))); }
+  const blocks = codeBlocks(cur);
+  if (blocks.length) {
+    const cs = sec("קוד מהתשובות");
+    blocks.slice(0, 12).forEach((b, i) => {
+      const n = b.code.split("\n").length;
+      cs.appendChild(row(IC.code, b.lang + " · " + (i + 1), (e) => copy(b.code, e.currentTarget), { ltr: true, small: n === 1 ? "שורה אחת" : n + " שורות" }));
+    });
+    if (blocks.length > 12) cs.appendChild(el("div", "more", "ועוד " + (blocks.length - 12)));
+  }
+}
+function convAsText(id) {
+  const c = convList().find((z) => z.id === id), L = ["# " + (c ? c.title : "שיחה"), ""];
+  for (const m of convItems(id)) {
+    if (m.from === "me") { const P = parse(m.text); L.push("**אני** (" + fmtStamp(m.at) + "):", "", P.text + (P.files.length ? "\n\n[קבצים מצורפים: " + P.files.join(", ") + "]" : ""), ""); }
+    else L.push("**Claude** (" + fmtStamp(m.at) + "):", "", m.text, "");
+  }
+  return L.join("\n");
+}
+$("panelBtn").onclick = () => setPanel(!panelOn);
+$("shareBtn").onclick = (e) => {
+  e.stopPropagation();
+  showMenu($("shareBtn"), [
+    ["העתקת כל השיחה", IC.copy, () => copy(convAsText(cur), null)],
+    ["הורדה כקובץ טקסט", IC.dl, () => {
+      const c = convList().find((z) => z.id === cur), a = el("a");
+      a.href = "data:text/markdown;charset=utf-8," + encodeURIComponent(convAsText(cur));
+      a.download = ((c ? c.title : "שיחה").replace(/[\\/:*?"<>|]+/g, " ").trim().slice(0, 60) || "שיחה") + ".md";
+      document.body.appendChild(a); a.click(); a.remove(); toast("ההורדה התחילה");
+    }],
+  ]);
+};
 function updJump() {
   const sc = $("scroll"), far = !sc.classList.contains("hide") && sc.scrollHeight - sc.scrollTop - sc.clientHeight > 160;
   $("jump").classList.toggle("hide", !far);
@@ -1403,7 +1536,8 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     hideMenu(true);
     // בטלפון הסרגל הוא שכבה: Escape סוגר אותו ומחזיר את המיקוד לכפתור שפתח אותו
-    if (innerWidth <= 820 && !document.body.classList.contains("closed") && !$("dlg").open) { closeSide(); $("openSide").focus(); }
+    if (innerWidth <= 820 && panelOn && !$("dlg").open) { setPanel(false); $("panelBtn").focus(); }
+    else if (innerWidth <= 820 && !document.body.classList.contains("closed") && !$("dlg").open) { closeSide(); $("openSide").focus(); }
   }
   if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
   if (e.shiftKey && e.code === "KeyO") { e.preventDefault(); startNew(); }
@@ -1412,6 +1546,7 @@ document.addEventListener("keydown", (e) => {
   else if (!e.shiftKey && e.code === "Period") { e.preventDefault(); toggleSide(); }
 });
 applyPrefs();
+setPanel(innerWidth > 820 ? panelOn : false);
 if (innerWidth > 820 && store.get("claude_side", true)) document.body.classList.remove("closed");
 renderHello();
 if (token) { load(); setInterval(() => { if (!document.hidden && !sending) load(); }, 6000); }
