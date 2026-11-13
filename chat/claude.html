@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://ydcfafijktzasrkkxyux.supabase.co; img-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self' https://ydcfafijktzasrkkxyux.supabase.co; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="theme-color" id="tc" content="#ffffff">
 <title>Claude</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23d97757' d='M11.50 11.80 L10.75 2.28 Q10.75 1.15 12.00 1.09 Q13.25 1.15 13.25 2.28 L12.50 11.80 ZM11.67 11.57 L15.40 4.21 Q15.91 3.36 16.88 3.88 Q17.79 4.49 17.28 5.34 L12.53 12.09 ZM11.90 11.47 L19.78 5.60 Q20.78 4.98 21.52 6.05 Q22.15 7.19 21.16 7.81 L12.43 12.32 ZM12.20 11.50 L20.80 10.85 Q21.83 10.85 21.89 12.00 Q21.83 13.15 20.80 13.15 L12.20 12.50 ZM12.43 11.67 L21.15 16.04 Q22.12 16.62 21.53 17.72 Q20.83 18.76 19.86 18.18 L11.91 12.53 ZM12.53 11.91 L17.18 18.49 Q17.69 19.34 16.78 19.95 Q15.81 20.47 15.30 19.62 L11.67 12.43 ZM12.50 12.20 L13.30 21.79 Q13.30 22.96 12.00 23.02 Q10.70 22.96 10.70 21.79 L11.50 12.20 ZM12.33 12.43 L8.50 19.96 Q7.99 20.81 7.02 20.29 Q6.10 19.68 6.61 18.83 L11.47 11.91 ZM12.09 12.53 L4.05 18.23 Q3.09 18.81 2.39 17.77 Q1.80 16.67 2.76 16.09 L11.57 11.67 ZM11.80 12.50 L3.14 13.20 Q2.06 13.20 2.00 12.00 Q2.06 10.80 3.14 10.80 L11.80 11.50 ZM11.57 12.33 L3.02 8.06 Q2.06 7.48 2.65 6.38 Q3.34 5.34 4.31 5.92 L12.09 11.47 ZM11.47 12.09 L6.77 5.43 Q6.26 4.58 7.17 3.96 Q8.14 3.44 8.65 4.29 L12.33 11.57 ZM12 12m-1.9 0a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0-3.8 0Z'/%3E%3C/svg%3E">
@@ -83,7 +83,7 @@ html[dir=ltr] .ci .tt,html[dir=ltr] .plist .tt,html[dir=ltr] #htitle{text-align:
 #sidefoot{padding:8px 12px 10px;display:flex;align-items:center;justify-content:space-between;border-top:.8px solid var(--line)}
 #sidefoot .ib{width:32px;height:32px;color:var(--ink)}
 #sidefoot .ib svg{width:20px;height:20px}
-#me{display:inline-flex;align-items:center;gap:8px;height:36px;max-width:calc(100% - 40px);padding:0 10px 0 4px;border-radius:8px;font-size:16px}
+#me{display:inline-flex;align-items:center;gap:8px;height:36px;max-width:calc(100% - 40px);padding-block:0;padding-inline:4px 10px;border-radius:8px;font-size:16px}
 #me:hover{background:var(--hover)}
 .av{width:26px;height:26px;border-radius:50%;background:var(--solid);color:var(--bg);display:grid;place-items:center;font-size:13px;font-weight:600;flex:none}
 #me b{font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -210,7 +210,7 @@ body:not(.sans) .a .body{font-family:var(--serif);font-size:1.06em;line-height:1
 .btn.bad{color:var(--bad)}
 .btn svg{width:16px;height:16px}
 .edit{width:100%;max-width:600px;background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:10px}
-.edit textarea{width:100%;min-width:260px;border:0;outline:0;background:none;resize:vertical;min-height:80px}
+.edit textarea{width:100%;min-width:min(260px,100%);border:0;outline:0;background:none;resize:vertical;min-height:80px}
 .edit .row{justify-content:flex-end;margin-top:4px}
 @keyframes sp{0%,100%{transform:rotate(0) scale(.9);opacity:.6}50%{transform:rotate(90deg) scale(1.05);opacity:1}}
 
@@ -335,9 +335,9 @@ body.inchat #below{max-width:768px}
 #menu.acct{width:272px}
 #menu .mh{height:25px;padding:0 10px;display:flex;align-items:center;font-size:13px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #menu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
-#toast{position:fixed;top:62px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:10px;font-size:14px;z-index:40;box-shadow:var(--pop);display:flex;gap:14px;align-items:center;max-width:92vw}
+#toast{position:fixed;top:62px;left:0;right:0;margin-inline:auto;width:fit-content;background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:10px;font-size:14px;z-index:40;box-shadow:var(--pop);display:flex;gap:14px;align-items:center;max-width:92vw}
 #toast button{color:var(--acc);font-weight:600;filter:brightness(1.25)}
-dialog{border:0;border-radius:12px;background:var(--panel);color:var(--ink);padding:12px 16px 16px;width:min(520px,94vw);box-shadow:var(--dlg);max-height:90vh;font-size:14px;line-height:20px}
+dialog{border:0;border-radius:12px;background:var(--panel);color:var(--ink);padding:12px 16px 16px;width:min(520px,94vw);box-shadow:var(--dlg);max-height:calc(100dvh - 24px);font-size:14px;line-height:20px}
 dialog::backdrop{background:rgba(0,0,0,.4)}
 dialog h3{margin:0 0 12px;font-size:15px;font-weight:600;line-height:28px}
 dialog .note{margin:0 0 12px}
@@ -360,10 +360,16 @@ dialog .row .btn{height:40px;padding:0 16px;border-radius:10px;font-size:15px}
 
 /* פריסה כמו באתר הרשמי: הסרגל משמאל, ההודעות שלך מימין, שליחה מימין. הטקסט עצמו נשאר מימין לשמאל */
 
-html[dir=ltr] :is(.mark span,.meta,#sub,.note,.plist small,#toast>span,.fld>span,.fld small,dialog h3,.nav .lb,.grp span,.card b,.card small,.pw h1,.err,#meTxt,#greet,.instr,.cf b){direction:rtl;text-align:left}
-html[dir=ltr] :is(.mark span,.meta,.nav .lb,.grp span,#meTxt,#greet,#toast>span){unicode-bidi:isolate}
+html[dir=ltr] :is(.mark span,.meta,#sub,.note,.plist small,#toast>span,.fld>span,.fld small,dialog h3,.nav .lb,.grp span,.card small,.err,#greet,.cf b,#hint){direction:rtl;text-align:left}
+html[dir=ltr] :is(.mark span,.meta,.nav .lb,.grp span,#greet,#toast>span,#hint){unicode-bidi:isolate}
+html[dir=ltr] :is(.pw h1,.card b,.instr){text-align:left}
+html[dir=rtl] #text:placeholder-shown{direction:rtl}
+.tag>span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+#menu{max-width:calc(100vw - 16px)}
+#menu button>span:not(.k){min-width:0;overflow:hidden;text-overflow:ellipsis}
 
 @media (min-width:821px){
+  body.pv.closed #projView{padding-top:56px}
   body.pv #head{position:absolute;top:0;inset-inline:0;z-index:2;pointer-events:none}
   body.pv #head>*{pointer-events:auto}
 }
@@ -372,6 +378,7 @@ html[dir=ltr] :is(.mark span,.meta,.nav .lb,.grp span,#meTxt,#greet,#toast>span)
 @media (max-width:820px){
   #side{position:fixed;inset-block:0;inset-inline-start:0;z-index:20;width:100%;border:0!important;transition:transform .3s var(--ez2),visibility .3s}
   body.closed #side{margin:0;transform:translateX(100%);visibility:hidden}
+  body:not(.closed) #side{transition:transform .3s var(--ez2),visibility 0s}
   html[dir=ltr] body.closed #side{transform:translateX(-100%)}
   body:not(.closed) #scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:15}
   #head{padding:0 10px}
@@ -405,7 +412,9 @@ html[dir=ltr] :is(.mark span,.meta,.nav .lb,.grp span,#meTxt,#greet,#toast>span)
   #badges .tag{max-width:130px}
   #msgs{padding:4px 38.4px 40px}
   .body p{padding-inline:4px 0}
-  .grid{grid-template-columns:1fr}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .ci .more{opacity:1}
+  .um:has(.edit){width:85%}
   .um{max-width:85%}
   #composeWrap{padding:0 26px max(14px,env(safe-area-inset-bottom))}
   #projView{padding:8px 0 30px}
@@ -493,6 +502,7 @@ html[dir=ltr] :is(.mark span,.meta,.nav .lb,.grp span,#meTxt,#greet,#toast>span)
 // השיחה עם Claude בסגנון האתר הרשמי: שני מצבים (שיחה / קוד), דף שיחות עם חיפוש, פרויקטים עם הנחיות, Markdown, הגדרות.
 // הכול עובר דרך הגשר ב-Supabase (claude_send / claude_history) עם האסימון של אתר הצאט. התשובות נכתבות מאוחר יותר.
 const API = "https://ydcfafijktzasrkkxyux.supabase.co/functions/v1/chat-netfree/";
+const VER = "2026-11-13.4";
 const $ = (id) => document.getElementById(id);
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -693,9 +703,13 @@ function renderSide() {
   const ms = $("meSub"); ms.className = live ? "on" : ""; ms.title = live ? "Claude מחובר" : "Claude לא מחובר כרגע"; $("me").title = "שמואל · " + ms.title;
   $("meTxt").textContent = "· " + (live ? "מחובר" : "לא מחובר"); $("sname").textContent = mode === "code" ? "Code" : "Claude";
   const box = $("convs");
-  box.textContent = "";
   const list = convList().filter((c) => c.mode === mode && c.hay && !c.archived);
-  if (!list.length) { box.appendChild(el("div", "grp", "אין עדיין שיחות")); return; }
+  // הרשימה נבנית מחדש רק כשמשהו השתנה, כדי שהמיקוד והתפריט הפתוח לא ייעלמו ברענון התקופתי
+  const anyConv = list.length || convList().some((c) => c.hay);
+  const ss = JSON.stringify([mode, view, cur, shut, anyConv, list.map((c) => [c.id, c.title, c.pinned, c.waiting, c.mode === "code" ? getRepo(c.id).repo : ""])]);
+  if (ss === renderSide.sig && box.firstChild) return;
+  renderSide.sig = ss; box.textContent = "";
+  if (!list.length) { const e0 = el("div", "grp"); e0.appendChild(el("span", "", anyConv ? "אין כאן שיחות פעילות" : "אין עדיין שיחות")); box.appendChild(e0); if (!anyConv) return; }
   let g = "";
   for (const c of list) {
     const ng = c.pinned ? "מוצמדות" : "אחרונות";
@@ -729,12 +743,12 @@ function renderChats(focus) {
   const top = el("div", "ptop"); top.appendChild(el("h1", "", "אחרונות"));
   const nb = el("button", "btn pri"); nb.type = "button"; nb.append(icon(IC.plus), document.createTextNode("שיחה חדשה")); nb.onclick = () => startNew();
   top.appendChild(nb); w.appendChild(top);
-  const sb = el("div", "sbox"), inp = el("input"); inp.type = "search"; inp.id = "q"; inp.placeholder = "חיפוש בפעילות שלך"; inp.setAttribute("aria-label", "חיפוש בשיחות"); inp.value = chatQ;
+  const sb = el("div", "sbox"), inp = el("input"); inp.type = "search"; inp.id = "q"; inp.dir = "auto"; inp.placeholder = "חיפוש בפעילות שלך"; inp.setAttribute("aria-label", "חיפוש בשיחות"); inp.value = chatQ;
   sb.append(icon(IC.search), inp); w.appendChild(sb);
   const tabs = el("div", "tabs"); tabs.setAttribute("role", "tablist");
   for (const [k, t] of [["active", "פעילות"], ["archived", "בארכיון"]]) {
     const b = el("button", "", t); b.type = "button"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", String(chatTab === k));
-    b.onclick = () => { chatTab = k; chatsSig = ""; renderChats(); };
+    b.onclick = () => { chatTab = k; render(); const nb = document.querySelector(".tabs [aria-selected=true]"); if (nb) nb.focus(); };
     tabs.appendChild(b);
   }
   w.insertBefore(tabs, sb);
@@ -778,18 +792,20 @@ function convMenu(c, anchor) {
 function delConv(id, title) {
   if (!confirm("למחוק את השיחה \"" + (title || "") + "\" מהרשימה במכשיר הזה?")) return;
   meta[id] = { ...meta[id], hidden: true }; saveMeta(); chatsSig = "";
-  if (cur === id) startNew(); else render();
+  if (cur === id) { const v = view; startNew(); if (v !== "chat") { view = v; render(); } } else render();
   toast("השיחה נמחקה מהרשימה (במכשיר הזה)", "ביטול", () => { meta[id].hidden = false; saveMeta(); openConv(id); });
 }
-let menuAnchor = null;
+let menuAnchor = null, menuRect = null;
 function showMenu(anchor, rows) {
-  const m = $("menu"); m.textContent = ""; menuAnchor = anchor;
+  const m = $("menu");
+  if (!m.classList.contains("hide") && menuAnchor === anchor) { hideMenu(true); return; }
+  m.textContent = ""; menuAnchor = anchor;
   for (const r of rows) {
     if (!r) { m.appendChild(el("hr")); continue; }
     const [label, ic, fn, cls, key] = r;
     const b = el("button", cls || ""); b.type = "button"; b.setAttribute("role", "menuitem");
     if (ic) b.append(icon(ic));
-    b.append(document.createTextNode(label));
+    const lb = el("span", "", label); lb.dir = "auto"; b.append(lb);
     if (key) b.append(el("span", "k", key));
     if (cls === "cur") b.setAttribute("aria-checked", "true");
     b.onclick = (e) => { e.stopPropagation(); hideMenu(); fn(); };
@@ -800,7 +816,7 @@ function showMenu(anchor, rows) {
   m.classList.toggle("acct", acct);
   if (acct) m.prepend(el("div", "mh", "שמואל · " + (live ? "Claude מחובר" : "Claude לא מחובר כרגע")));
   m.classList.remove("hide");
-  const r = anchor.getBoundingClientRect();
+  const r = anchor.isConnected ? (menuRect = anchor.getBoundingClientRect()) : menuRect || anchor.getBoundingClientRect();
   const below = r.bottom + 4 + m.offsetHeight < innerHeight - 8;
   m.style.top = Math.max(8, below ? r.bottom + 4 : r.top - 4 - m.offsetHeight) + "px";
   m.style.left = (acct ? Math.max(8, Math.min(innerWidth - m.offsetWidth - 8, $("side").getBoundingClientRect().left + 8)) : Math.max(8, Math.min(innerWidth - m.offsetWidth - 8, document.documentElement.dir === "ltr" ? r.left : r.right - m.offsetWidth))) + "px";
@@ -832,8 +848,8 @@ function openForm(o) {
     else if (fd.type === "select") { inp = el("select"); for (const [v, t] of fd.options) { const op = el("option", "", t); op.value = v; inp.appendChild(op); } }
     else { inp = el("input"); inp.type = fd.type === "check" ? "checkbox" : "text"; if (fd.type !== "check") inp.maxLength = fd.max || 100; }
     if (fd.type === "check") inp.checked = !!fd.value; else inp.value = fd.value || "";
-    if (fd.ph) inp.placeholder = fd.ph;
-    if (fd.ltr) inp.dir = "ltr";
+    if (fd.ph) inp.placeholder = fd.ltr ? fd.ph : "\u202B" + fd.ph + "\u202C";
+    if (fd.type !== "check" && fd.type !== "select") inp.dir = fd.ltr ? "ltr" : "auto";
     if (fd.type === "check") lab.append(inp, el("span", "", fd.label)); else lab.append(el("span", "", fd.label), inp);
     if (fd.list) {
       const dl = el("datalist"); dl.id = "dl_" + fd.k;
@@ -865,22 +881,24 @@ function rename(id) {
   if (id !== cur || view !== "chat") openConv(id);
   const c = convList().find((x) => x.id === id), ht = $("htitle");
   if (!c || !convItems(id).length) return;
-  renaming = true;
-  const inp = el("input"); inp.id = "hname"; inp.type = "text"; inp.maxLength = 80; inp.value = c.title; inp.setAttribute("aria-label", "שם השיחה");
+  renaming = true; if (innerWidth <= 820) closeSide();
+  const inp = el("input"); inp.id = "hname"; inp.type = "text"; inp.dir = "auto"; inp.maxLength = 80; inp.value = c.title; inp.setAttribute("aria-label", "שם השיחה");
   ht.classList.add("hide"); $("hmore").classList.add("hide"); ht.after(inp);
   let done = false;
-  const end = (save) => {
+  const end = (save, viaBlur) => {
     if (done) return; done = true; renaming = false;
     if (save) { meta[id] = { ...meta[id], title: clean(inp.value) || undefined }; saveMeta(); }
     inp.remove(); render();
+    if (!viaBlur && view === "chat" && cur === id) $("htitle").focus();
   };
-  inp.onkeydown = (e) => { if (e.key === "Enter") end(true); else if (e.key === "Escape") end(false); };
-  inp.onblur = () => end(true);
+  inp.onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); end(true); } else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); end(false); } };
+  // השהיה קצרה ביציאה מהשדה, כדי שלחיצה על שורה בסרגל לא תיבלע בבנייה מחדש של הרשימה
+  inp.onblur = () => setTimeout(() => end(true, true), 180);
   inp.focus(); inp.select();
 }
 
 // ---- פרויקטים
-function projForm(p) {
+function projForm(p, assignTo) {
   openForm({
     title: p ? "עריכת פרויקט" : "פרויקט חדש",
     note: "ההנחיות נשלחות ל-Claude פעם אחת, בהודעה הראשונה של כל שיחה בפרויקט (ושוב אם שינית אותן), בתוך סימון ברור.",
@@ -892,8 +910,12 @@ function projForm(p) {
     ok: p ? "שמירה" : "יצירה",
     valid(v) { if (!clean(v.name)) { toast("צריך לתת שם לפרויקט"); return false; } return true; },
     onOk(v) {
-      if (p) { p.name = clean(v.name); p.desc = clean(v.desc); p.instr = v.instr.trim(); }
-      else { p = { id: newId("p"), name: clean(v.name), desc: clean(v.desc), instr: v.instr.trim(), at: Date.now() }; projects.unshift(p); }
+      const desc = String(v.desc || "").replace(/[\n\r]/g, " ").replace(/\s+/g, " ").trim().slice(0, 120);
+      if (p) { p.name = clean(v.name); p.desc = desc; p.instr = v.instr.trim(); p.upd = Date.now(); }
+      else {
+        p = { id: newId("p"), name: clean(v.name), desc, instr: v.instr.trim(), at: Date.now() }; projects.unshift(p);
+        if (assignTo) { meta[assignTo] = { ...meta[assignTo], project: p.id }; saveMeta(); sig = ""; }
+      }
       saveProj(); if (view === "projects" || view.startsWith("p:")) view = "p:" + p.id; render();
     },
   });
@@ -902,11 +924,14 @@ function projMenu(id, anchor) {
   const curP = (meta[id] || {}).project || "";
   const rows = [["ללא פרויקט", null, () => setProj(id, ""), curP ? "" : "cur"]];
   for (const p of projects) rows.push([p.name, IC.folder, () => setProj(id, p.id), p.id === curP ? "cur" : ""]);
-  rows.push(null, ["פרויקט חדש…", IC.plus, () => projForm(null)]);
+  rows.push(null, ["פרויקט חדש…", IC.plus, () => projForm(null, id)]);
   showMenu(anchor, rows);
 }
 function setProj(id, pid) { meta[id] = { ...meta[id], project: pid }; saveMeta(); sig = ""; render(); }
-function renderProjects() {
+// דף הפרויקטים נבנה מחדש רק כשמשהו השתנה, כדי ששדה החיפוש והמיקוד לא ייעלמו ברענון התקופתי
+const projSig = () => view + projSort + projSearch + JSON.stringify(projects) + JSON.stringify(convList().map((c) => [c.id, c.title, c.last, c.project, c.mode]));
+function renderProjects() { drawProjects(); renderProjects.sig = projSig(); }
+function drawProjects() {
   const box = $("projView"); box.textContent = "";
   const w = el("div", "pw"); box.appendChild(w);
   const p = view.startsWith("p:") ? projects.find((x) => x.id === view.slice(2)) : null;
@@ -914,20 +939,20 @@ function renderProjects() {
     view = "projects";
     const top = el("div", "ptop"); top.appendChild(el("h1", "", "פרויקטים"));
     const hb = el("div", "hb");
-    const sbtn = ibtn(IC.search, "חיפוש בפרויקטים", () => { projSearch = !projSearch; if (!projSearch) projQ = ""; renderProjects(); if (projSearch) { const q = $("pq"); if (q) q.focus(); } });
+    const sbtn = ibtn(IC.search, "חיפוש בפרויקטים", () => { projSearch = !projSearch; if (!projSearch) projQ = ""; renderProjects(); const q = projSearch ? $("pq") : document.querySelector(".ptop .hb .ib"); if (q) q.focus(); });
     const SORTS = [["updated", "עדכון אחרון"], ["created", "תאריך יצירה"], ["alpha", "לפי שם"]];
-    const obtn = ibtn(IC.sort, "מיון הפרויקטים", (e) => { e.stopPropagation(); showMenu(obtn, SORTS.map(([k, t]) => [t, null, () => { projSort = k; store.set("claude_psort", k); renderProjects(); }, projSort === k ? "cur" : ""])); });
+    const obtn = ibtn(IC.sort, "מיון הפרויקטים", (e) => { e.stopPropagation(); showMenu(obtn, SORTS.map(([k, t]) => [t, null, () => { projSort = k; store.set("claude_psort", k); setTimeout(() => { const o = document.querySelector(".ptop .hb .ib:nth-child(2)"); if (o) o.focus(); }); renderProjects(); }, projSort === k ? "cur" : ""])); });
     const nb = el("button", "btn pri"); nb.type = "button"; nb.append(icon(IC.plus), document.createTextNode("פרויקט חדש")); nb.onclick = () => projForm(null);
     hb.append(sbtn, obtn, nb); top.appendChild(hb); w.appendChild(top);
     if (projSearch) {
-      const sb = el("div", "sbox"), inp = el("input"); inp.type = "search"; inp.id = "pq"; inp.placeholder = "חיפוש בפרויקטים"; inp.setAttribute("aria-label", "חיפוש בפרויקטים"); inp.value = projQ;
+      const sb = el("div", "sbox"), inp = el("input"); inp.type = "search"; inp.id = "pq"; inp.dir = "auto"; inp.placeholder = "חיפוש בפרויקטים"; inp.setAttribute("aria-label", "חיפוש בפרויקטים"); inp.value = projQ;
       inp.oninput = () => { projQ = inp.value; fillP(); };
-      inp.onkeydown = (e) => { if (e.key === "Escape") { projSearch = false; projQ = ""; renderProjects(); sbtn.focus(); } };
+      inp.onkeydown = (e) => { if (e.key === "Escape") { projSearch = false; projQ = ""; renderProjects(); const nb = document.querySelector(".ptop .hb .ib"); if (nb) nb.focus(); } };
       sb.append(icon(IC.search), inp); w.appendChild(sb);
     }
     const info = el("p", "note"), g = el("div", "grid"); w.append(info, g);
     const all = convList();
-    const lastOf = (x) => all.filter((k) => k.project === x.id).reduce((n, k) => Math.max(n, k.last), x.at || 0);
+    const lastOf = (x) => all.filter((k) => k.project === x.id).reduce((n, k) => Math.max(n, k.last), x.upd || x.at || 0);
     const fillP = () => {
       const q = projQ.trim().toLowerCase();
       let list = projects.filter((x) => !q || (x.name + " " + (x.desc || "")).toLowerCase().includes(q));
@@ -938,7 +963,7 @@ function renderProjects() {
         const c = el("button", "card"); c.type = "button";
         const tile = el("span", "tile"); tile.appendChild(icon(IC.folder));
         const n = all.filter((k) => k.project === x.id).length;
-        const tx = el("span", "tx"); tx.append(el("b", "", x.name), el("small", "", (n === 1 ? "שיחה אחת" : n + " שיחות") + (x.desc ? " · " + x.desc : "")));
+        const tx = el("span", "tx"); const nm = el("b", "", x.name); nm.dir = "auto"; tx.append(nm, el("small", "", (n === 1 ? "שיחה אחת" : n + " שיחות") + (x.desc ? " · " + x.desc : "")));
         c.append(tile, tx);
         c.onclick = () => { view = "p:" + x.id; render(); };
         g.appendChild(c);
@@ -946,9 +971,9 @@ function renderProjects() {
     };
     fillP(); return;
   }
-  const back = el("button", "back", "→ כל הפרויקטים"); back.type = "button"; back.onclick = () => { view = "projects"; render(); };
+  const back = el("button", "back", (document.documentElement.dir === "ltr" ? "← " : "→ ") + "כל הפרויקטים"); back.type = "button"; back.onclick = () => { view = "projects"; render(); };
   w.appendChild(back);
-  const top = el("div", "ptop"); top.appendChild(el("h1", "", p.name));
+  const top = el("div", "ptop"); const ph1 = el("h1", "", p.name); ph1.dir = "auto"; top.appendChild(ph1);
   const r = el("div", "row");
   const nb = el("button", "btn pri"); nb.type = "button"; nb.append(icon(IC.plus), document.createTextNode("שיחה חדשה בפרויקט")); nb.onclick = () => startNew(p.id);
   const eb = el("button", "btn"); eb.type = "button"; eb.append(icon(IC.edit), document.createTextNode("עריכה")); eb.onclick = () => projForm(p);
@@ -960,13 +985,14 @@ function renderProjects() {
     saveMeta(); view = "projects"; render();
   };
   r.append(nb, eb, db); top.appendChild(r); w.appendChild(top);
-  w.appendChild(el("div", "instr", p.instr || "אין הנחיות. אפשר להוסיף בעריכה."));
+  if (p.desc) { const pd = el("p", "note", p.desc); pd.dir = "auto"; w.appendChild(pd); }
+  const ins = el("div", "instr", p.instr || "אין הנחיות. אפשר להוסיף בעריכה."); ins.dir = "auto"; w.appendChild(ins);
   const list = convList().filter((c) => c.project === p.id);
   w.appendChild(el("p", "note", list.length ? "שיחות בפרויקט" : "אין עדיין שיחות בפרויקט."));
   const pl = el("div", "plist");
   for (const c of list) {
     const b = el("button"); b.type = "button";
-    b.append(icon(c.mode === "code" ? IC.code : IC.chat), el("span", "tt", c.title), el("span", "meta", fmtDay(c.last)));
+    const ptt = el("span", "tt", c.title); ptt.dir = "auto"; b.append(icon(c.mode === "code" ? IC.code : IC.chat), ptt, el("span", "meta", fmtDay(c.last)));
     b.onclick = () => openConv(c.id);
     pl.appendChild(b);
   }
@@ -993,10 +1019,10 @@ function openConv(id) {
   cur = id; view = "chat"; mode = convMode(id); store.set("claude_cur", cur); store.set("claude_mode", mode);
   sig = ""; editing = ""; loadDraft(); render();
 }
-function loadDraft() { $("text").value = store.get("claude_draft_" + cur, "") || ""; atts = []; renderAtts(); grow(); updSend(); }
+function loadDraft() { stopDict(); $("text").value = store.get("claude_draft_" + cur, "") || ""; atts = []; renderAtts(); grow(); updSend(); }
 function tagEl(ic, text, ltr, fn) {
   const t = el(fn ? "button" : "span", "tag" + (ltr ? " ltr" : "")); if (fn) { t.type = "button"; t.onclick = fn; }
-  t.append(icon(ic), el("span", "", text)); return t;
+  const ts = el("span", "", text); if (!ltr) ts.dir = "auto"; t.append(icon(ic), ts); return t;
 }
 function renderHead() {
   const b = $("badges"); b.textContent = "";
@@ -1016,7 +1042,7 @@ function renderHead() {
 function renderTools() {
   const code = convMode(cur) === "code";
   const p = projOf(cur), pb = $("projBtn");
-  pb.textContent = ""; pb.append(icon(IC.folder), el("span", "", p ? p.name : "פרויקט"));
+  pb.textContent = ""; const pbs = el("span", "", p ? p.name : "פרויקט"); pbs.dir = "auto"; pb.append(icon(IC.folder), pbs);
   pb.title = "שיוך השיחה לפרויקט";
   const rb = $("repoBtn"); rb.classList.toggle("hide", !code); document.body.classList.toggle("codemode", code);
   if (code) {
@@ -1080,8 +1106,9 @@ function render() {
   $("projView").classList.toggle("hide", !pv);
   $("composeWrap").classList.toggle("hide", pv);
   if (pv) {
+    stopDict();
     $("hello").classList.add("hide"); $("scroll").classList.add("hide"); $("jump").classList.add("hide"); $("hright").classList.add("hide");
-    if (view !== "chats") { chatsSig = ""; renderProjects(); return; }
+    if (view !== "chats") { chatsSig = ""; if (projSig() !== renderProjects.sig || !$("projView").firstChild) renderProjects(); return; }
     // דף השיחות נבנה מחדש רק כשמשהו השתנה, כדי לא להקפיץ את הגלילה ואת שדה החיפוש
     const cs = JSON.stringify(convList().map((c) => [c.id, c.title, c.last, c.pinned, c.archived])) + chatTab;
     if (cs !== chatsSig || !$("q")) { chatsSig = cs; const f = document.activeElement === $("q"); renderChats(f); }
@@ -1093,9 +1120,10 @@ function render() {
   document.body.classList.toggle("inchat", !empty);
   if (empty) { $("jump").classList.add("hide"); $("hright").classList.add("hide"); }
   $("scroll").classList.toggle("hide", empty);
-  const wrap = $("composeWrap");
+  const wrap = $("composeWrap"), hadFocus = document.activeElement === $("text");
   if (empty && wrap.parentNode !== $("composeSlot")) $("composeSlot").appendChild(wrap);
   if (!empty && wrap.parentNode !== $("main")) $("main").appendChild(wrap);
+  if (hadFocus && document.activeElement !== $("text")) $("text").focus();
   chatsSig = "";
   renderTools();
   if (empty) { renderHello(); return; }
@@ -1129,7 +1157,7 @@ function userMsg(m) {
   if (P.proj) tags.appendChild(tagEl(IC.folder, "הנחיות: " + P.proj.name, false));
   if (tags.childElementCount) wrap.appendChild(tags);
   if (editing === m.id) {
-    const ed = el("div", "edit"), ta = el("textarea"); ta.value = editDraft != null ? editDraft : P.text; ta.oninput = () => { editDraft = ta.value; };
+    const ed = el("div", "edit"), ta = el("textarea"); ta.dir = "auto"; ta.value = editDraft != null ? editDraft : P.text; ta.oninput = () => { editDraft = ta.value; };
     const row = el("div", "row");
     const no = el("button", "btn", "ביטול"); no.type = "button"; no.onclick = () => { editing = ""; sig = ""; render(); };
     const ok = el("button", "btn pri", "שליחה מחדש"); ok.type = "button";
@@ -1162,7 +1190,7 @@ function botMsg(m, isLast) {
   const col = el("div", "col"), body = el("div", "body"); body.appendChild(md(m.text)); col.appendChild(body);
   if (m.confirm) {
     const cf = el("div", "cf"); cf.appendChild(el("b", "", "ממתין לאישור שלך"));
-    cf.appendChild(document.createTextNode(m.confirm));
+    const ct = el("div", "", m.confirm); ct.dir = "auto"; cf.appendChild(ct);
     const row = el("div", "row");
     const yes = el("button", "btn pri", "מאשר"), no = el("button", "btn", "לבטל"), chg = el("button", "btn", "בקשת שינוי");
     yes.onclick = () => send("(מאושר)", { plain: true }); no.onclick = () => send("(לא מאושר, לבטל)", { plain: true });
@@ -1173,7 +1201,11 @@ function botMsg(m, isLast) {
   acts.append(ibtn(IC.copy, "העתקת התשובה", (e) => copy(m.text, e.currentTarget)),
     ibtn(IC.quote, "ציטוט בתשובה", () => { const t = $("text"); t.value = "> " + m.text.split("\n").slice(0, 3).join("\n> ") + "\n\n" + t.value; t.focus(); grow(); updSend(); }),
     el("span", "meta", fmtStamp(m.at)));
-  const vote = (v) => { fb[m.id] = fb[m.id] === v ? 0 : v; store.set("claude_fb", fb); sig = ""; render(); };
+  const vote = (v) => {
+    fb[m.id] = fb[m.id] === v ? 0 : v; store.set("claude_fb", fb);
+    gb.classList.toggle("on", fb[m.id] === 1); bb.classList.toggle("on", fb[m.id] === -1);
+    gb.setAttribute("aria-pressed", String(fb[m.id] === 1)); bb.setAttribute("aria-pressed", String(fb[m.id] === -1));
+  };
   const gb = ibtn(IC.up, "תשובה טובה (נשמר במכשיר הזה בלבד)", () => vote(1)), bb = ibtn(IC.down2, "תשובה לא טובה (נשמר במכשיר הזה בלבד)", () => vote(-1));
   if (fb[m.id] === 1) gb.classList.add("on"); if (fb[m.id] === -1) bb.classList.add("on");
   gb.setAttribute("aria-pressed", String(fb[m.id] === 1)); bb.setAttribute("aria-pressed", String(fb[m.id] === -1));
@@ -1277,7 +1309,7 @@ function link(href, text) {
 
 // ---- קבצים מצורפים (קובצי טקסט בלבד: התוכן נשלח בתוך ההודעה)
 function fileChip(name, onRemove) {
-  const c = el("span", "chip"); c.appendChild(icon(IC.file)); c.appendChild(el("span", "", name));
+  const c = el("span", "chip"); c.appendChild(icon(IC.file)); const fn = el("span", "", name); fn.dir = "auto"; c.appendChild(fn);
   if (onRemove) { const x = el("button"); x.type = "button"; x.setAttribute("aria-label", "הסרת " + name); x.appendChild(icon(IC.x)); x.onclick = onRemove; c.appendChild(x); }
   return c;
 }
@@ -1316,17 +1348,31 @@ $("modeBtn").onclick = (e) => {
 };
 // הכתבה: זיהוי הדיבור של הדפדפן, אם קיים. הטקסט נכנס לתיבה ולא נשלח לבד
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition; let rec = null;
+function stopDict() {
+  if (!rec) return; const r = rec; rec = null; r.onresult = r.onerror = r.onend = null;
+  try { r.abort(); } catch (e) {}
+  const b = $("dictBtn"); b.classList.remove("on"); b.title = "הכתבה"; b.setAttribute("aria-pressed", "false");
+}
 $("dictBtn").onclick = () => {
   const btn = $("dictBtn");
   if (!SR) { toast("הדפדפן הזה לא תומך בהכתבה"); return; }
-  if (rec) { rec.stop(); return; }
-  const t = $("text"), base = t.value.trim();
+  if (rec) { stopDict(); return; }
+  const t = $("text"); let fin = "", shown = "";
   try {
-    rec = new SR(); rec.lang = "he-IL"; rec.interimResults = true; rec.continuous = true;
-    rec.onresult = (ev) => { let x = ""; for (const r of ev.results) x += r[0].transcript; t.value = (base ? base + " " : "") + x; grow(); updSend(); store.set("claude_draft_" + cur, t.value); };
+    const r0 = rec = new SR(); rec.lang = "he-IL"; rec.interimResults = true; rec.continuous = true;
+    rec.onresult = (ev) => {
+      if (rec !== r0) return;
+      let interim = "";
+      for (let i = ev.resultIndex; i < ev.results.length; i++) { const x = ev.results[i]; if (x.isFinal) fin += x[0].transcript; else interim += x[0].transcript; }
+      // מחליפים רק את מה שההכתבה עצמה הוסיפה; אם הטקסט נערך ביד בינתיים, ממשיכים אחריו
+      let v = t.value;
+      if (shown && v.endsWith(shown)) v = v.slice(0, v.length - shown.length); else if (shown) { fin = ""; for (let i = ev.resultIndex; i < ev.results.length; i++) if (ev.results[i].isFinal) fin += ev.results[i][0].transcript; }
+      const add = (fin + interim).trim(); shown = add ? (v && !/\s$/.test(v) ? " " : "") + add : "";
+      t.value = v + shown; grow(); updSend(); store.set("claude_draft_" + cur, t.value);
+    };
     rec.onerror = (ev) => { toast(ev.error === "not-allowed" || ev.error === "service-not-allowed" ? "אין הרשאה למיקרופון" : ev.error === "no-speech" ? "לא נשמע דיבור" : "ההכתבה לא זמינה כרגע"); };
-    rec.onend = () => { rec = null; btn.classList.remove("on"); btn.title = "הכתבה"; };
-    rec.start(); btn.classList.add("on"); btn.title = "עצירת ההכתבה"; t.focus();
+    rec.onend = () => { if (rec === r0) stopDict(); };
+    rec.start(); btn.classList.add("on"); btn.title = "עצירת ההכתבה"; btn.setAttribute("aria-pressed", "true"); t.focus();
   } catch (x) { rec = null; btn.classList.remove("on"); toast("ההכתבה לא זמינה כרגע"); }
 };
 $("file").onchange = (e) => { addFiles([...e.target.files]); e.target.value = ""; };
@@ -1336,8 +1382,9 @@ cmp.addEventListener("dragleave", () => cmp.classList.remove("drag"));
 cmp.addEventListener("drop", (e) => { e.preventDefault(); cmp.classList.remove("drag"); addFiles([...e.dataTransfer.files]); });
 $("text").addEventListener("paste", (e) => { const f = [...((e.clipboardData && e.clipboardData.files) || [])]; if (f.length) { e.preventDefault(); addFiles(f); } });
 
+
 // ---- שליחה
-function grow() { const t = $("text"); t.style.height = "auto"; t.style.height = Math.min(260, t.scrollHeight) + "px"; }
+function grow() { const t = $("text"); t.style.height = "auto"; t.style.height = Math.min(260, t.scrollHeight) + "px"; updJump(); }
 function updSend() { $("sendbtn").disabled = sending || (!$("text").value.trim() && !atts.length); }
 $("text").addEventListener("input", () => { grow(); updSend(); store.set("claude_draft_" + cur, $("text").value); });
 $("text").addEventListener("keydown", (e) => {
@@ -1350,7 +1397,7 @@ cmp.onsubmit = (e) => {
   const t = $("text"); let body = t.value.trim();
   if (atts.length) body = (body || "מצורף קובץ") + atts.map((a) => "\n\n[קובץ מצורף: " + a.name + "]\n```\n" + a.text + "\n```").join("");
   if (!body) return;
-  t.value = ""; atts = []; renderAtts(); grow(); store.set("claude_draft_" + cur, "");
+  stopDict(); t.value = ""; atts = []; renderAtts(); grow(); store.set("claude_draft_" + cur, "");
   send(body);
 };
 // ההנחיות של הפרויקט נשלחות פעם אחת בכל שיחה (ושוב אם השתנו), בתוך סימון ברור
@@ -1506,9 +1553,16 @@ function updJump() {
   $("jump").style.bottom = ($("composeWrap").offsetHeight + 16) + "px";
 }
 $("scroll").addEventListener("scroll", updJump, { passive: true });
+try { new ResizeObserver(() => updJump()).observe($("composeWrap")); } catch (e) {}
 $("jump").onclick = () => { const sc = $("scroll"); sc.scrollTo({ top: sc.scrollHeight, behavior: "smooth" }); };
-function closeSide() { document.body.classList.add("closed"); if (innerWidth > 820) store.set("claude_side", false); }
-function toggleSide() { document.body.classList.toggle("closed"); if (innerWidth > 820) store.set("claude_side", !document.body.classList.contains("closed")); }
+function sideA11y(focus) {
+  const open = !document.body.classList.contains("closed"), phone = innerWidth <= 820;
+  $("main").inert = phone && open;
+  if (phone && focus) (open ? $("closeSide") : $("openSide")).focus();
+}
+function closeSide() { document.body.classList.add("closed"); if (innerWidth > 820) store.set("claude_side", false); sideA11y(false); }
+function toggleSide() { document.body.classList.toggle("closed"); if (innerWidth > 820) store.set("claude_side", !document.body.classList.contains("closed")); sideA11y(true); }
+addEventListener("resize", () => { sideA11y(false); updJump(); });
 for (const b of $("modes").children) b.onclick = () => { setMode(b.dataset.mode); if (innerWidth <= 820) closeSide(); };
 $("newbtn").onclick = () => { startNew(); if (innerWidth <= 820) closeSide(); };
 $("newTop").onclick = () => startNew();
@@ -1539,12 +1593,25 @@ document.addEventListener("keydown", (e) => {
     if (innerWidth <= 820 && panelOn && !$("dlg").open) { setPanel(false); $("panelBtn").focus(); }
     else if (innerWidth <= 820 && !document.body.classList.contains("closed") && !$("dlg").open) { closeSide(); $("openSide").focus(); }
   }
-  if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
+  if (!(e.ctrlKey || e.metaKey) || e.altKey || $("dlg").open) return;
   if (e.shiftKey && e.code === "KeyO") { e.preventDefault(); startNew(); }
   else if (!e.shiftKey && e.code === "KeyU" && view === "chat") { e.preventDefault(); $("file").click(); }
   else if (!e.shiftKey && e.code === "KeyK") { e.preventDefault(); openChats(true); }
   else if (!e.shiftKey && e.code === "Period") { e.preventDefault(); toggleSide(); }
 });
+// הדפדפן שומר את הדף כמה דקות. בודקים מול השרת, ואם עלתה גרסה חדשה – טוענים אותה, אבל רק כשלא באמצע כתיבה
+async function checkVersion() {
+  try {
+    const r = await fetch(location.pathname + "?nocache=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) return;
+    const m = (await r.text()).match(/const VER = "([^"]+)"/);
+    if (!m || m[1] === VER) return;
+    const busy = sending || $("dlg").open || $("text").value.trim() || atts.length || renaming || editing || rec;
+    if (busy) { toast("יש גרסה חדשה של הדף", "רענון", () => location.replace(location.pathname + "?v=" + encodeURIComponent(m[1]))); return; }
+    location.replace(location.pathname + "?v=" + encodeURIComponent(m[1]));
+  } catch (e) {}
+}
+setTimeout(checkVersion, 1500); setInterval(() => { if (!document.hidden) checkVersion(); }, 5 * 60e3);
 applyPrefs();
 setPanel(innerWidth > 820 ? panelOn : false);
 if (innerWidth > 820 && store.get("claude_side", true)) document.body.classList.remove("closed");
